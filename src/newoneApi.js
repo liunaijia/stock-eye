@@ -169,7 +169,7 @@ const parseHoldings = async (dom = new Document()) => {
   const [, ...stockRows] = Array.from(dom.querySelectorAll('#tabbuy tr'));
   const stocks = stockRows.map((row) => {
     const cells = row.querySelectorAll('td');
-    const codePrefix = cells[0].attributes.scdm === '1' ? 'sh' : 'sz';
+    const codePrefix = cells[0].attributes.scdm.value === '1' ? 'sh' : 'sz';
     return {
       stockCode: codePrefix + cells[0].attributes.zqdm.value,
       stockName: cells[1].innerText,
