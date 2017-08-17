@@ -1,3 +1,7 @@
+body {
+  width: 350px;
+}
+
 input[type="text"] {
   text-align: right;
   width: 60px;
@@ -9,4 +13,11 @@ form.buy input {
 
 form.sell input {
   color: green;
+}
+
+table {
+  width: 100%;
+}
+table td {
+  text-align: right;
 }

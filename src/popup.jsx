@@ -1,5 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Holdings from './holdings';
+
+class Popup extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      balance: 0,
+      stocks: [],
+    };
+
+    chrome.runtime.sendMessage({ type: 'GET_HOLDINGS' }, (response) => {
+      this.setState(response);
+    });
+  }
+
+  render() {
+    return (
+      <Holdings balance={this.state.balance} stocks={this.state.stocks} />
+    );
+  }
+}
 
 const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}) => {
   const form = document.querySelector(`form.${formName}`);
@@ -20,10 +42,16 @@ const readForm = (form = new HTMLFormElement()) => (
 );
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <h1>React!</h1>,
-    document.getElementById('root'),
-  );
+  ReactDOM.render(<Popup />, document.getElementById('root'));
+
+
+  chrome.runtime.sendMessage({ type: 'GET_SUGGESTION' }, (response) => {
+    document.getElementById('debugWindow').innerText = JSON.stringify(response);
+    if (response) {
+      fillForm('buy', response.buy);
+      fillForm('sell', response.sell);
+    }
+  });
 
   document.querySelectorAll('form').forEach((formNode) => {
     formNode.onsubmit = (e) => { // eslint-disable-line no-param-reassign
@@ -40,11 +68,3 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
-chrome.runtime.sendMessage({ type: 'GET_SUGGESTION' }, (response) => {
-  document.getElementById('debugWindow').innerText = JSON.stringify(response);
-  if (response) {
-    fillForm('buy', response.buy);
-    fillForm('sell', response.sell);
-  }
-});

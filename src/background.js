@@ -32,9 +32,11 @@ const process = (stocks = [{ buyingRatio: 0, sellingRatio: 0 }]) => {
   return null;
 };
 
-const sendTradeSignal = ({ gap = 0,
+const sendTradeSignal = ({
+  gap = 0,
   buy: { stockName: buyStockName, price: buyPrice },
-  sell: { stockName: sellStockname, price: sellPrice } }) => {
+  sell: { stockName: sellStockname, price: sellPrice },
+}) => {
   const title = `价差${gap}%`;
   const message = `买${buyStockName} ${buyPrice}，卖${sellStockname} ${sellPrice}`;
   sendNotification({ title, message });
@@ -80,10 +82,14 @@ sendNotification({ title: 'StockEye 启动' });
 
 const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
   const amount = Math.floor(balance / price / 100) * 100;
-  if (amount <= 0) { return 0; }
+  if (amount <= 0) {
+    return 0;
+  }
 
   const cost = amount * price * (1 + (commission / 10000));
-  if (balance < cost) { return amount - 100; }
+  if (balance < cost) {
+    return amount - 100;
+  }
   return amount;
 };
 
@@ -101,48 +107,45 @@ const createTradeSuggestion = () => {
   return suggestion;
 };
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.type === 'GET_HOLDINGS') { sendResponse(holdings); }
-  if (request.type === 'GET_SUGGESTION') {
-    sendResponse(createTradeSuggestion());
+const run = async (block) => {
+  try {
+    await block();
+  } catch (e) {
+    console.error(e);
   }
-  if (request.type === 'PLACE_ORDER') {
-    const payload = request.payload;
-    try {
-      if (payload.type === 'buy') {
-        await buyStock(payload.stockCode, payload.price, payload.amount);
-      } else if (payload.type === 'sell') {
-        await sellStock(payload.stockCode, payload.price, payload.amount);
+};
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // a listener cannot be a async function because it causes sending sendResponse asynchronously
+  // failed. However, the listener can be an async function if using sendResponse synchronously
+  // regardless the rest part of code uses await or not.
+  run(async () => {
+    // wrap async code in a function, then the listener does not have to be an async one, which
+    // makes calling sendResponse asynchronously work.
+    if (message.type === 'GET_HOLDINGS') {
+      if (!holdings) {
+        holdings = await getHoldings();
       }
-      sendNotification({ title: '下单成功', message: JSON.stringify(payload) });
-    } catch (error) {
-      sendNotification({ title: '下单失败', message: error.message });
+      sendResponse(holdings);
     }
-  }
+    if (message.type === 'GET_SUGGESTION') {
+      sendResponse(createTradeSuggestion());
+    }
+    if (message.type === 'PLACE_ORDER') {
+      const payload = message.payload;
+      try {
+        if (payload.type === 'buy') {
+          await buyStock(payload.stockCode, payload.price, payload.amount);
+        } else if (payload.type === 'sell') {
+          await sellStock(payload.stockCode, payload.price, payload.amount);
+        }
+        sendResponse('下单成功');
+        sendNotification({ title: '下单成功', message: JSON.stringify(payload) });
+      } catch (error) {
+        sendResponse(`下单失败：${error.message}`);
+        sendNotification({ title: '下单失败', message: error.message });
+      }
+    }
+  });
+  return true;
 });
-
-
-// chrome.runtime.onConnect.addListener((port) => {
-//   console.log(port.name);
-//   port.onMessage.addListener((msg) => {
-//     console.log(`background received a message ${msg}`);
-//   });
-
-//   port.postMessage({ msg: 'I am background' });
-// });
-
-
-// chrome.extension.onConnect.addListener((port) => {
-//   console.log('Connected .....');
-// port.onMessage.addListener((msg) => {
-//   console.log(`message recieved${msg}`);
-//   port.postMessage('Hi Popup.js');
-// });
-// });
-
-// login().then(() => {
-//   holdings();
-//   // buyStock('sh601988', 3.71, 200); // 中国银行
-//   // sellStock('sh601288', 3.91, 200); // 农业银行
-// });
-
