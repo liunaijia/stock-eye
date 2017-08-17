@@ -2,7 +2,7 @@ import isTradeTime from './tradeTime';
 import { STOCK_POOL, THRESHOLD } from './settings';
 import fetchStockData from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
-import { login, buyStock, getHoldings, sellStock } from './newoneApi';
+import { buyStock, getHoldings, sellStock } from './newoneApi';
 
 const process = (stocks = [{ buyingRatio: 0, sellingRatio: 0 }]) => {
   const stockMayBuy = stocks.sort((a, b) => a.sellingRatio - b.sellingRatio)[0];

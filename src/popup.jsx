@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}) => {
   const form = document.querySelector(`form.${formName}`);
   form.querySelector('.stock').innerText = `${stockName} ${price}`;
@@ -17,6 +20,11 @@ const readForm = (form = new HTMLFormElement()) => (
 );
 
 document.addEventListener('DOMContentLoaded', () => {
+  ReactDOM.render(
+    <h1>React!</h1>,
+    document.getElementById('root'),
+  );
+
   document.querySelectorAll('form').forEach((formNode) => {
     formNode.onsubmit = (e) => { // eslint-disable-line no-param-reassign
       e.preventDefault();
