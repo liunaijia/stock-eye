@@ -1,15 +1,12 @@
 import React from 'react';
 import { number, string, arrayOf, shape } from 'prop-types';
-import styled from 'styled-components';
+import { Table, TableBody, TableHead, TableRow } from 'material-ui';
 
 import StockHeld from './StockHeld';
-
-const Table = styled.table`
-  width: 100%;
-`;
+import NarrowTableCell from './NarrowTableCell';
+import NumericTableCell from './NumericTableCell';
 
 const propTypes = {
-  balance: number,
   stocks: arrayOf(shape({
     stockCode: string.isRequired,
     stockName: string.isRequired,
@@ -21,35 +18,31 @@ const propTypes = {
 };
 
 const defaultProps = {
-  balance: 0,
   stocks: [],
 };
 
-const Holdings = ({ balance = 0, stocks = [] }) => (
-  <div>
-    <h4>可用资金：{balance || '?'}</h4>
-    <Table>
-      <thead>
-        <tr>
-          <th>股票</th>
-          <th>数量</th>
-          <th>可卖</th>
-          <th colSpan="2">浮动盈亏</th>
-        </tr>
-      </thead>
-      <tbody>
-        {stocks.map(stock => (
-          <StockHeld
-            key={stock.stockCode}
-            stockName={stock.stockName}
-            stockAmount={stock.stockAmount}
-            sellableAmount={stock.sellableAmount}
-            floating={stock.floating}
-            floatingRate={stock.floatingRate}
-          />))}
-      </tbody>
-    </Table>
-  </div>
+const Holdings = ({ stocks }) => (
+  <Table>
+    <TableHead>
+      <TableRow>
+        <NarrowTableCell>股票</NarrowTableCell>
+        <NumericTableCell>持有量</NumericTableCell>
+        <NumericTableCell>可卖量</NumericTableCell>
+        <NumericTableCell>浮动盈亏</NumericTableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {stocks.map(stock => (
+        <StockHeld
+          key={stock.stockCode}
+          stockName={stock.stockName}
+          stockAmount={stock.stockAmount}
+          sellableAmount={stock.sellableAmount}
+          floating={stock.floating}
+          floatingRate={stock.floatingRate}
+        />))}
+    </TableBody>
+  </Table>
 );
 
 Holdings.propTypes = propTypes;

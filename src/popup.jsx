@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+
 import Holdings from './components/Holdings';
 
 class Popup extends Component {
@@ -18,7 +19,9 @@ class Popup extends Component {
 
   render() {
     return (
-      <Holdings balance={this.state.balance} stocks={this.state.stocks} />
+      <div>
+        <Holdings stocks={this.state.stocks} />
+      </div>
     );
   }
 }

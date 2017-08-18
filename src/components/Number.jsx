@@ -20,5 +20,5 @@ Number.propTypes = propTypes;
 Number.defaultProps = defaultProps;
 
 export default styled(Number)`
-  color: ${props => (/^\s*-/.test(props.children) ? 'green' : 'red')};
+  color: ${props => (/^\s*-/.test(props.children) ? '#383' : '#c10')};
 `;
