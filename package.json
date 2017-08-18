@@ -4,6 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "lint:css": "stylelint './src/**/*.jsx'",
+    "lint:js": "npx eslint --ext .js --ext .jsx src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +15,8 @@
     "iconv-lite": "^0.4.18",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "styled-components": "^2.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -30,6 +33,9 @@
     "eslint-plugin-react": "^7.2.1",
     "file-loader": "^0.11.2",
     "jest": "^20.0.4",
+    "stylelint": "^8.0.0",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-processor-styled-components": "^0.3.0",
     "webpack": "^3.5.5"
   }
 }

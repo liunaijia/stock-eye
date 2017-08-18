@@ -1,5 +1,10 @@
 import React from 'react';
 import { string, number } from 'prop-types';
+import styled from 'styled-components';
+
+const Td = styled.td`
+  text-align: ${props => (props.number ? 'right' : 'center')};
+`;
 
 const propTypes = {
   stockName: string.isRequired,
@@ -11,11 +16,11 @@ const propTypes = {
 
 function StockHeld({ stockName, stockAmount, sellableAmount, floating, floatingRate }) {
   return (<tr>
-    <td>{stockName}</td>
-    <td>{stockAmount}</td>
-    <td>{sellableAmount}</td>
-    <td>{floating}</td>
-    <td>{floatingRate}</td>
+    <Td>{stockName}</Td>
+    <Td number>{stockAmount}</Td>
+    <Td number>{sellableAmount}</Td>
+    <Td number>{floating}</Td>
+    <Td number>{floatingRate}</Td>
   </tr>);
 }
 

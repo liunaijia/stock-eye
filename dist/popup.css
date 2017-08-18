@@ -14,10 +14,3 @@ form.buy input {
 form.sell input {
   color: green;
 }
-
-table {
-  width: 100%;
-}
-table td {
-  text-align: right;
-}

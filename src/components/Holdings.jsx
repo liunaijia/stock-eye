@@ -1,7 +1,12 @@
 import React from 'react';
 import { number, string, arrayOf, shape } from 'prop-types';
+import styled from 'styled-components';
 
 import StockHeld from './StockHeld';
+
+const Table = styled.table`
+  width: 100%;
+`;
 
 const propTypes = {
   balance: number,
@@ -23,7 +28,7 @@ const defaultProps = {
 const Holdings = ({ balance = 0, stocks = [] }) => (
   <div>
     <h4>可用资金：{balance || '?'}</h4>
-    <table>
+    <Table>
       <thead>
         <tr>
           <th>股票</th>
@@ -43,7 +48,7 @@ const Holdings = ({ balance = 0, stocks = [] }) => (
             floatingRate={stock.floatingRate}
           />))}
       </tbody>
-    </table>
+    </Table>
   </div>
 );
 
