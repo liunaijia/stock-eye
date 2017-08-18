@@ -2,14 +2,10 @@ import React from 'react';
 import { string, number } from 'prop-types';
 import styled from 'styled-components';
 
+import Number from './Number';
+
 const Td = styled.td`
-  text-align: ${props => (props.number ? 'right' : 'center')};
-  color: ${(props) => {
-    if (['string', 'number'].includes(typeof props.number)) {
-      return /^\s*-/.test(props.number) ? 'green' : 'red';
-    }
-    return 'initial';
-  }};
+  text-align: ${props => (props.number ? 'right' : 'initial')};
 `;
 
 const propTypes = {
@@ -25,8 +21,8 @@ function StockHeld({ stockName, stockAmount, sellableAmount, floating, floatingR
     <Td>{stockName}</Td>
     <Td number>{stockAmount}</Td>
     <Td number>{sellableAmount}</Td>
-    <Td number={floating}>{floating}</Td>
-    <Td number={floatingRate}>{floatingRate}</Td>
+    <Td number><Number>{floating}</Number></Td>
+    <Td number><Number>{floatingRate}</Number></Td>
   </tr>);
 }
 
