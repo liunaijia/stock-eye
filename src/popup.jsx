@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Holdings from './holdings';
+import Holdings from './components/Holdings';
 
-class Popup extends React.Component {
+class Popup extends Component {
   constructor() {
     super();
-
-    this.state = {
-      balance: 0,
-      stocks: [],
-    };
 
     chrome.runtime.sendMessage({ type: 'GET_HOLDINGS' }, (response) => {
       this.setState(response);
     });
   }
+
+  state = {
+    balance: 0,
+    stocks: [],
+  };
 
   render() {
     return (

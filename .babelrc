@@ -1,6 +1,5 @@
 {
   "presets": [
-    "react",
     [
       "env",
       {
@@ -9,9 +8,10 @@
         },
         "modules": false
       }
-    ]
+    ],
+    "stage-0",
+    "react"
   ],
-  "plugins": ["transform-object-rest-spread"],
   "env": {
     "test": {
       "plugins": [
