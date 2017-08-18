@@ -15,10 +15,6 @@ const propTypes = {
   floatingRate: string.isRequired,
 };
 
-const defaultProps = {
-  className: null,
-};
-
 function StockHeld({ stockName, stockAmount, sellableAmount, floating, floatingRate }) {
   return (
     <TableRow hover>
@@ -31,6 +27,5 @@ function StockHeld({ stockName, stockAmount, sellableAmount, floating, floatingR
 }
 
 StockHeld.propTypes = propTypes;
-StockHeld.defaultProps = defaultProps;
 
 export default StockHeld;

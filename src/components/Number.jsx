@@ -1,10 +1,10 @@
 import React from 'react';
-import { node, string } from 'prop-types';
+import { element, string } from 'prop-types';
 import styled from 'styled-components';
 
 const propTypes = {
   className: string,
-  children: node,
+  children: element,
 };
 
 const defaultProps = {
