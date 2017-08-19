@@ -14,7 +14,6 @@
   "dependencies": {
     "iconv-lite": "^0.4.18",
     "material-ui": "^1.0.0-beta.5",
-    "material-ui-icons": "^1.0.0-alpha.19",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -38,6 +37,8 @@
     "stylelint": "^8.0.0",
     "stylelint-config-standard": "^17.0.0",
     "stylelint-processor-styled-components": "^0.3.0",
-    "webpack": "^3.5.5"
+    "uglifyjs-webpack-plugin": "^1.0.0-beta.2",
+    "webpack": "^3.5.5",
+    "webpack-bundle-analyzer": "^2.9.0"
   }
 }

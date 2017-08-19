@@ -5,6 +5,7 @@
     "version": "0.1",
     "background": {
         "scripts": [
+            "vendor.js",
             "background.js"
         ]
     },
