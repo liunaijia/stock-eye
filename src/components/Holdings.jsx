@@ -1,39 +1,35 @@
 import React from 'react';
-import { number, string, arrayOf, shape } from 'prop-types';
-import { Table, TableBody, TableHead, TableRow } from 'material-ui';
+import { string, arrayOf, shape } from 'prop-types';
+import styled from 'styled-components';
 
-import StockHeld from './StockHeld';
-import NarrowTableCell from './NarrowTableCell';
-import NumericTableCell from './NumericTableCell';
+import Holding from './Holding';
 
 const propTypes = {
-  stocks: arrayOf(shape({
+  className: string,
+  holdings: arrayOf(shape({
     stockCode: string.isRequired,
-    stockName: string.isRequired,
-    stockAmount: number.isRequired,
-    sellableAmount: number.isRequired,
-    floating: number.isRequired,
-    floatingRate: string.isRequired,
+    ...Holding.propTypes,
   })),
 };
 
 const defaultProps = {
-  stocks: [],
+  className: null,
+  holdings: [],
 };
 
-const Holdings = ({ stocks }) => (
-  <Table>
-    <TableHead>
-      <TableRow>
-        <NarrowTableCell>股票</NarrowTableCell>
-        <NumericTableCell>持有量</NumericTableCell>
-        <NumericTableCell>可卖量</NumericTableCell>
-        <NumericTableCell>浮动盈亏</NumericTableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {stocks.map(stock => (
-        <StockHeld
+const Holdings = ({ className, holdings }) => (
+  <table className={className}>
+    <thead>
+      <tr>
+        <th>股票</th>
+        <th>持有量</th>
+        <th>可卖量</th>
+        <th>浮动盈亏</th>
+      </tr>
+    </thead>
+    <tbody>
+      {holdings.map(stock => (
+        <Holding
           key={stock.stockCode}
           stockName={stock.stockName}
           stockAmount={stock.stockAmount}
@@ -41,11 +37,26 @@ const Holdings = ({ stocks }) => (
           floating={stock.floating}
           floatingRate={stock.floatingRate}
         />))}
-    </TableBody>
-  </Table>
+    </tbody>
+  </table>
 );
 
 Holdings.propTypes = propTypes;
 Holdings.defaultProps = defaultProps;
 
-export default Holdings;
+export default styled(Holdings)`
+  width: 100%;
+  tr {
+    line-height: 1.3rem;
+  }
+  th, td {
+    &:nth-child(1) {
+      text-align: center;
+    }
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4) {
+      text-align: right;
+    }
+}
+`;

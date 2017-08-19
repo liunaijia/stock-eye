@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import Holdings from './components/Holdings';
+import Portfolio from './components/Portfolio';
 
 class Popup extends Component {
   constructor() {
@@ -20,7 +20,7 @@ class Popup extends Component {
   render() {
     return (
       <div>
-        <Holdings stocks={this.state.stocks} />
+        <Portfolio availableCash={this.state.balance} holdings={this.state.stocks} />
       </div>
     );
   }
