@@ -46,17 +46,21 @@ Holdings.defaultProps = defaultProps;
 
 export default styled(Holdings)`
   width: 100%;
+
   tr {
     line-height: 1.3rem;
   }
-  th, td {
+
+  th,
+  td {
     &:nth-child(1) {
       text-align: center;
     }
+
     &:nth-child(2),
     &:nth-child(3),
     &:nth-child(4) {
       text-align: right;
     }
-}
+  }
 `;
