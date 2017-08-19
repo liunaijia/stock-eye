@@ -16,7 +16,7 @@ const defaultProps = {
 
 const Portfolio = ({ availableCash, holdings }) => (
   <Paper>
-    可用：{availableCash}
+    可用资金：{availableCash}
     <Holdings holdings={holdings} />
   </Paper>
 );

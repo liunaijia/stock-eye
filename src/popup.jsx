@@ -2,25 +2,26 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Portfolio from './components/Portfolio';
+import { GET_PORTFOLIO } from './actions';
 
 class Popup extends Component {
   constructor() {
     super();
-
-    chrome.runtime.sendMessage({ type: 'GET_HOLDINGS' }, (response) => {
+    chrome.runtime.sendMessage({ type: GET_PORTFOLIO }, (response) => {
       this.setState(response);
     });
   }
 
   state = {
-    balance: 0,
-    stocks: [],
+    availableCash: 0,
+    holding: [],
   };
+
 
   render() {
     return (
       <div>
-        <Portfolio availableCash={this.state.balance} holdings={this.state.stocks} />
+        <Portfolio {...this.state.availableCash} />
       </div>
     );
   }

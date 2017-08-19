@@ -164,10 +164,10 @@ const sellStock = async (stockCode = '', price = 0.0, amount = 0) => {
 
 const parseNumber = (str = '') => parseFloat(str.replace(/,|\s/g, ''));
 
-const parseHoldings = async (dom = new Document()) => {
-  const balance = parseFloat(dom.querySelector('#zongzichan').innerText.match(/可用：\s*([\d|.]+)/)[1]);
-  const [, ...stockRows] = Array.from(dom.querySelectorAll('#tabbuy tr'));
-  const stocks = stockRows.map((row) => {
+const parsePortfolio = async (dom = new Document()) => {
+  const availableCash = parseFloat(dom.querySelector('#zongzichan').innerText.match(/可用：\s*([\d|.]+)/)[1]);
+  const [, ...holdingRows] = Array.from(dom.querySelectorAll('#tabbuy tr'));
+  const holdings = holdingRows.map((row) => {
     const cells = row.querySelectorAll('td');
     const codePrefix = cells[0].attributes.scdm.value === '1' ? 'sh' : 'sz';
     return {
@@ -183,21 +183,21 @@ const parseHoldings = async (dom = new Document()) => {
     };
   });
   return {
-    balance,
-    stocks,
+    availableCash,
+    holdings,
   };
 };
 
-const getHoldings = async () => {
+const getPortfolio = async () => {
   const response = await sendRequest(`/xtrade?random=${new Date().getTime()}`, { jybm: '100040' });
   const dom = await readAsDom(response);
   if (dom.body.childElementCount === 0) {
     await login();
-    return getHoldings();
+    return getPortfolio();
   }
 
-  return parseHoldings(dom);
+  return parsePortfolio(dom);
 };
 
-export { login, buyStock, getHoldings, sellStock };
+export { login, buyStock, getPortfolio, sellStock };
 

@@ -2,7 +2,8 @@ import isTradeTime from './tradeTime';
 import { STOCK_POOL, THRESHOLD } from './settings';
 import fetchStockData from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
-import { buyStock, getHoldings, sellStock } from './newoneApi';
+import { buyStock, getPortfolio, sellStock } from './newoneApi';
+import { GET_PORTFOLIO } from './actions';
 
 const process = (stocks = [{ buyingRatio: 0, sellingRatio: 0 }]) => {
   const stockMayBuy = stocks.sort((a, b) => a.sellingRatio - b.sellingRatio)[0];
@@ -72,10 +73,10 @@ runDuringTradeTime()(async () => {
   }
 });
 
-// refresh holdings
-let holdings = null;
+// refresh portfolio
+let portfolio = null;
 runDuringTradeTime(10)(async () => {
-  holdings = await getHoldings();
+  portfolio = await getPortfolio();
 });
 
 sendNotification({ title: 'StockEye 启动' });
@@ -99,10 +100,10 @@ const createTradeSuggestion = () => {
   }
 
   const suggestion = { ...tradeSignal };
-  suggestion.balance = holdings.balance;
-  suggestion.buy.maxAmount = cutoffAmount(suggestion.buy.price, holdings.balance);
+  suggestion.balance = portfolio.availableCash;
+  suggestion.buy.maxAmount = cutoffAmount(suggestion.buy.price, portfolio.availableCash);
 
-  const holding = holdings.stocks.find(stock => stock.stockCode === suggestion.sell.stockCode);
+  const holding = portfolio.holdings.find(h => h.stockCode === suggestion.sell.stockCode);
   suggestion.sell.maxAmount = holding ? holding.sellableAmount : 0;
   return suggestion;
 };
@@ -122,11 +123,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   run(async () => {
     // wrap async code in a function, then the listener does not have to be an async one, which
     // makes calling sendResponse asynchronously work.
-    if (message.type === 'GET_HOLDINGS') {
-      if (!holdings) {
-        holdings = await getHoldings();
+    if (message.type === GET_PORTFOLIO) {
+      if (!portfolio) {
+        portfolio = await getPortfolio();
       }
-      sendResponse(holdings);
+      // debugger;
+      sendResponse(portfolio);
     }
     if (message.type === 'GET_SUGGESTION') {
       sendResponse(createTradeSuggestion());
