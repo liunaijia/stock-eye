@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Portfolio from './components/Portfolio';
+import Quotes from './components/Quotes';
 import { GET_PORTFOLIO } from './actions';
+import './popup.css';
 
 class Popup extends Component {
   constructor() {
@@ -14,14 +16,34 @@ class Popup extends Component {
 
   state = {
     availableCash: 0,
-    holding: [],
+    holdings: [],
+    quotes: {
+      currentPrice: 4.01,
+      buyingBids: [
+        { price: 4.00, amount: 7458 },
+        { price: 3.99, amount: 31904 },
+        { price: 3.98, amount: 44368 },
+        { price: 3.97, amount: 69427 },
+        { price: 3.96, amount: 28521 }],
+      sellingBids: [
+        { price: 4.01, amount: 17006 },
+        { price: 4.02, amount: 34706 },
+        { price: 4.03, amount: 31231 },
+        { price: 4.04, amount: 22060 },
+        { price: 4.05, amount: 30422 },
+      ],
+    },
   };
-
 
   render() {
     return (
       <div>
-        <Portfolio {...this.state.availableCash} />
+        <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
+        <Quotes
+          currentPrice={this.state.quotes.currentPrice}
+          buyingBids={this.state.quotes.buyingBids}
+          sellingBids={this.state.quotes.sellingBids}
+        />
       </div>
     );
   }

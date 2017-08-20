@@ -127,7 +127,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (!portfolio) {
         portfolio = await getPortfolio();
       }
-      // debugger;
       sendResponse(portfolio);
     }
     if (message.type === 'GET_SUGGESTION') {

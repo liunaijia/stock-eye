@@ -39,10 +39,11 @@ const config = {
       name: 'vendor',
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
 };
 
+// NODE_ENV=production npx webpack
 if (process.env.NODE_ENV === 'production') {
   Object.assign(config, {
     plugins: [
@@ -51,7 +52,7 @@ if (process.env.NODE_ENV === 'production') {
           NODE_ENV: JSON.stringify('production'),
         },
       }),
-      new UglifyJSPlugin(),
+      new UglifyJSPlugin({ uglifyOptions: { ecma: 8 } }),
     ],
   });
 }
