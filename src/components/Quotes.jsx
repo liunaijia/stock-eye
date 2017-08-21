@@ -5,9 +5,15 @@ import { number, arrayOf, object } from 'prop-types';
 import Bids from './Bids';
 
 const propTypes = {
-  currentPrice: number.isRequired,
-  buyingBids: arrayOf(object).isRequired,
-  sellingBids: arrayOf(object).isRequired,
+  currentPrice: number,
+  buyingBids: arrayOf(object),
+  sellingBids: arrayOf(object),
+};
+
+const defaultProps = {
+  currentPrice: 0,
+  buyingBids: [],
+  sellingBids: [],
 };
 
 const Quotes = ({ currentPrice, buyingBids, sellingBids }) => (
@@ -18,6 +24,6 @@ const Quotes = ({ currentPrice, buyingBids, sellingBids }) => (
 );
 
 Quotes.propTypes = propTypes;
+Quotes.defaultProps = defaultProps;
 
 export default Quotes;
-// export default styled(Quotes)``;

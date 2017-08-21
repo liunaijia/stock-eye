@@ -74,7 +74,6 @@ const runDuringTradeTime = (interval = 3) => async (block) => {
 let currentGap = null;
 runDuringTradeTime()(async () => {
   const stocks = await fetchStockData();
-
   currentGap = calcGap(stocks);
   setBadge(currentGap.value.toString());
   if (currentGap.value >= THRESHOLD) {
@@ -107,9 +106,10 @@ const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
   return amount;
 };
 
-const createTradeSuggestion = () => {
+const createTradeSuggestion = async () => {
   if (currentGap == null) {
-    return null;
+    const stocks = await fetchStockData();
+    currentGap = calcGap(stocks);
   }
 
   const suggestion = { ...currentGap };
@@ -117,6 +117,7 @@ const createTradeSuggestion = () => {
 
   const holding = portfolio.holdings.find(h => h.stockCode === suggestion.toSell.stockCode);
   suggestion.toSell.maxAmount = holding ? holding.sellableAmount : 0;
+
   return suggestion;
 };
 
@@ -144,7 +145,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse(portfolio);
         break;
       case GET_TRADE_SUGGESTION:
-        sendResponse(createTradeSuggestion());
+        sendResponse(await createTradeSuggestion());
         break;
       case PLACE_ORDER:
         try {

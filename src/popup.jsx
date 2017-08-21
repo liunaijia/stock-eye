@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Portfolio from './components/Portfolio';
-import Quotes from './components/Quotes';
+import TradeSuggestion from './components/TradeSuggestion';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import './popup.css';
 
@@ -26,7 +26,7 @@ class Popup extends Component {
       if (response) {
         fillForm('buy', response.toBuy);
         fillForm('sell', response.toSell);
-        this.setState({ ...this.setState, tradeSuggestion: response });
+        this.setState({ tradeSuggestion: response });
       }
     });
   }
@@ -34,40 +34,18 @@ class Popup extends Component {
   state = {
     availableCash: 0,
     holdings: [],
-    tradeSuggestion: {
-      gap: 0,
-      toBuy: {
-        // quotes: {
-        //   current: 0,
-        //   buyingBids: [],
-        //   sellingBids: [],
-        // },
-      },
-      toSell: {
-        // quotes: {
-        //   current: 0,
-        //   buyingBids: [],
-        //   sellingBids: [],
-        // },
-      },
-    },
+    tradeSuggestion: {},
   };
 
   render() {
     return (
       <div>
         <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
-        {/* 
-        <Quotes
-          currentPrice={this.state.tradeSuggestion.toBuy.quotes.currentPrice}
-          buyingBids={this.state.tradeSuggestion.toBuy.quotes.buyingBids}
-          sellingBids={this.state.tradeSuggestion.toBuy.quotes.sellingBids}
-        />
-        <Quotes
-          currentPrice={this.state.tradeSuggestion.toSell.quotes.currentPrice}
-          buyingBids={this.state.tradeSuggestion.toSell.quotes.buyingBids}
-          sellingBids={this.state.tradeSuggestion.toSell.quotes.sellingBids}
-        /> */}
+        <h5>GAP: {this.state.tradeSuggestion.value} {new Date(this.state.tradeSuggestion.timestamp).toLocaleTimeString()}</h5>
+        买入
+        <TradeSuggestion {...this.state.tradeSuggestion.toBuy} />
+        卖出
+        <TradeSuggestion {...this.state.tradeSuggestion.toSell} />
       </div>
     );
   }
