@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "lint:css": "stylelint './src/**/*.jsx'",
-    "lint:js": "npx eslint --ext .js --ext .jsx src",
+    "lint:css": "stylelint ./src/**/*.jsx",
+    "lint:js": "eslint --ext .js --ext .jsx src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "iconv-lite": "^0.4.18",
-    "material-ui": "^1.0.0-beta.5",
+    "material-ui": "^1.0.0-beta.6",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

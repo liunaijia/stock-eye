@@ -16,7 +16,10 @@ const getValuesFrom = (array = [], index = 0, length = 1) =>
 const collapseArray = (array = []) =>
   array.reduce((acc, _, idx) => {
     if (idx % 2 === 0) {
-      acc.push([array[idx + 1], array[idx]]);
+      acc.push({
+        price: array[idx + 1],
+        amount: array[idx],
+      });
     }
     return acc;
   }, []);
@@ -39,8 +42,8 @@ const parse = (text = '') =>
         current: getValueFrom(rawValues, 3),
         buyingAt: getValueFrom(rawValues, 6),
         sellingAt: getValueFrom(rawValues, 7),
-        buyBid: collapseArray(getValuesFrom(rawValues, 10, 10)),
-        sellBid: collapseArray(getValuesFrom(rawValues, 20, 10)),
+        buyingBids: collapseArray(getValuesFrom(rawValues, 10, 10)),
+        sellingBids: collapseArray(getValuesFrom(rawValues, 20, 10)),
         timestamp: new Date(`${rawValues[30]} ${rawValues[31]}`),
       };
       stock.ratio = calcRatio(stock.current, stock);

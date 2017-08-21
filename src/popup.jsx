@@ -3,51 +3,8 @@ import ReactDOM from 'react-dom';
 
 import Portfolio from './components/Portfolio';
 import Quotes from './components/Quotes';
-import { GET_PORTFOLIO } from './actions';
+import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import './popup.css';
-
-class Popup extends Component {
-  constructor() {
-    super();
-    chrome.runtime.sendMessage({ type: GET_PORTFOLIO }, (response) => {
-      this.setState(response);
-    });
-  }
-
-  state = {
-    availableCash: 0,
-    holdings: [],
-    quotes: {
-      currentPrice: 4.01,
-      buyingBids: [
-        { price: 4.00, amount: 7458 },
-        { price: 3.99, amount: 31904 },
-        { price: 3.98, amount: 44368 },
-        { price: 3.97, amount: 69427 },
-        { price: 3.96, amount: 28521 }],
-      sellingBids: [
-        { price: 4.01, amount: 17006 },
-        { price: 4.02, amount: 34706 },
-        { price: 4.03, amount: 31231 },
-        { price: 4.04, amount: 22060 },
-        { price: 4.05, amount: 30422 },
-      ],
-    },
-  };
-
-  render() {
-    return (
-      <div>
-        <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
-        <Quotes
-          currentPrice={this.state.quotes.currentPrice}
-          buyingBids={this.state.quotes.buyingBids}
-          sellingBids={this.state.quotes.sellingBids}
-        />
-      </div>
-    );
-  }
-}
 
 const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}) => {
   const form = document.querySelector(`form.${formName}`);
@@ -57,6 +14,64 @@ const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}
   form.querySelector('.maxAmount').innerText = maxAmount;
   form.querySelector('.code').value = stockCode;
 };
+
+class Popup extends Component {
+  constructor() {
+    super();
+    chrome.runtime.sendMessage({ type: GET_PORTFOLIO }, (response) => {
+      this.setState(response);
+    });
+    chrome.runtime.sendMessage({ type: GET_TRADE_SUGGESTION }, (response) => {
+      document.getElementById('debugWindow').innerText = JSON.stringify(response);
+      if (response) {
+        fillForm('buy', response.toBuy);
+        fillForm('sell', response.toSell);
+        this.setState({ ...this.setState, tradeSuggestion: response });
+      }
+    });
+  }
+
+  state = {
+    availableCash: 0,
+    holdings: [],
+    tradeSuggestion: {
+      gap: 0,
+      toBuy: {
+        // quotes: {
+        //   current: 0,
+        //   buyingBids: [],
+        //   sellingBids: [],
+        // },
+      },
+      toSell: {
+        // quotes: {
+        //   current: 0,
+        //   buyingBids: [],
+        //   sellingBids: [],
+        // },
+      },
+    },
+  };
+
+  render() {
+    return (
+      <div>
+        <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
+        {/* 
+        <Quotes
+          currentPrice={this.state.tradeSuggestion.toBuy.quotes.currentPrice}
+          buyingBids={this.state.tradeSuggestion.toBuy.quotes.buyingBids}
+          sellingBids={this.state.tradeSuggestion.toBuy.quotes.sellingBids}
+        />
+        <Quotes
+          currentPrice={this.state.tradeSuggestion.toSell.quotes.currentPrice}
+          buyingBids={this.state.tradeSuggestion.toSell.quotes.buyingBids}
+          sellingBids={this.state.tradeSuggestion.toSell.quotes.sellingBids}
+        /> */}
+      </div>
+    );
+  }
+}
 
 const readForm = (form = new HTMLFormElement()) => (
   {
@@ -70,15 +85,6 @@ const readForm = (form = new HTMLFormElement()) => (
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Popup />, document.getElementById('root'));
 
-
-  chrome.runtime.sendMessage({ type: 'GET_SUGGESTION' }, (response) => {
-    document.getElementById('debugWindow').innerText = JSON.stringify(response);
-    if (response) {
-      fillForm('buy', response.buy);
-      fillForm('sell', response.sell);
-    }
-  });
-
   document.querySelectorAll('form').forEach((formNode) => {
     formNode.onsubmit = (e) => { // eslint-disable-line no-param-reassign
       e.preventDefault();
@@ -87,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const payload = readForm(formNode);
 
-      chrome.runtime.sendMessage({ type: 'PLACE_ORDER', payload }, (response) => {
+      chrome.runtime.sendMessage({ type: PLACE_ORDER, payload }, (response) => {
         document.querySelector('.message').innerText += JSON.stringify(response);
       });
     };

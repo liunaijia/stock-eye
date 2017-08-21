@@ -3,43 +3,51 @@ import { STOCK_POOL, THRESHOLD } from './settings';
 import fetchStockData from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
 import { buyStock, getPortfolio, sellStock } from './newoneApi';
-import { GET_PORTFOLIO } from './actions';
+import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 
-const process = (stocks = [{ buyingRatio: 0, sellingRatio: 0 }]) => {
+const calcGap = (stocks = [{ code: '',
+  current: 0,
+  buyingAt: 0,
+  buyingBids: [],
+  buyingRatio: 0,
+  sellingAt: 0,
+  sellingBids: [],
+  sellingRatio: 0 }]) => {
   const stockMayBuy = stocks.sort((a, b) => a.sellingRatio - b.sellingRatio)[0];
   const stockMaySell = stocks.sort((a, b) => b.buyingRatio - a.buyingRatio)[0];
 
   const gap = Math.round((stockMaySell.buyingRatio - stockMayBuy.sellingRatio) * 100) / 100;
-  setBadge(gap.toString());
+  // Gap could be a negative value, which means any trade will lose.
 
-  if (gap > THRESHOLD) {
-    return {
-      gap,
-      buy: {
-        stockCode: stockMayBuy.code,
-        stockName: STOCK_POOL[stockMayBuy.code],
-        price: stockMayBuy.sellingAt,
+  return {
+    value: gap,
+    toBuy: {
+      stockCode: stockMayBuy.code,
+      stockName: STOCK_POOL[stockMayBuy.code],
+      price: stockMayBuy.sellingAt,
+      quotes: {
+        current: stockMayBuy.current,
+        buyingBids: stockMayBuy.buyingBids,
+        sellingBids: stockMayBuy.sellingBids,
       },
-      sell: {
-        stockCode: stockMaySell.code,
-        stockName: STOCK_POOL[stockMaySell.code],
-        price: stockMaySell.buyingAt,
+    },
+    toSell: {
+      stockCode: stockMaySell.code,
+      stockName: STOCK_POOL[stockMaySell.code],
+      price: stockMaySell.buyingAt,
+      quotes: {
+        current: stockMaySell.current,
+        buyingBids: stockMaySell.buyingBids,
+        sellingBids: stockMaySell.sellingBids,
       },
-      timestamp: new Date().getTime(),
-    };
-  }
-
-  // console.log(`${gap} B:${STOCK_POOL[stockMayBuy.code]}${stockMayBuy.sellingRatio}% S:${STOCK_POOL[stockMaySell.code]}${stockMaySell.buyingRatio}%`);
-  return null;
+    },
+    timestamp: new Date().getTime(),
+  };
 };
 
-const sendTradeSignal = ({
-  gap = 0,
-  buy: { stockName: buyStockName, price: buyPrice },
-  sell: { stockName: sellStockname, price: sellPrice },
-}) => {
+const sendTradeSignal = ({ gap = 0, stockToBuy = '', priceToBuy = 0, stockToSell = '', priceToSell = 0 }) => {
   const title = `价差${gap}%`;
-  const message = `买${buyStockName} ${buyPrice}，卖${sellStockname} ${sellPrice}`;
+  const message = `买${stockToBuy} ${priceToBuy}，卖${stockToSell} ${priceToSell}`;
   sendNotification({ title, message });
 };
 
@@ -63,13 +71,18 @@ const runDuringTradeTime = (interval = 3) => async (block) => {
 };
 
 // watch stocks
-let tradeSignal = null;
+let currentGap = null;
 runDuringTradeTime()(async () => {
   const stocks = await fetchStockData();
-  tradeSignal = process(stocks);
-  if (tradeSignal) {
-    sendTradeSignal(tradeSignal);
-    // console.log(tradeSignal);
+
+  currentGap = calcGap(stocks);
+  setBadge(currentGap.value.toString());
+  if (currentGap.value >= THRESHOLD) {
+    sendTradeSignal({ gap: currentGap.value,
+      buyStockName: currentGap.toBuy.stockName,
+      buyPrice: currentGap.toBuy.price,
+      sellStockName: currentGap.toSell.stockName,
+      sellPrice: currentGap.toSell.price });
   }
 });
 
@@ -95,16 +108,15 @@ const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
 };
 
 const createTradeSuggestion = () => {
-  if (tradeSignal == null) {
+  if (currentGap == null) {
     return null;
   }
 
-  const suggestion = { ...tradeSignal };
-  suggestion.balance = portfolio.availableCash;
-  suggestion.buy.maxAmount = cutoffAmount(suggestion.buy.price, portfolio.availableCash);
+  const suggestion = { ...currentGap };
+  suggestion.toBuy.maxAmount = cutoffAmount(suggestion.toBuy.price, portfolio.availableCash);
 
-  const holding = portfolio.holdings.find(h => h.stockCode === suggestion.sell.stockCode);
-  suggestion.sell.maxAmount = holding ? holding.sellableAmount : 0;
+  const holding = portfolio.holdings.find(h => h.stockCode === suggestion.toSell.stockCode);
+  suggestion.toSell.maxAmount = holding ? holding.sellableAmount : 0;
   return suggestion;
 };
 
@@ -123,29 +135,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   run(async () => {
     // wrap async code in a function, then the listener does not have to be an async one, which
     // makes calling sendResponse asynchronously work.
-    if (message.type === GET_PORTFOLIO) {
-      if (!portfolio) {
-        portfolio = await getPortfolio();
-      }
-      sendResponse(portfolio);
-    }
-    if (message.type === 'GET_SUGGESTION') {
-      sendResponse(createTradeSuggestion());
-    }
-    if (message.type === 'PLACE_ORDER') {
-      const payload = message.payload;
-      try {
-        if (payload.type === 'buy') {
-          await buyStock(payload.stockCode, payload.price, payload.amount);
-        } else if (payload.type === 'sell') {
-          await sellStock(payload.stockCode, payload.price, payload.amount);
+    const payload = message.payload;
+    switch (message.type) {
+      case GET_PORTFOLIO:
+        if (!portfolio) {
+          portfolio = await getPortfolio();
         }
-        sendResponse('下单成功');
-        sendNotification({ title: '下单成功', message: JSON.stringify(payload) });
-      } catch (error) {
-        sendResponse(`下单失败：${error.message}`);
-        sendNotification({ title: '下单失败', message: error.message });
-      }
+        sendResponse(portfolio);
+        break;
+      case GET_TRADE_SUGGESTION:
+        sendResponse(createTradeSuggestion());
+        break;
+      case PLACE_ORDER:
+        try {
+          if (payload.type === 'buy') {
+            await buyStock(payload.stockCode, payload.price, payload.amount);
+          } else if (payload.type === 'sell') {
+            await sellStock(payload.stockCode, payload.price, payload.amount);
+          }
+          sendResponse('下单成功');
+          sendNotification({ title: '下单成功', message: JSON.stringify(payload) });
+        } catch (error) {
+          sendResponse(`下单失败：${error.message}`);
+          sendNotification({ title: '下单失败', message: error.message });
+        }
+        break;
+      default:
+        throw new Error(`Unknown message type ${message.type}`);
     }
   });
   return true;
