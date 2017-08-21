@@ -27,7 +27,7 @@ const Bid = (index, type, bid, currentPrice) => {
     <li key={key} data-vs-current-price={vsCurrentPrice}>
       <span>{type === 'buy' ? '买' : '卖'}{index + 1}</span>
       <span>{bid.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-      <span>{bid.amount}</span>
+      <span>{Math.round(bid.amount / 100)}</span>
     </li>
   );
 };
