@@ -1,8 +1,10 @@
-const totalMinutes = (hour = 0, minute = 0) => ((parseInt(hour, 10) * 60) + parseInt(minute, 10));
+// @flow
+const totalMinutes = (hour: number | string, minute: number | string) =>
+  ((parseInt(hour, 10) * 60) + parseInt(minute, 10));
 
-const isTimeInAnyTimeSlots = (timeInMinutes, ...timeSlots) =>
+const isTimeInAnyTimeSlots = (timeInMinutes: number, ...timeSlots) =>
   timeSlots.some((slot) => {
-    const [, ...durations] = slot.match(/(\d+):(\d+)-(\d+):(\d+)/);
+    const [, ...durations] = slot.match(/(\d+):(\d+)-(\d+):(\d+)/) || [];
     return timeInMinutes >= totalMinutes(durations[0], durations[1]) &&
       timeInMinutes <= totalMinutes(durations[2], durations[3]);
   });
@@ -12,7 +14,7 @@ const isTradeDay = (time) => {
   return day > 0 && day < 6;
 };
 
-const isTradeTime = (time) => {
+const isTradeTime = (time: Date) => {
   if (!isTradeDay(time)) { return false; }
 
   const BEIJING_TIMEZONE = -480;

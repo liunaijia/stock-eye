@@ -1,5 +1,9 @@
 {
     "eslint.autoFixOnSave": true,
     "editor.tabSize": 2,
-    "stylelint.additionalDocumentSelectors": ["javascriptreact"]
+    "stylelint.additionalDocumentSelectors": [
+        "javascriptreact"
+    ],
+    "flow.useNPMPackagedFlow": true,
+    "javascript.validate.enable": false
 }
