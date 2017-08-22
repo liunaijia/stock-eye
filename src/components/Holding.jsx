@@ -1,17 +1,17 @@
+// @flow
 import React from 'react';
-import { string, number } from 'prop-types';
 
 import Number from './Number';
 
-const propTypes = {
-  stockName: string.isRequired,
-  stockAmount: number.isRequired,
-  sellableAmount: number.isRequired,
-  floating: number.isRequired,
-  floatingRate: string.isRequired,
+type Props = {
+  stockName?: string,
+  stockAmount?: number,
+  sellableAmount?: number,
+  floating?: number,
+  floatingRate?: string
 };
 
-function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRate }) {
+function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRate }: Props) {
   return (
     <tr>
       <td>{stockName}</td>
@@ -22,6 +22,12 @@ function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRat
   );
 }
 
-Holding.propTypes = propTypes;
+Holding.defaultProps = {
+  stockName: '',
+  stockAmount: 0,
+  sellableAmount: 0,
+  floating: 0.00,
+  floatingRate: '0%',
+};
 
 export default Holding;

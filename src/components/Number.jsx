@@ -1,24 +1,21 @@
-import React from 'react';
-import { node, string } from 'prop-types';
+// @flow
+import * as React from 'react';
 import styled from 'styled-components';
 
-const propTypes = {
-  className: string,
-  children: node,
+type Props = {
+  className?: string,
+  children?: React.Node,
 };
 
-const defaultProps = {
+function Number({ className, children }: Props) {
+  return <span className={className}>{children}</span>;
+}
+
+Number.defaultProps = {
   className: null,
   children: null,
 };
 
-function Number({ className, children }) {
-  return <span className={className}>{children}</span>;
-}
-
-Number.propTypes = propTypes;
-Number.defaultProps = defaultProps;
-
-export default styled(Number)`
+export default styled(Number) `
   color: ${props => (/^\s*-/.test(props.children) ? '#383' : '#c10')};
 `;

@@ -9,7 +9,7 @@ const isTimeInAnyTimeSlots = (timeInMinutes: number, ...timeSlots) =>
       timeInMinutes <= totalMinutes(durations[2], durations[3]);
   });
 
-const isTradeDay = (time) => {
+const isTradeDay = (time: Date) => {
   const day = time.getDay();
   return day > 0 && day < 6;
 };
