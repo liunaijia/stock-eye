@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
-
-import Number from './Number';
+import styled from 'styled-components';
 
 type Props = {
   stockName?: string,
@@ -17,10 +16,14 @@ function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRat
       <td>{stockName}</td>
       <td>{stockAmount}</td>
       <td>{sellableAmount}</td>
-      <td><Number>{floating} ({floatingRate})</Number></td>
+      <Number>{floating} ({floatingRate})</Number>
     </tr>
   );
 }
+
+const Number = styled.td`
+  color: ${props => (/^\s*-/.test(props.children) ? '#383' : '#c10')};
+`;
 
 Holding.defaultProps = {
   stockName: '',
