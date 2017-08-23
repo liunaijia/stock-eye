@@ -9,7 +9,6 @@ const config = {
     popup: './src/popup.jsx',
     vendor: [
       'iconv-lite',
-      'material-ui',
       'prop-types',
       'react',
       'react-dom',

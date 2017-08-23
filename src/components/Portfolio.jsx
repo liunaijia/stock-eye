@@ -1,6 +1,5 @@
 import React from 'react';
 import { number, arrayOf, object } from 'prop-types';
-import { Paper } from 'material-ui';
 
 import Holdings from './Holdings';
 
@@ -15,10 +14,10 @@ const defaultProps = {
 };
 
 const Portfolio = ({ availableCash, holdings }) => (
-  <Paper>
+  <div>
     可用资金：{availableCash}
     <Holdings holdings={holdings} />
-  </Paper>
+  </div>
 );
 
 Portfolio.propTypes = propTypes;
