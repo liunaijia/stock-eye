@@ -78,10 +78,10 @@ runDuringTradeTime()(async () => {
   setBadge(currentGap.value.toString());
   if (currentGap.value >= THRESHOLD) {
     sendTradeSignal({ gap: currentGap.value,
-      buyStockName: currentGap.toBuy.stockName,
-      buyPrice: currentGap.toBuy.price,
-      sellStockName: currentGap.toSell.stockName,
-      sellPrice: currentGap.toSell.price });
+      stockToBuy: currentGap.toBuy.stockName,
+      priceToBuy: currentGap.toBuy.price,
+      stockToSell: currentGap.toSell.stockName,
+      priceToSell: currentGap.toSell.price });
   }
 });
 
