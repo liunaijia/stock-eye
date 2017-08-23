@@ -14,10 +14,11 @@ const defaultProps = {
 };
 
 const Portfolio = ({ availableCash, holdings }) => (
-  <div>
+  <article>
+    <header>持仓</header>
     可用资金：{availableCash}
     <Holdings holdings={holdings} />
-  </div>
+  </article>
 );
 
 Portfolio.propTypes = propTypes;

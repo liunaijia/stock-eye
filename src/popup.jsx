@@ -34,18 +34,47 @@ class Popup extends Component {
   state = {
     availableCash: 0,
     holdings: [],
-    tradeSuggestion: {},
+    tradeSuggestion: {
+      toBuy: {},
+      toSell: {},
+    },
   };
+
+  handleSubmit(e) {
+    e.preventDefault();
+  }
 
   render() {
     return (
       <div>
         <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
-        <h5>GAP: {this.state.tradeSuggestion.value} {new Date(this.state.tradeSuggestion.timestamp).toLocaleTimeString()}</h5>
-        买入
-        <TradeSuggestion {...this.state.tradeSuggestion.toBuy} />
-        卖出
-        <TradeSuggestion {...this.state.tradeSuggestion.toSell} />
+        <article>
+          <header>
+            交易建议
+            GAP[{this.state.tradeSuggestion.value}]
+            <time>{new Date(this.state.tradeSuggestion.timestamp).toLocaleTimeString()}</time>
+          </header>
+          <section>
+            买入 {this.state.tradeSuggestion.toBuy.stockName}
+            <TradeSuggestion
+              tradeType="buy"
+              price={this.state.tradeSuggestion.toBuy.price}
+              maxAmount={this.state.tradeSuggestion.toBuy.maxAmount}
+              quotes={this.state.tradeSuggestion.toBuy.quotes}
+              onSubmit={this.handleSubmit}
+            />
+          </section>
+          <section>
+            卖出 {this.state.tradeSuggestion.toSell.stockName}
+            <TradeSuggestion
+              tradeType="sell"
+              price={this.state.tradeSuggestion.toSell.price}
+              maxAmount={this.state.tradeSuggestion.toSell.maxAmount}
+              quotes={this.state.tradeSuggestion.toSell.quotes}
+              onSubmit={this.handleSubmit}
+            />
+          </section>
+        </article>
       </div>
     );
   }

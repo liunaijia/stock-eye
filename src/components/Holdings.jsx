@@ -1,5 +1,5 @@
 import React from 'react';
-import { string, arrayOf, shape } from 'prop-types';
+import { string, number, arrayOf, shape } from 'prop-types';
 import styled from 'styled-components';
 
 import Holding from './Holding';
@@ -7,8 +7,12 @@ import Holding from './Holding';
 const propTypes = {
   className: string,
   holdings: arrayOf(shape({
-    stockCode: string.isRequired,
-    ...Holding.propTypes,
+    stockCode: string,
+    stockName: string,
+    stockAmount: number,
+    sellableAmount: number,
+    floating: number,
+    floatingRate: string,
   })),
 };
 
@@ -28,7 +32,7 @@ const Holdings = ({ className, holdings }) => (
       </tr>
     </thead>
     <tbody>
-      {holdings.map(stock => (
+      {(holdings || []).map(stock => (
         <Holding
           key={stock.stockCode}
           stockName={stock.stockName}

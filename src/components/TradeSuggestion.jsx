@@ -1,11 +1,11 @@
 import React from 'react';
-import { string, number, shape, array } from 'prop-types';
+import { number, shape, array, func, oneOf } from 'prop-types';
 
 import Quotes from './Quotes';
+import TradeFrom from './TradeForm';
 
 const propTypes = {
-  stockCode: string,
-  stockName: string,
+  tradeType: oneOf(['buy', 'sell']),
   price: number,
   maxAmount: number,
   quotes: shape({
@@ -13,27 +13,30 @@ const propTypes = {
     buyingBids: array,
     sellingBids: array,
   }),
+  onSubmit: func,
 };
 
 const defaultProps = {
-  stockCode: '',
-  stockName: '',
+  tradeType: 'buy',
   price: 0,
   maxAmount: 0,
   quotes: {},
+  onSubmit: null,
 };
 
-const TradeSuggestion = ({ stockCode, stockName, price, maxAmount, quotes }) => (
-  <div>
-    {stockName} {stockCode}
-    价格{price}
-    数量{maxAmount}
-    <Quotes
-      currentPrice={quotes.current}
-      buyingBids={quotes.buyingBids}
-      sellingBids={quotes.sellingBids}
-    />
-  </div>
+const TradeSuggestion = ({ tradeType, price, maxAmount, quotes, onSubmit }) => (
+  <article>
+    <section>
+      <TradeFrom tradeType={tradeType} price={price} maxAmount={maxAmount} onSubmit={onSubmit} />
+    </section>
+    <section>
+      <Quotes
+        currentPrice={quotes.current}
+        buyingBids={quotes.buyingBids}
+        sellingBids={quotes.sellingBids}
+      />
+    </section>
+  </article>
 );
 
 TradeSuggestion.propTypes = propTypes;

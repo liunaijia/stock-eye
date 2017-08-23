@@ -5,5 +5,6 @@
         "javascriptreact"
     ],
     "flow.useNPMPackagedFlow": true,
-    "javascript.validate.enable": false
+    "javascript.validate.enable": true,
+    "flow.enabled": false
 }

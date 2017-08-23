@@ -1,16 +1,24 @@
-// @flow
 import React from 'react';
+import { string, number } from 'prop-types';
 import styled from 'styled-components';
 
-type Props = {
-  stockName?: string,
-  stockAmount?: number,
-  sellableAmount?: number,
-  floating?: number,
-  floatingRate?: string
+const propTypes = {
+  stockName: string,
+  stockAmount: number,
+  sellableAmount: number,
+  floating: number,
+  floatingRate: string,
 };
 
-function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRate }: Props) {
+const defaultProps = {
+  stockName: null,
+  stockAmount: null,
+  sellableAmount: null,
+  floating: null,
+  floatingRate: null,
+};
+
+function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRate }) {
   return (
     <tr>
       <td>{stockName}</td>
@@ -22,15 +30,10 @@ function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRat
 }
 
 const Number = styled.td`
-  color: ${props => (/^\s*-/.test(props.children) ? '#383' : '#c10')};
+  color: var(${props => (/^\s*-/.test(props.children) ? '--green' : '--red')});
 `;
 
-Holding.defaultProps = {
-  stockName: '',
-  stockAmount: 0,
-  sellableAmount: 0,
-  floating: 0.00,
-  floatingRate: '0%',
-};
+Holding.propTypes = propTypes;
+Holding.defaultProps = defaultProps;
 
 export default Holding;
