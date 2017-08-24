@@ -5,7 +5,7 @@ import Quotes from './Quotes';
 import TradeFrom from './TradeForm';
 
 const propTypes = {
-  tradeType: oneOf(['buy', 'sell']),
+  tradeType: oneOf(['buy', 'sell']).isRequired,
   price: number,
   maxAmount: number,
   quotes: shape({
@@ -13,21 +13,24 @@ const propTypes = {
     buyingBids: array,
     sellingBids: array,
   }),
-  onSubmit: func,
+  onPlaceOrder: func.isRequired,
 };
 
 const defaultProps = {
-  tradeType: 'buy',
   price: 0,
   maxAmount: 0,
   quotes: {},
-  onSubmit: null,
 };
 
-const TradeSuggestion = ({ tradeType, price, maxAmount, quotes, onSubmit }) => (
+const TradeSuggestion = ({ tradeType, price, maxAmount, quotes, onPlaceOrder }) => (
   <article>
     <section>
-      <TradeFrom tradeType={tradeType} price={price} maxAmount={maxAmount} onSubmit={onSubmit} />
+      <TradeFrom
+        tradeType={tradeType}
+        price={price}
+        maxAmount={maxAmount}
+        onPlaceOrder={onPlaceOrder}
+      />
     </section>
     <section>
       <Quotes

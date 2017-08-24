@@ -2,34 +2,53 @@ import React, { Component } from 'react';
 import { string, number, func, oneOf } from 'prop-types';
 import styled from 'styled-components';
 
-const propTypes = {
-  className: string,
-  tradeType: oneOf(['buy', 'sell']),
-  price: number,
-  maxAmount: number,
-  onSubmit: func,
-};
+class TradeForm extends Component {
+  static propTypes = {
+    className: string,
+    tradeType: oneOf(['buy', 'sell']).isRequired,
+    price: number,
+    maxAmount: number,
+    onPlaceOrder: func.isRequired,
+  }
 
-const defaultProps = {
-  className: null,
-  tradeType: 'buy',
-  price: null,
-  maxAmount: null,
-  onSubmit: null,
-};
+  static defaultProps = {
+    className: null,
+    price: null,
+    maxAmount: null,
+  }
 
-// It should be a stateful component
-const TradeForm = ({ className, tradeType, price, maxAmount, onSubmit }) => (
-  <form className={className} onSubmit={onSubmit}>
-    价格：<input value={price} type="number" />
-    数量：<input value={maxAmount} required type="number" />
-    可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
-    <input type="submit" value={tradeType === 'buy' ? '买入' : '卖出'} />
-  </form>
-);
+  state = {
+    price: this.props.price,
+    amount: this.props.maxAmount,
+  }
 
-TradeForm.propTypes = propTypes;
-TradeForm.defaultProps = defaultProps;
+  handleSubmit = (event = new Event()) => {
+    event.preventDefault();
+    this.props.onPlaceOrder();
+  }
+
+  handleChange = (event = new Event()) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  render() {
+    const { className, tradeType, maxAmount } = this.props;
+    return (
+      <form className={className} onSubmit={this.handleSubmit}>
+        价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
+        数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
+        可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
+        <input type="submit" value={tradeType === 'buy' ? '买入' : '卖出'} />
+      </form>
+    );
+  }
+}
 
 export default styled(TradeForm)`
   input {
