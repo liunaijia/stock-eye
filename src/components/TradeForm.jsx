@@ -6,25 +6,31 @@ class TradeForm extends Component {
   static propTypes = {
     className: string,
     tradeType: oneOf(['buy', 'sell']).isRequired,
+    stockCode: string,
+    stockName: string,
     price: number,
     maxAmount: number,
-    onPlaceOrder: func.isRequired,
+    onSubmit: func.isRequired,
   }
 
   static defaultProps = {
     className: null,
+    stockCode: null,
+    stockName: null,
     price: null,
     maxAmount: null,
   }
 
   state = {
+    stockCode: this.props.stockCode,
     price: this.props.price,
     amount: this.props.maxAmount,
   }
 
   handleSubmit = (event = new Event()) => {
     event.preventDefault();
-    this.props.onPlaceOrder();
+    const { stockCode, price, amount } = this.state;
+    this.props.onSubmit({ stockCode, price, amount });
   }
 
   handleChange = (event = new Event()) => {
@@ -38,17 +44,21 @@ class TradeForm extends Component {
   }
 
   render() {
-    const { className, tradeType, maxAmount } = this.props;
+    const { className, tradeType, stockName, maxAmount } = this.props;
     return (
       <form className={className} onSubmit={this.handleSubmit}>
         <p>
-        价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
+          股票：<input name="stockName" value={stockName} readOnly />
+          <input name="stockCode" value={this.state.stockCode} type="hidden" />
         </p>
         <p>
-        数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
+          价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
         </p>
         <p>
-        可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
+          数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
+        </p>
+        <p>
+          可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
         </p>
         <input type="submit" value={tradeType === 'buy' ? '买入' : '卖出'} />
       </form>
@@ -56,7 +66,7 @@ class TradeForm extends Component {
   }
 }
 
-export default styled(TradeForm)`
+export default styled(TradeForm) `
   input {
     color: var(${({ tradeType }) => (tradeType === 'buy' ? '--red' : '--green')});
   }

@@ -55,6 +55,8 @@ class Popup extends Component {
             买入 {this.state.tradeSuggestion.toBuy.stockName}
             <TradeSuggestion
               tradeType="buy"
+              stockCode={this.state.tradeSuggestion.toBuy.stockCode}
+              stockName={this.state.tradeSuggestion.toBuy.stockName}
               price={this.state.tradeSuggestion.toBuy.price}
               maxAmount={this.state.tradeSuggestion.toBuy.maxAmount}
               quotes={this.state.tradeSuggestion.toBuy.quotes}
@@ -65,6 +67,8 @@ class Popup extends Component {
             卖出 {this.state.tradeSuggestion.toSell.stockName}
             <TradeSuggestion
               tradeType="sell"
+              stockCode={this.state.tradeSuggestion.toSell.stockCode}
+              stockName={this.state.tradeSuggestion.toSell.stockName}
               price={this.state.tradeSuggestion.toSell.price}
               maxAmount={this.state.tradeSuggestion.toSell.maxAmount}
               quotes={this.state.tradeSuggestion.toSell.quotes}

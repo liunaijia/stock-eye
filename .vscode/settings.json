@@ -3,8 +3,5 @@
     "editor.tabSize": 2,
     "stylelint.additionalDocumentSelectors": [
         "javascriptreact"
-    ],
-    "flow.useNPMPackagedFlow": true,
-    "javascript.validate.enable": true,
-    "flow.enabled": false
+    ]
 }
