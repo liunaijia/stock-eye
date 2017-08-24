@@ -41,9 +41,15 @@ class TradeForm extends Component {
     const { className, tradeType, maxAmount } = this.props;
     return (
       <form className={className} onSubmit={this.handleSubmit}>
+        <p>
         价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
+        </p>
+        <p>
         数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
+        </p>
+        <p>
         可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
+        </p>
         <input type="submit" value={tradeType === 'buy' ? '买入' : '卖出'} />
       </form>
     );

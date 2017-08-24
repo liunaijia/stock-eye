@@ -20,10 +20,7 @@ class Popup extends Component {
   state = {
     availableCash: 0,
     holdings: [],
-    tradeSuggestion: {
-      toBuy: {},
-      toSell: {},
-    },
+    tradeSuggestion: null,
   };
 
   async componentDidMount() {
@@ -47,6 +44,7 @@ class Popup extends Component {
     return (
       <div>
         <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
+        {this.state.tradeSuggestion &&
         <article>
           <header>
             交易建议
@@ -74,6 +72,7 @@ class Popup extends Component {
             />
           </section>
         </article>
+        }
       </div>
     );
   }
