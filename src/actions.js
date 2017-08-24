@@ -1,4 +1,3 @@
-// @flow
 export const GET_PORTFOLIO = 'GET_PORTFOLIO';
 export const GET_TRADE_SUGGESTION = 'GET_TRADE_SUGGESTION';
 export const PLACE_ORDER = 'PLACE_ORDER';

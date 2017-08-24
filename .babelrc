@@ -10,8 +10,7 @@
       }
     ],
     "stage-0",
-    "react",
-    "flow"
+    "react"
   ],
   "env": {
     "test": {
