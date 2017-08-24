@@ -10,5 +10,8 @@ module.exports = {
   env: {
     browser: true,
     'jest/globals': true    
+  },
+  rules: {
+    'react/no-did-mount-set-state': 'off'
   }
 };

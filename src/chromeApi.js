@@ -12,3 +12,8 @@ export const sendNotification = ({
   // However the messages sent by Notification API come up with the website domain which is
   // needless.
 };
+
+export const sendMessage = message => new Promise((resolve) => {
+  // convert the original callback to promise
+  chrome.runtime.sendMessage(message, resolve);
+});

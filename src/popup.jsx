@@ -5,6 +5,7 @@ import Portfolio from './components/Portfolio';
 import TradeSuggestion from './components/TradeSuggestion';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import './popup.css';
+import { sendMessage } from './chromeApi';
 
 const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}) => {
   const form = document.querySelector(`form.${formName}`);
@@ -25,18 +26,17 @@ class Popup extends Component {
     },
   };
 
-  componentDidMount() {
-    chrome.runtime.sendMessage({ type: GET_PORTFOLIO }, (response) => {
-      this.setState(response);
-    });
-    chrome.runtime.sendMessage({ type: GET_TRADE_SUGGESTION }, (response) => {
-      document.getElementById('debugWindow').innerText = JSON.stringify(response);
-      if (response) {
-        fillForm('buy', response.toBuy);
-        fillForm('sell', response.toSell);
-        this.setState({ tradeSuggestion: response });
-      }
-    });
+  async componentDidMount() {
+    const portfolio = await sendMessage({ type: GET_PORTFOLIO });
+    this.setState(portfolio);
+
+    const tradeSuggesion = await sendMessage({ type: GET_TRADE_SUGGESTION });
+    document.getElementById('debugWindow').innerText = JSON.stringify(tradeSuggesion);
+    // if (tradeSuggesion) {
+    fillForm('buy', tradeSuggesion.toBuy);
+    fillForm('sell', tradeSuggesion.toSell);
+    this.setState({ tradeSuggestion: tradeSuggesion });
+    // }
   }
 
   handlePlaceOrder(order) {
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const payload = readForm(formNode);
 
-      chrome.runtime.sendMessage({ type: PLACE_ORDER, payload }, (response) => {
+      sendMessage({ type: PLACE_ORDER, payload }).then((response) => {
         document.querySelector('.message').innerText += JSON.stringify(response);
       });
     };
