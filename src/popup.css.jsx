@@ -8,6 +8,7 @@ injectGlobal`
   }
 
   body {
+    font-family: "Helvetica Neue";
     width: 350px;
   }
 `;
