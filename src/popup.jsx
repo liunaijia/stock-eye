@@ -16,8 +16,16 @@ const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}
 };
 
 class Popup extends Component {
-  constructor() {
-    super();
+  state = {
+    availableCash: 0,
+    holdings: [],
+    tradeSuggestion: {
+      toBuy: {},
+      toSell: {},
+    },
+  };
+
+  componentDidMount() {
     chrome.runtime.sendMessage({ type: GET_PORTFOLIO }, (response) => {
       this.setState(response);
     });
@@ -31,17 +39,8 @@ class Popup extends Component {
     });
   }
 
-  state = {
-    availableCash: 0,
-    holdings: [],
-    tradeSuggestion: {
-      toBuy: {},
-      toSell: {},
-    },
-  };
-
-  handleSubmit(e) {
-    e.preventDefault();
+  handlePlaceOrder(order) {
+    console.log(order);
   }
 
   render() {
@@ -61,7 +60,7 @@ class Popup extends Component {
               price={this.state.tradeSuggestion.toBuy.price}
               maxAmount={this.state.tradeSuggestion.toBuy.maxAmount}
               quotes={this.state.tradeSuggestion.toBuy.quotes}
-              onSubmit={this.handleSubmit}
+              onPlaceOrder={this.handlePlaceOrder}
             />
           </section>
           <section>
@@ -71,7 +70,7 @@ class Popup extends Component {
               price={this.state.tradeSuggestion.toSell.price}
               maxAmount={this.state.tradeSuggestion.toSell.maxAmount}
               quotes={this.state.tradeSuggestion.toSell.quotes}
-              onSubmit={this.handleSubmit}
+              onPlaceOrder={this.handlePlaceOrder}
             />
           </section>
         </article>
