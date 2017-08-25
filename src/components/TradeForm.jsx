@@ -44,7 +44,7 @@ class TradeForm extends Component {
   }
 
   render() {
-    const { className, tradeType, stockName, maxAmount } = this.props;
+    const { className, tradeType, stockName, price, maxAmount } = this.props;
     return (
       <form className={className} onSubmit={this.handleSubmit}>
         <p>
@@ -53,6 +53,9 @@ class TradeForm extends Component {
         </p>
         <p>
           价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
+        </p>
+        <p>
+          建议：{price}
         </p>
         <p>
           数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
