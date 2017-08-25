@@ -36,50 +36,58 @@ class Popup extends Component {
     // }
   }
 
-  handlePlaceOrder(order) {
-    console.log(order);
-  }
+   handlePlaceOrder =async (order) => {
+     const payload = { type: order.tradeType,
+       stockCode: order.stockCode,
+       price: order.price,
+       amount: order.amount };
+     const response = await sendMessage({ type: PLACE_ORDER, payload });
+     this.setState({ operationResults: response });
+   }
 
-  render() {
-    return (
-      <div>
-        <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
-        {this.state.tradeSuggestion &&
-        <article>
-          <header>
+   render() {
+     return (
+       <div>
+         <Portfolio availableCash={this.state.availableCash} holdings={this.state.holdings} />
+         {this.state.tradeSuggestion &&
+         <article>
+           <header>
             交易建议
             GAP[{this.state.tradeSuggestion.value}]
-            <time>{new Date(this.state.tradeSuggestion.timestamp).toLocaleTimeString()}</time>
-          </header>
-          <section>
+             <time>{new Date(this.state.tradeSuggestion.timestamp).toLocaleTimeString()}</time>
+           </header>
+           <section>
+             <p>{this.state.operationResults}</p>
+           </section>
+           <section>
             买入 {this.state.tradeSuggestion.toBuy.stockName}
-            <TradeSuggestion
-              tradeType="buy"
-              stockCode={this.state.tradeSuggestion.toBuy.stockCode}
-              stockName={this.state.tradeSuggestion.toBuy.stockName}
-              price={this.state.tradeSuggestion.toBuy.price}
-              maxAmount={this.state.tradeSuggestion.toBuy.maxAmount}
-              quotes={this.state.tradeSuggestion.toBuy.quotes}
-              onPlaceOrder={this.handlePlaceOrder}
-            />
-          </section>
-          <section>
+             <TradeSuggestion
+               tradeType="buy"
+               stockCode={this.state.tradeSuggestion.toBuy.stockCode}
+               stockName={this.state.tradeSuggestion.toBuy.stockName}
+               price={this.state.tradeSuggestion.toBuy.price}
+               maxAmount={this.state.tradeSuggestion.toBuy.maxAmount}
+               quotes={this.state.tradeSuggestion.toBuy.quotes}
+               onPlaceOrder={this.handlePlaceOrder}
+             />
+           </section>
+           <section>
             卖出 {this.state.tradeSuggestion.toSell.stockName}
-            <TradeSuggestion
-              tradeType="sell"
-              stockCode={this.state.tradeSuggestion.toSell.stockCode}
-              stockName={this.state.tradeSuggestion.toSell.stockName}
-              price={this.state.tradeSuggestion.toSell.price}
-              maxAmount={this.state.tradeSuggestion.toSell.maxAmount}
-              quotes={this.state.tradeSuggestion.toSell.quotes}
-              onPlaceOrder={this.handlePlaceOrder}
-            />
-          </section>
-        </article>
-        }
-      </div>
-    );
-  }
+             <TradeSuggestion
+               tradeType="sell"
+               stockCode={this.state.tradeSuggestion.toSell.stockCode}
+               stockName={this.state.tradeSuggestion.toSell.stockName}
+               price={this.state.tradeSuggestion.toSell.price}
+               maxAmount={this.state.tradeSuggestion.toSell.maxAmount}
+               quotes={this.state.tradeSuggestion.toSell.quotes}
+               onPlaceOrder={this.handlePlaceOrder}
+             />
+           </section>
+         </article>
+         }
+       </div>
+     );
+   }
 }
 
 const readForm = (form = new HTMLFormElement()) => (

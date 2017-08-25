@@ -125,7 +125,12 @@ const getAccountCode = async (stockCode = '', tradeType = '') => {
     return matchedNode.value;
   }
 
-  throw new Error(`Cannot find the account code matched with: ${stockCode}`);
+  throw new Error('无法获取股东代码');
+};
+
+const handleFailedResponse = (text = '') => {
+  const [, errorMessage] = text.match(/alert\('(.*?)'\)/) || [];
+  throw new Error(`${errorMessage}`);
 };
 
 const buyStock = async (stockCode = '', price = 0.0, amount = 0) => {
@@ -141,7 +146,7 @@ const buyStock = async (stockCode = '', price = 0.0, amount = 0) => {
   });
   const text = await readAsText(response);
   if (!text.includes('您的申请已提交')) {
-    throw new Error(`Fail to buy stock ${stockCode} ${price} ${amount}, ${text}`);
+    handleFailedResponse(text);
   }
 };
 
@@ -158,7 +163,7 @@ const sellStock = async (stockCode = '', price = 0.0, amount = 0) => {
   });
   const text = await readAsText(response);
   if (!text.includes('您的申请已提交')) {
-    throw new Error(`Fail to sell stock ${stockCode} ${price} ${amount}, ${text}`);
+    handleFailedResponse(text);
   }
 };
 
