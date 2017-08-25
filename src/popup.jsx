@@ -4,17 +4,8 @@ import ReactDOM from 'react-dom';
 import Portfolio from './components/Portfolio';
 import TradeSuggestion from './components/TradeSuggestion';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
-import './popup.css';
 import { sendMessage } from './chromeApi';
-
-const fillForm = (formName = '', { stockCode, stockName, price, maxAmount } = {}) => {
-  const form = document.querySelector(`form.${formName}`);
-  form.querySelector('.stock').innerText = `${stockName} ${price}`;
-  form.querySelector('.price').value = price;
-  form.querySelector('.amount').value = maxAmount;
-  form.querySelector('.maxAmount').innerText = maxAmount;
-  form.querySelector('.code').value = stockCode;
-};
+import './popup.css';
 
 class Popup extends Component {
   state = {
@@ -28,12 +19,7 @@ class Popup extends Component {
     this.setState(portfolio);
 
     const tradeSuggesion = await sendMessage({ type: GET_TRADE_SUGGESTION });
-    document.getElementById('debugWindow').innerText = JSON.stringify(tradeSuggesion);
-    // if (tradeSuggesion) {
-    fillForm('buy', tradeSuggesion.toBuy);
-    fillForm('sell', tradeSuggesion.toSell);
     this.setState({ tradeSuggestion: tradeSuggesion });
-    // }
   }
 
    handlePlaceOrder =async (order) => {
@@ -90,30 +76,7 @@ class Popup extends Component {
    }
 }
 
-const readForm = (form = new HTMLFormElement()) => (
-  {
-    type: form.querySelector('.type').value,
-    stockCode: form.querySelector('.code').value,
-    price: parseFloat(form.querySelector('.price').value),
-    amount: parseFloat(form.querySelector('.amount').value),
-  }
-);
-
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Popup />, document.getElementById('root'));
-
-  document.querySelectorAll('form').forEach((formNode) => {
-    formNode.onsubmit = (e) => { // eslint-disable-line no-param-reassign
-      e.preventDefault();
-      const submitNode = formNode.querySelector('input[type="submit"]');
-      submitNode.disabled = true;
-
-      const payload = readForm(formNode);
-
-      sendMessage({ type: PLACE_ORDER, payload }).then((response) => {
-        document.querySelector('.message').innerText += JSON.stringify(response);
-      });
-    };
-  });
 });
 
