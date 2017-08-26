@@ -62,6 +62,7 @@ Bids.propTypes = propTypes;
 Bids.defaultProps = defaultProps;
 
 export default styled(Bids)`
+  margin: 0;
   padding: 0;
 
   li {

@@ -1,29 +1,54 @@
-import React from 'react';
-import { number, arrayOf, object } from 'prop-types';
-// import styled from 'styled-components';
+import React, { Component } from 'react';
+import { string } from 'prop-types';
+import styled from 'styled-components';
 
 import Bids from './Bids';
+import fetchStockData from '../stockData';
 
-const propTypes = {
-  currentPrice: number,
-  buyingBids: arrayOf(object),
-  sellingBids: arrayOf(object),
-};
+class Quotes extends Component {
+  static propTypes = {
+    className: string,
+    stockCode: string.isRequired,
+  };
 
-const defaultProps = {
-  currentPrice: 0,
-  buyingBids: [],
-  sellingBids: [],
-};
+  static defaultProps = {
+    className: null,
+    currentPrice: 0,
+    buyingBids: [],
+    sellingBids: [],
+  };
 
-const Quotes = ({ currentPrice, buyingBids, sellingBids }) => (
-  <div>
-    <Bids type="sell" bids={sellingBids} currentPrice={currentPrice} />
-    <Bids type="buy" bids={buyingBids} currentPrice={currentPrice} />
-  </div>
-);
+  state = {
+    currentPrice: 0,
+    buyingBids: [],
+    sellingBids: [],
+  };
 
-Quotes.propTypes = propTypes;
-Quotes.defaultProps = defaultProps;
+  async componentDidMount() {
+    const stockCode = this.props.stockCode;
+    const stocks = await fetchStockData();
+    const stock = stocks.find(_ => _.code === stockCode);
+    this.setState({
+      currentPrice: stock.current,
+      buyingBids: stock.buyingBids,
+      sellingBids: stock.sellingBids,
+    });
+  }
 
-export default Quotes;
+  render() {
+    const { className } = this.props;
+    return (
+      <article className={className}>
+        <Bids type="sell" bids={this.state.sellingBids} currentPrice={this.state.currentPrice} />
+        <p>现价 {this.state.currentPrice}</p>
+        <Bids type="buy" bids={this.state.buyingBids} currentPrice={this.state.currentPrice} />
+      </article>
+    );
+  }
+}
+
+export default styled(Quotes)`
+  p {
+    margin: 0;
+  }
+`;

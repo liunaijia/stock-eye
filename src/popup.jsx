@@ -53,7 +53,6 @@ class Popup extends Component {
                stockName={this.state.tradeSuggestion.toBuy.stockName}
                price={this.state.tradeSuggestion.toBuy.price}
                maxAmount={this.state.tradeSuggestion.toBuy.maxAmount}
-               quotes={this.state.tradeSuggestion.toBuy.quotes}
                onPlaceOrder={this.handlePlaceOrder}
              />
            </section>
@@ -65,7 +64,6 @@ class Popup extends Component {
                stockName={this.state.tradeSuggestion.toSell.stockName}
                price={this.state.tradeSuggestion.toSell.price}
                maxAmount={this.state.tradeSuggestion.toSell.maxAmount}
-               quotes={this.state.tradeSuggestion.toSell.quotes}
                onPlaceOrder={this.handlePlaceOrder}
              />
            </section>

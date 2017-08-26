@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { string, number, shape, array, func, oneOf } from 'prop-types';
+import { string, number, func, oneOf } from 'prop-types';
 import styled from 'styled-components';
 
 import Quotes from './Quotes';
@@ -13,11 +13,6 @@ class TradeSuggestion extends Component {
     stockName: string,
     price: number,
     maxAmount: number,
-    quotes: shape({
-      current: number,
-      buyingBids: array,
-      sellingBids: array,
-    }),
     onPlaceOrder: func.isRequired,
   };
 
@@ -27,7 +22,6 @@ class TradeSuggestion extends Component {
     stockName: null,
     price: 0,
     maxAmount: 0,
-    quotes: {},
   };
 
   handleSubmit = (formData) => {
@@ -35,7 +29,7 @@ class TradeSuggestion extends Component {
   };
 
   render() {
-    const { className, tradeType, stockCode, stockName, price, maxAmount, quotes } = this.props;
+    const { className, tradeType, stockCode, stockName, price, maxAmount } = this.props;
     return (
       <article className={className}>
         <section>
@@ -49,11 +43,7 @@ class TradeSuggestion extends Component {
           />
         </section>
         <section>
-          <Quotes
-            currentPrice={quotes.current}
-            buyingBids={quotes.buyingBids}
-            sellingBids={quotes.sellingBids}
-          />
+          <Quotes stockCode={stockCode} />
         </section>
       </article>
     );
