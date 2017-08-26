@@ -71,6 +71,15 @@ const loadLoginForm = async () => {
   return formData;
 };
 
+export const readAlertMessage = (text = '') => {
+  const messages = text.match(/alert\('.*?'\)/g);
+  if (messages === null) { return null; }
+
+  const lastMessage = messages[messages.length - 1];
+  const [, errorMessage] = lastMessage.match(/'(.*?)'/);
+  return errorMessage;
+};
+
 const doLogin = async (payload, captcha) => {
   const response = await sendRequest('/xtrade', { ...payload,
     f_khh: ACCOUNT_NUMBER,
@@ -79,12 +88,14 @@ const doLogin = async (payload, captcha) => {
     macip: MOBILE_NUMBER,
   });
   if (!response.ok) {
-    throw new Error(`fail to login: ${response.statusText}`);
+    throw new Error(`登录失败：${response.statusText}`);
   }
 
-  const { charset } = readContentType(response);
-  const bytes = await response.arrayBuffer();
-  const text = decode(new Buffer(bytes), charset);
+  const text = await readAsText(response);
+  const message = readAlertMessage(text);
+
+  if (message.includes('系统维护')) { throw new Error(`登录失败：${message}`); }
+
   return !text.includes('验证码输入错误');
 };
 
