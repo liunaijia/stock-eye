@@ -1,6 +1,6 @@
 import isTradeTime from './tradeTime';
 import { STOCK_POOL, THRESHOLD } from './settings';
-import fetchStockData from './stockData';
+import { fetchAllStocks } from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
 import { buyStock, getPortfolio, sellStock } from './newoneApi';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
@@ -73,7 +73,7 @@ const runDuringTradeTime = (interval = 3) => async (block) => {
 // watch stocks
 let currentGap = null;
 runDuringTradeTime()(async () => {
-  const stocks = await fetchStockData();
+  const stocks = await fetchAllStocks();
   currentGap = calcGap(stocks);
   setBadge(currentGap.value.toString());
   if (currentGap.value >= THRESHOLD) {
@@ -108,7 +108,7 @@ const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
 
 const createTradeSuggestion = async () => {
   if (currentGap == null) {
-    const stocks = await fetchStockData();
+    const stocks = await fetchAllStocks();
     currentGap = calcGap(stocks);
   }
 

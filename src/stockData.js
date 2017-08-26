@@ -52,10 +52,13 @@ const parse = (text = '') =>
       return stock;
     });
 
-const fetchStockData = async () => {
+export const fetchAllStocks = async () => {
   const text = await fetchData();
   const stocks = parse(text);
   return stocks;
 };
 
-export default fetchStockData;
+export const fetchStock = async (stockCode) => {
+  const data = await fetchAllStocks();
+  return data.find(stock => stock.code === stockCode);
+};

@@ -3,7 +3,7 @@ import { string } from 'prop-types';
 import styled from 'styled-components';
 
 import Bids from './Bids';
-import fetchStockData from '../stockData';
+import { fetchStock } from '../stockData';
 
 class Quotes extends Component {
   static propTypes = {
@@ -26,8 +26,7 @@ class Quotes extends Component {
 
   async componentDidMount() {
     const stockCode = this.props.stockCode;
-    const stocks = await fetchStockData();
-    const stock = stocks.find(_ => _.code === stockCode);
+    const stock = await fetchStock(stockCode);
     this.setState({
       currentPrice: stock.current,
       buyingBids: stock.buyingBids,
