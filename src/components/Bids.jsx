@@ -24,6 +24,7 @@ const Bids = ({ className, type, bids, currentPrice }) => {
   // However, this makes test code ignorant
   const bidListItems = bids.map((bid, index) => (
     <Bid
+      key={type + index} // eslint-disable-line react/no-array-index-key
       index={index}
       type={type}
       price={bid.price}

@@ -30,14 +30,12 @@ const Lot = styled.span`
 `;
 
 const Bid = ({ className, index, type, price, amount, currentPrice }) => {
-  const key = type + index;
-
   let vsCurrentPrice = 'equal';
   if (price < currentPrice) vsCurrentPrice = 'lower';
   else if (price > currentPrice) vsCurrentPrice = 'higher';
 
   return (
-    <li className={className} key={key} data-vs-current-price={vsCurrentPrice}>
+    <li className={className} data-vs-current-price={vsCurrentPrice}>
       <BidType>{type === 'buy' ? '买' : '卖'}{index + 1}</BidType>
       <Price>{price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</Price>
       <Lot>{Math.round(amount / 100)}</Lot>
