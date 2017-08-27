@@ -1,4 +1,4 @@
-import isTradeTime from './tradeTime';
+import { isTradeTime, sleep } from './time';
 import { STOCK_POOL, THRESHOLD } from './settings';
 import { fetchAllStocks } from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
@@ -51,7 +51,6 @@ const sendTradeSignal = ({ gap = 0, stockToBuy = '', priceToBuy = 0, stockToSell
   sendNotification({ title, message });
 };
 
-const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
 const runDuringTradeTime = (interval = 3) => async (block) => {
   try {

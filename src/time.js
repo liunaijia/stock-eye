@@ -13,7 +13,7 @@ const isTradeDay = (time) => {
   return day > 0 && day < 6;
 };
 
-const isTradeTime = (time) => {
+export const isTradeTime = (time) => {
   if (!isTradeDay(time)) { return false; }
 
   const BEIJING_TIMEZONE = -480;
@@ -23,4 +23,4 @@ const isTradeTime = (time) => {
   return isTimeInAnyTimeSlots(timeInMinutes, '9:30-11:30', '13:00-15:00');
 };
 
-export default isTradeTime;
+export const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));

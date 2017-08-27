@@ -1,4 +1,4 @@
-import isTradeTime from './tradeTime';
+import { isTradeTime, sleep } from './time';
 
 describe('isTradeTime in Brisbane time zone', () => {
   it('is not trade time on Saturday', () => {
@@ -58,3 +58,15 @@ describe('isTradeTime in Brisbane time zone', () => {
     });
   });
 });
+
+describe('sleep', () => {
+  jest.useFakeTimers();
+
+  it('waits 1 second before waking up', () => {
+    sleep(1);
+
+    expect(setTimeout.mock.calls.length).toBe(1);
+    expect(setTimeout.mock.calls[0][1]).toBe(1000);
+  });
+});
+
