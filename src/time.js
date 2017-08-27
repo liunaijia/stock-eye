@@ -13,7 +13,7 @@ const isTradeDay = (time) => {
   return day > 0 && day < 6;
 };
 
-export const isTradeTime = (time) => {
+export const isTradeTime = (time = new Date()) => {
   if (!isTradeDay(time)) { return false; }
 
   const BEIJING_TIMEZONE = -480;

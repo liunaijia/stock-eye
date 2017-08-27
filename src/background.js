@@ -51,7 +51,6 @@ const sendTradeSignal = ({ gap = 0, stockToBuy = '', priceToBuy = 0, stockToSell
   sendNotification({ title, message });
 };
 
-
 const runDuringTradeTime = (interval = 3) => async (block) => {
   try {
     const now = new Date();
@@ -112,10 +111,12 @@ const createTradeSuggestion = async () => {
   }
 
   const suggestion = { ...currentGap };
-  suggestion.toBuy.maxAmount = cutoffAmount(suggestion.toBuy.price, portfolio.availableCash);
+  // suggestion.toBuy.maxAmount = cutoffAmount(suggestion.toBuy.price, portfolio.availableCash);
+  // suggestion.toBuy.maxAmount = null;
 
-  const holding = portfolio.holdings.find(h => h.stockCode === suggestion.toSell.stockCode);
-  suggestion.toSell.maxAmount = holding ? holding.sellableAmount : 0;
+  // const holding = portfolio.holdings.find(h => h.stockCode === suggestion.toSell.stockCode);
+  // suggestion.toSell.maxAmount = holding ? holding.sellableAmount : 0;
+  // suggestion.toSell.maxAmount = null;
 
   return suggestion;
 };
