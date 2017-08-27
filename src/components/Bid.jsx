@@ -48,7 +48,7 @@ Bid.defaultProps = defaultProps;
 
 export default styled(Bid)`
   display: flex;
-  line-height: 1rem;
+  line-height: 1.4rem;
 
   &[data-vs-current-price=higher] {
     span:nth-child(2) {
