@@ -27,7 +27,7 @@ class Quotes extends Component {
   };
 
   async componentDidMount() {
-    this.initStock(3);
+    this.initStock(1);
   }
 
   async initStock(interval) {

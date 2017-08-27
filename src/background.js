@@ -25,21 +25,11 @@ const calcGap = (stocks = [{ code: '',
       stockCode: stockMayBuy.code,
       stockName: STOCK_POOL[stockMayBuy.code],
       price: stockMayBuy.sellingAt,
-      quotes: {
-        current: stockMayBuy.current,
-        buyingBids: stockMayBuy.buyingBids,
-        sellingBids: stockMayBuy.sellingBids,
-      },
     },
     toSell: {
       stockCode: stockMaySell.code,
       stockName: STOCK_POOL[stockMaySell.code],
       price: stockMaySell.buyingAt,
-      quotes: {
-        current: stockMaySell.current,
-        buyingBids: stockMaySell.buyingBids,
-        sellingBids: stockMaySell.sellingBids,
-      },
     },
     timestamp: new Date().getTime(),
   };
