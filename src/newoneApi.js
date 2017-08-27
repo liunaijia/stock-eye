@@ -204,7 +204,7 @@ const parsePortfolio = async (dom = new Document()) => {
   };
 };
 
-const getPortfolio = async () => {
+export const getPortfolio = async () => {
   const response = await sendRequest(`/xtrade?random=${new Date().getTime()}`, { jybm: '100040' });
   const dom = await readAsDom(response);
   if (dom.body.childElementCount === 0) {
@@ -215,5 +215,5 @@ const getPortfolio = async () => {
   return parsePortfolio(dom);
 };
 
-export { login, buyStock, getPortfolio, sellStock };
+export { login, buyStock, sellStock };
 

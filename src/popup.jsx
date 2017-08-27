@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 
 import Portfolio from './components/Portfolio';
 import TradeSuggestion from './components/TradeSuggestion';
-import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
+import { GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
+import { getPortfolio } from './newoneApi';
 import './popup.css';
 
 class Popup extends Component {
@@ -15,11 +16,11 @@ class Popup extends Component {
   };
 
   async componentDidMount() {
-    const portfolio = await sendMessage({ type: GET_PORTFOLIO });
-    this.setState(portfolio);
+    const portfolio = await getPortfolio();
+    this.setState({ availableCash: portfolio.availableCash, holdings: portfolio.holdings });
 
     const tradeSuggesion = await sendMessage({ type: GET_TRADE_SUGGESTION });
-    this.setState({ tradeSuggestion: tradeSuggesion });
+    // this.setState({ tradeSuggestion: tradeSuggesion });
   }
 
    handlePlaceOrder =async (order) => {

@@ -3,7 +3,7 @@ import { STOCK_POOL, THRESHOLD } from './settings';
 import { fetchAllStocks } from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
 import { buyStock, getPortfolio, sellStock } from './newoneApi';
-import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
+import { GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 
 const calcGap = (stocks = [{ code: '',
   current: 0,
@@ -138,12 +138,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // makes calling sendResponse asynchronously work.
     const payload = message.payload;
     switch (message.type) {
-      case GET_PORTFOLIO:
-        if (!portfolio) {
-          portfolio = await getPortfolio();
-        }
-        sendResponse(portfolio);
-        break;
       case GET_TRADE_SUGGESTION:
         sendResponse(await createTradeSuggestion());
         break;
