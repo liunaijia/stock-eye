@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Bids from './Bids';
 import { fetchStock } from '../stockData';
+import { isTradeTime, sleep } from '../time';
 
 class Quotes extends Component {
   static propTypes = {
@@ -22,16 +23,27 @@ class Quotes extends Component {
     currentPrice: 0,
     buyingBids: [],
     sellingBids: [],
+    isInitialized: false,
   };
 
   async componentDidMount() {
-    const stockCode = this.props.stockCode;
-    const stock = await fetchStock(stockCode);
-    this.setState({
-      currentPrice: stock.current,
-      buyingBids: stock.buyingBids,
-      sellingBids: stock.sellingBids,
-    });
+    this.initStock(3);
+  }
+
+  async initStock(interval) {
+    if (isTradeTime() || !this.state.isInitialized) {
+      const stockCode = this.props.stockCode;
+      const stock = await fetchStock(stockCode);
+      this.setState({
+        currentPrice: stock.current,
+        buyingBids: stock.buyingBids,
+        sellingBids: stock.sellingBids,
+        isInitialized: true,
+      });
+    }
+
+    await sleep(interval);
+    this.initStock(interval);
   }
 
   render() {
