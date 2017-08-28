@@ -1,50 +1,24 @@
 import { isTradeTime, sleep } from './time';
-import { STOCK_POOL, THRESHOLD } from './settings';
+import { THRESHOLD } from './settings';
 import { fetchAllStocks } from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
 import { buyStock, getPortfolio, sellStock } from './newoneApi';
 import { GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
+import { calcBuyingGap, calcSellingGap } from './gapService';
 
-const calcGap = (stocks = [{ code: '',
-  current: 0,
-  buyingAt: 0,
-  buyingBids: [],
-  buyingRatio: 0,
-  sellingAt: 0,
-  sellingBids: [],
-  sellingRatio: 0 }]) => {
-  const stockMayBuy = stocks.sort((a, b) => a.sellingRatio - b.sellingRatio)[0];
-  const stockMaySell = stocks.sort((a, b) => b.buyingRatio - a.buyingRatio)[0];
+let portfolio = null;
+let currentGapToBuy = null;
+let currentGapToSell = null;
 
-  const gap = Math.round((stockMaySell.buyingRatio - stockMayBuy.sellingRatio) * 100) / 100;
-  // Gap could be a negative value, which means any trade will lose.
-
-  return {
-    value: gap,
-    toBuy: {
-      stockCode: stockMayBuy.code,
-      stockName: STOCK_POOL[stockMayBuy.code],
-      price: stockMayBuy.sellingAt,
-    },
-    toSell: {
-      stockCode: stockMaySell.code,
-      stockName: STOCK_POOL[stockMaySell.code],
-      price: stockMaySell.buyingAt,
-    },
-    timestamp: new Date().getTime(),
-  };
-};
-
-const sendTradeSignal = ({ gap = 0, stockToBuy = '', priceToBuy = 0, stockToSell = '', priceToSell = 0 }) => {
+const sendTradeSignal = ({ gap = 0, trade = '', stock = '', price = 0 }) => {
   const title = `价差${gap}%`;
-  const message = `买${stockToBuy} ${priceToBuy}，卖${stockToSell} ${priceToSell}`;
+  const message = `${trade} ${stock} ${price}`;
   sendNotification({ title, message });
 };
 
 const runDuringTradeTime = (interval = 3) => async (block) => {
   try {
-    const now = new Date();
-    if (isTradeTime(now)) {
+    if (isTradeTime()) {
       await block();
     } else {
       setBadge('');
@@ -58,57 +32,56 @@ const runDuringTradeTime = (interval = 3) => async (block) => {
   }
 };
 
-// watch stocks
-let currentGap = null;
-runDuringTradeTime()(async () => {
+const calcGaps = async () => {
   const stocks = await fetchAllStocks();
-  currentGap = calcGap(stocks);
-  setBadge(currentGap.value.toString());
-  if (currentGap.value >= THRESHOLD) {
-    sendTradeSignal({ gap: currentGap.value,
-      stockToBuy: currentGap.toBuy.stockName,
-      priceToBuy: currentGap.toBuy.price,
-      stockToSell: currentGap.toSell.stockName,
-      priceToSell: currentGap.toSell.price });
+
+  if (!portfolio) {
+    portfolio = await getPortfolio();
   }
+
+  // calculate gap to buy stock
+  currentGapToBuy = calcBuyingGap(stocks, portfolio.availableCash);
+
+  // calculate gap to sell holding stock
+  currentGapToSell = calcSellingGap(stocks, portfolio.holdings);
+};
+
+// watch stocks
+runDuringTradeTime()(async () => {
+  await calcGaps();
+
+  if (currentGapToBuy.value >= THRESHOLD) {
+    sendTradeSignal({ gap: currentGapToBuy.value,
+      trade: '买',
+      stock: currentGapToBuy.toBuy.stockName,
+      price: currentGapToBuy.toBuy.price,
+    });
+  }
+
+  if (currentGapToSell.value >= THRESHOLD) {
+    sendTradeSignal({ gap: currentGapToSell.value,
+      trade: '卖',
+      stock: currentGapToSell.toSell.stockName,
+      price: currentGapToSell.toSell.price,
+    });
+  }
+
+  setBadge(currentGapToBuy.value.toString());
 });
 
 // refresh portfolio
-let portfolio = null;
 runDuringTradeTime(10)(async () => {
   portfolio = await getPortfolio();
 });
 
 sendNotification({ title: 'StockEye 启动' });
 
-const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
-  const amount = Math.floor(balance / price / 100) * 100;
-  if (amount <= 0) {
-    return 0;
-  }
-
-  const cost = amount * price * (1 + (commission / 10000));
-  if (balance < cost) {
-    return amount - 100;
-  }
-  return amount;
-};
-
 const createTradeSuggestion = async () => {
-  if (currentGap == null) {
-    const stocks = await fetchAllStocks();
-    currentGap = calcGap(stocks);
+  if (currentGapToBuy == null) {
+    await calcGaps();
   }
 
-  const suggestion = { ...currentGap };
-  // suggestion.toBuy.maxAmount = cutoffAmount(suggestion.toBuy.price, portfolio.availableCash);
-  // suggestion.toBuy.maxAmount = null;
-
-  // const holding = portfolio.holdings.find(h => h.stockCode === suggestion.toSell.stockCode);
-  // suggestion.toSell.maxAmount = holding ? holding.sellableAmount : 0;
-  // suggestion.toSell.maxAmount = null;
-
-  return suggestion;
+  return { currentGapToBuy, currentGapToSell };
 };
 
 const run = async (block) => {

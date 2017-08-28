@@ -19,10 +19,22 @@ class Popup extends Component {
       isLoading: false,
     },
     tradeSuggestion: {
-      gap: null,
-      toBuy: {},
-      toSell: {},
-      timestamp: null,
+      toBuy: {
+        gap: null,
+        stockCode: null,
+        stockName: null,
+        price: null,
+        maxAmount: null,
+        timestamp: null,
+      },
+      toSell: {
+        gap: null,
+        stockCode: null,
+        stockName: null,
+        price: null,
+        maxAmount: null,
+        timestamp: null,
+      },
       isInitialized: false,
       isLoading: false,
     },
@@ -45,25 +57,6 @@ class Popup extends Component {
           isLoading: false,
         },
       });
-
-      if (this.state.tradeSuggestion.isInitialized) {
-        const holding = this.state.portfolio.holdings.find(h =>
-          h.stockCode === this.state.tradeSuggestion.toSell.stockCode);
-        this.setState({
-          tradeSuggestion: {
-            ...this.state.tradeSuggestion,
-            toBuy: {
-              ...this.state.tradeSuggestion.toBuy,
-              maxAmount: this.cutoffAmount(this.state.tradeSuggestion.toBuy.price,
-                this.state.portfolio.availableCash),
-            },
-            toSell: {
-              ...this.state.tradeSuggestion.toSell,
-              maxAmount: holding ? holding.sellableAmount : 0,
-            },
-          },
-        });
-      }
     }
 
     await sleep(interval);
@@ -73,29 +66,29 @@ class Popup extends Component {
   async initTradeSuggestion() {
     this.setState({ tradeSuggestion: { ...this.state.tradeSuggestion, isLoading: true } });
     const tradeSuggestion = await sendMessage({ type: GET_TRADE_SUGGESTION });
+
     this.setState({
       tradeSuggestion: {
-        gap: tradeSuggestion.value,
-        toBuy: tradeSuggestion.toBuy,
-        toSell: tradeSuggestion.toSell,
-        timestamp: tradeSuggestion.timestamp,
+        toBuy: {
+          gap: tradeSuggestion.currentGapToBuy.value,
+          timestamp: tradeSuggestion.currentGapToBuy.timestamp,
+          stockCode: tradeSuggestion.currentGapToBuy.toBuy.stockCode,
+          stockName: tradeSuggestion.currentGapToBuy.toBuy.stockName,
+          price: tradeSuggestion.currentGapToBuy.toBuy.price,
+          maxAmount: tradeSuggestion.currentGapToBuy.toBuy.maxAmount,
+        },
+        toSell: {
+          gap: tradeSuggestion.currentGapToSell.value,
+          timestamp: tradeSuggestion.currentGapToSell.timestamp,
+          stockCode: tradeSuggestion.currentGapToSell.toSell.stockCode,
+          stockName: tradeSuggestion.currentGapToSell.toSell.stockName,
+          price: tradeSuggestion.currentGapToSell.toSell.price,
+          maxAmount: tradeSuggestion.currentGapToSell.toSell.maxAmount,
+        },
         isInitialized: true,
         isLoading: false,
       },
     });
-  }
-
-  cutoffAmount = (price = 0, balance = 0, commission = 5) => {
-    const amount = Math.floor(balance / price / 100) * 100;
-    if (amount <= 0) {
-      return 0;
-    }
-
-    const cost = amount * price * (1 + (commission / 10000));
-    if (balance < cost) {
-      return amount - 100;
-    }
-    return amount;
   }
 
   handlePlaceOrder = async (order) => {
@@ -123,14 +116,12 @@ class Popup extends Component {
           {this.state.tradeSuggestion.isInitialized &&
           <div>
             <section>
-              GAP：[{this.state.tradeSuggestion.gap}]
-              <time>{new Date(this.state.tradeSuggestion.timestamp).toLocaleTimeString()}</time>
-            </section>
-            <section>
               <p>{this.state.operationResults}</p>
             </section>
             <section>
               买入 {this.state.tradeSuggestion.toBuy.stockName}
+              GAP：[{this.state.tradeSuggestion.toBuy.gap}]
+              <time>{new Date(this.state.tradeSuggestion.toBuy.timestamp).toLocaleTimeString()}</time>
               <TradeSuggestion
                 tradeType="buy"
                 stockCode={this.state.tradeSuggestion.toBuy.stockCode}
@@ -142,6 +133,8 @@ class Popup extends Component {
             </section>
             <section>
               卖出 {this.state.tradeSuggestion.toSell.stockName}
+              GAP：[{this.state.tradeSuggestion.toSell.gap}]
+              <time>{new Date(this.state.tradeSuggestion.toSell.timestamp).toLocaleTimeString()}</time>
               <TradeSuggestion
                 tradeType="sell"
                 stockCode={this.state.tradeSuggestion.toSell.stockCode}
