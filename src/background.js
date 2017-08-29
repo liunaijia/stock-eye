@@ -1,25 +1,40 @@
 import { isTradeTime, sleep } from './time';
 import { THRESHOLD } from './settings';
-import { fetchAllStocks } from './stockData';
 import { setBadge, sendNotification } from './chromeApi';
-import { buyStock, getPortfolio, sellStock } from './newoneApi';
-import { GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
-import { calcBuyingGap, calcSellingGap } from './gapService';
+import { buyStock, sellStock } from './newoneApi';
+import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
+import { getPortfolio, getGaps } from './jobs';
 
-let portfolio = null;
-let currentGapToBuy = null;
-let currentGapToSell = null;
-
-const sendTradeSignal = ({ gap = 0, trade = '', stock = '', price = 0 }) => {
+const sendTradeSignal = ({ gap = 0, trade = '', stock = '', price = 0, additional = '' }) => {
   const title = `价差${gap}%`;
-  const message = `${trade} ${stock} ${price}`;
+  const message = `${trade} ${stock} ${price} ${additional}`;
   sendNotification({ title, message });
 };
 
-const runDuringTradeTime = (interval = 3) => async (block) => {
+const watchGaps = async () => {
   try {
     if (isTradeTime()) {
-      await block();
+      const gaps = await getGaps();
+
+      if (gaps.buying.value >= THRESHOLD && gaps.buying.toBuy.maxAmount > 0) {
+        sendTradeSignal({ gap: gaps.buying.value,
+          trade: '买',
+          stock: gaps.buying.toBuy.stockName,
+          price: gaps.buying.toBuy.price,
+          additional: `相比${gaps.buying.compareWith.stockName}`,
+        });
+      }
+
+      if (gaps.selling.value >= THRESHOLD) {
+        sendTradeSignal({ gap: gaps.selling.value,
+          trade: '卖',
+          stock: gaps.selling.toSell.stockName,
+          price: gaps.selling.toSell.price,
+          additional: `相比${gaps.selling.compareWith.stockName}`,
+        });
+      }
+
+      setBadge(gaps.buying.value.toString());
     } else {
       setBadge('');
     }
@@ -27,62 +42,13 @@ const runDuringTradeTime = (interval = 3) => async (block) => {
     console.error(e);
     sendNotification({ title: e.message });
   } finally {
-    await sleep(interval);
-    runDuringTradeTime(interval)(block);
+    await sleep(3);
+    watchGaps();
   }
 };
-
-const calcGaps = async () => {
-  const stocks = await fetchAllStocks();
-
-  if (!portfolio) {
-    portfolio = await getPortfolio();
-  }
-
-  // calculate gap to buy stock
-  currentGapToBuy = calcBuyingGap(stocks, portfolio.availableCash);
-
-  // calculate gap to sell holding stock
-  currentGapToSell = calcSellingGap(stocks, portfolio.holdings);
-};
-
-// watch stocks
-runDuringTradeTime()(async () => {
-  await calcGaps();
-
-  if (currentGapToBuy.value >= THRESHOLD) {
-    sendTradeSignal({ gap: currentGapToBuy.value,
-      trade: '买',
-      stock: currentGapToBuy.toBuy.stockName,
-      price: currentGapToBuy.toBuy.price,
-    });
-  }
-
-  if (currentGapToSell.value >= THRESHOLD) {
-    sendTradeSignal({ gap: currentGapToSell.value,
-      trade: '卖',
-      stock: currentGapToSell.toSell.stockName,
-      price: currentGapToSell.toSell.price,
-    });
-  }
-
-  setBadge(currentGapToBuy.value.toString());
-});
-
-// refresh portfolio
-runDuringTradeTime(10)(async () => {
-  portfolio = await getPortfolio();
-});
+watchGaps();
 
 sendNotification({ title: 'StockEye 启动' });
-
-const createTradeSuggestion = async () => {
-  if (currentGapToBuy == null) {
-    await calcGaps();
-  }
-
-  return { currentGapToBuy, currentGapToSell };
-};
 
 const run = async (block) => {
   try {
@@ -101,8 +67,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // makes calling sendResponse asynchronously work.
     const payload = message.payload;
     switch (message.type) {
+      case GET_PORTFOLIO:
+        sendResponse(await getPortfolio());
+        break;
       case GET_TRADE_SUGGESTION:
-        sendResponse(await createTradeSuggestion());
+        sendResponse(await getGaps());
         break;
       case PLACE_ORDER:
         try {

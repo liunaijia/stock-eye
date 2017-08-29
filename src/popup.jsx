@@ -4,10 +4,9 @@ import ReactDOM from 'react-dom';
 import Portfolio from './components/Portfolio';
 import TradeSuggestion from './components/TradeSuggestion';
 import ProgressBar from './components/ProgressBar';
-import { GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
+import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
-import { getPortfolio } from './newoneApi';
-import { isTradeTime, sleep } from './time';
+import { sleep } from './time';
 import './popup.css';
 
 class Popup extends Component {
@@ -15,7 +14,6 @@ class Popup extends Component {
     portfolio: {
       availableCash: null,
       holdings: [],
-      isInitialized: false,
       isLoading: false,
     },
     tradeSuggestion: {
@@ -46,18 +44,16 @@ class Popup extends Component {
   }
 
   async initPortfolio(interval = 10) {
-    if (isTradeTime() || !this.state.portfolio.isInitialized) {
-      this.setState({ portfolio: { ...this.state.portfolio, isLoading: true } });
-      const portfolio = await getPortfolio();
-      this.setState({
-        portfolio: {
-          availableCash: portfolio.availableCash,
-          holdings: portfolio.holdings,
-          isInitialized: true,
-          isLoading: false,
-        },
-      });
-    }
+    this.setState({ portfolio: { ...this.state.portfolio, isLoading: true } });
+
+    const portfolio = await sendMessage({ type: GET_PORTFOLIO });
+    this.setState({
+      portfolio: {
+        availableCash: portfolio.availableCash,
+        holdings: portfolio.holdings,
+        isLoading: false,
+      },
+    });
 
     await sleep(interval);
     this.initPortfolio(interval);
@@ -70,20 +66,20 @@ class Popup extends Component {
     this.setState({
       tradeSuggestion: {
         toBuy: {
-          gap: tradeSuggestion.currentGapToBuy.value,
-          timestamp: tradeSuggestion.currentGapToBuy.timestamp,
-          stockCode: tradeSuggestion.currentGapToBuy.toBuy.stockCode,
-          stockName: tradeSuggestion.currentGapToBuy.toBuy.stockName,
-          price: tradeSuggestion.currentGapToBuy.toBuy.price,
-          maxAmount: tradeSuggestion.currentGapToBuy.toBuy.maxAmount,
+          gap: tradeSuggestion.buying.value,
+          timestamp: tradeSuggestion.buying.timestamp,
+          stockCode: tradeSuggestion.buying.toBuy.stockCode,
+          stockName: tradeSuggestion.buying.toBuy.stockName,
+          price: tradeSuggestion.buying.toBuy.price,
+          maxAmount: tradeSuggestion.buying.toBuy.maxAmount,
         },
         toSell: {
-          gap: tradeSuggestion.currentGapToSell.value,
-          timestamp: tradeSuggestion.currentGapToSell.timestamp,
-          stockCode: tradeSuggestion.currentGapToSell.toSell.stockCode,
-          stockName: tradeSuggestion.currentGapToSell.toSell.stockName,
-          price: tradeSuggestion.currentGapToSell.toSell.price,
-          maxAmount: tradeSuggestion.currentGapToSell.toSell.maxAmount,
+          gap: tradeSuggestion.selling.value,
+          timestamp: tradeSuggestion.selling.timestamp,
+          stockCode: tradeSuggestion.selling.toSell.stockCode,
+          stockName: tradeSuggestion.selling.toSell.stockName,
+          price: tradeSuggestion.selling.toSell.price,
+          maxAmount: tradeSuggestion.selling.toSell.maxAmount,
         },
         isInitialized: true,
         isLoading: false,
