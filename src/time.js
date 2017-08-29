@@ -20,7 +20,7 @@ export const isTradeTime = (time = new Date()) => {
   const timezoneDiff = time.getTimezoneOffset() - BEIJING_TIMEZONE;
   const timeInMinutes = timezoneDiff + totalMinutes(time.getHours(), time.getMinutes());
 
-  return isTimeInAnyTimeSlots(timeInMinutes, '9:30-11:30', '13:00-15:00');
+  return isTimeInAnyTimeSlots(timeInMinutes, '9:15-11:30', '13:00-15:00');
 };
 
 export const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));

@@ -22,8 +22,8 @@ describe('isTradeTime in Brisbane time zone', () => {
     expect(isTradeTime(time)).toBe(false);
   });
 
-  it('is trade time at Monday 11:30', () => {
-    const time = new Date('2017-8-14 11:30');
+  it('is trade time at Monday 11:15', () => {
+    const time = new Date('2017-8-14 11:15');
     expect(isTradeTime(time)).toBe(true);
   });
 
