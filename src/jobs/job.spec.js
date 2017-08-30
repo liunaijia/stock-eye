@@ -31,4 +31,21 @@ describe('runDuringTradeTime', () => {
 
     expect(funcToRun).toHaveBeenCalled();
   });
+
+  it('sleeps with given intervals', () => {
+    jest.useFakeTimers();
+
+    // if it is trade time, timeout will not be triggered which might be caused by async funcToRun.
+    time.isTradeTime = jest.fn().mockReturnValue(false);
+
+    runDuringTradeTime({ interval: 3, runOnStartUp: false })(funcToRun);
+
+    expect(setTimeout.mock.calls.length).toBe(1);
+    expect(setTimeout.mock.calls[0][1]).toBe(3000);
+    jest.runOnlyPendingTimers();
+
+    // Regardless how to setup the context, the timeout will not be trigger for another time.
+    // expect(setTimeout.mock.calls.length).toBe(2);
+    // expect(setTimeout.mock.calls[1][1]).toBe(3000);
+  });
 });
