@@ -11,26 +11,38 @@ const sendTradeSignal = ({ gap = 0, trade = '', stock = '', price = 0, additiona
   sendNotification({ title, message });
 };
 
+const calcThreshold = (stockCode1, stockCode2) => {
+  const base = THRESHOLD.base;
+  const stock1Threshold = THRESHOLD[stockCode1] ? THRESHOLD[stockCode1] : base;
+  const stock2Threshold = THRESHOLD[stockCode2] ? THRESHOLD[stockCode2] : base;
+
+  return base + Math.abs(stock1Threshold - stock2Threshold);
+};
+
 const watchGaps = async () => {
   try {
     if (isTradeTime()) {
       const gaps = await getGaps();
 
-      if (gaps.buying.value >= THRESHOLD && gaps.buying.toBuy.maxAmount > 0) {
-        sendTradeSignal({ gap: gaps.buying.value,
+      const buyingGap = gaps.buying;
+      const buyingThreshold = calcThreshold(buyingGap.toBuy.stockCode, buyingGap.compareWith.stockCode);
+      if (buyingGap.value >= buyingThreshold && buyingGap.toBuy.maxAmount > 0) {
+        sendTradeSignal({ gap: buyingGap.value,
           trade: '买',
-          stock: gaps.buying.toBuy.stockName,
-          price: gaps.buying.toBuy.price,
-          additional: `相比${gaps.buying.compareWith.stockName}`,
+          stock: buyingGap.toBuy.stockName,
+          price: buyingGap.toBuy.price,
+          additional: `相比${buyingGap.compareWith.stockName}`,
         });
       }
 
-      if (gaps.selling.value >= THRESHOLD) {
-        sendTradeSignal({ gap: gaps.selling.value,
+      const sellingGap = gaps.selling;
+      const sellingThreshold = calcThreshold(sellingGap.toSell.stockCode, sellingGap.compareWith.stockCode);
+      if (sellingGap.value >= sellingThreshold) {
+        sendTradeSignal({ gap: sellingGap.value,
           trade: '卖',
-          stock: gaps.selling.toSell.stockName,
-          price: gaps.selling.toSell.price,
-          additional: `相比${gaps.selling.compareWith.stockName}`,
+          stock: sellingGap.toSell.stockName,
+          price: sellingGap.toSell.price,
+          additional: `相比${sellingGap.compareWith.stockName}`,
         });
       }
 

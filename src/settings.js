@@ -6,6 +6,9 @@ export const STOCK_POOL = {
   sh601328: '交行',
 };
 
-export const THRESHOLD = 1;
+export const THRESHOLD = {
+  base: 1,
+  sh601328: 1.5,
+};
 
 export const STOCK_CODES = Object.keys(STOCK_POOL);
