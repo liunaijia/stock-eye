@@ -6,14 +6,16 @@ import Holding from './Holding';
 
 const propTypes = {
   className: string,
-  holdings: arrayOf(shape({
-    stockCode: string,
-    stockName: string,
-    stockAmount: number,
-    sellableAmount: number,
-    floating: number,
-    floatingRate: string,
-  })),
+  holdings: arrayOf(
+    shape({
+      stockCode: string,
+      stockName: string,
+      stockAmount: number,
+      sellableAmount: number,
+      floating: number,
+      floatingRate: string,
+    }),
+  ),
 };
 
 const defaultProps = {
@@ -32,15 +34,17 @@ const Holdings = ({ className, holdings }) => (
       </tr>
     </thead>
     <tbody>
-      {(holdings || []).map(stock => (
-        <Holding
-          key={stock.stockCode}
-          stockName={stock.stockName}
-          stockAmount={stock.stockAmount}
-          sellableAmount={stock.sellableAmount}
-          floating={stock.floating}
-          floatingRate={stock.floatingRate}
-        />))}
+      {(holdings || [])
+        .map(stock => (
+          <Holding
+            key={stock.stockCode}
+            stockName={stock.stockName}
+            stockAmount={stock.stockAmount}
+            sellableAmount={stock.sellableAmount}
+            floating={stock.floating}
+            floatingRate={stock.floatingRate}
+          />
+        ))}
     </tbody>
   </table>
 );
