@@ -3,7 +3,7 @@ import { THRESHOLD } from './settings';
 import { setBadge, sendNotification } from './chromeApi';
 import { buyStock, sellStock } from './newoneApi';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
-import { getPortfolio, getGaps } from './jobs';
+import { getPortfolio, reloadPortfolio, getGaps } from './jobs';
 
 const sendTradeSignal = ({ gap = 0, trade = '', stock = '', price = 0, additional = '' }) => {
   const title = `价差${gap}%`;
@@ -27,22 +27,24 @@ const watchGaps = async () => {
       const buyingGap = gaps.buying;
       const buyingThreshold = calcThreshold(buyingGap.toBuy.stockCode, buyingGap.compareWith.stockCode);
       if (buyingGap.value >= buyingThreshold && buyingGap.toBuy.maxAmount > 0) {
-        sendTradeSignal({ gap: buyingGap.value,
+        sendTradeSignal({
+          gap: buyingGap.value,
           trade: '买',
           stock: buyingGap.toBuy.stockName,
           price: buyingGap.toBuy.price,
-          additional: `相比${buyingGap.compareWith.stockName}`,
+          additional: `相比${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`,
         });
       }
 
       const sellingGap = gaps.selling;
       const sellingThreshold = calcThreshold(sellingGap.toSell.stockCode, sellingGap.compareWith.stockCode);
       if (sellingGap.value >= sellingThreshold) {
-        sendTradeSignal({ gap: sellingGap.value,
+        sendTradeSignal({
+          gap: sellingGap.value,
           trade: '卖',
           stock: sellingGap.toSell.stockName,
           price: sellingGap.toSell.price,
-          additional: `相比${sellingGap.compareWith.stockName}`,
+          additional: `相比${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`,
         });
       }
 
@@ -94,6 +96,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           }
           sendResponse('下单成功');
           sendNotification({ title: '下单成功', message: JSON.stringify(payload) });
+          reloadPortfolio();
         } catch (error) {
           sendResponse(`下单失败：${error.message}`);
           sendNotification({ title: '下单失败', message: error.message });

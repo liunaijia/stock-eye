@@ -2,7 +2,7 @@ import { getPortfolio as getPortfolioFromApi } from '../newoneApi';
 import { runDuringTradeTime } from './job';
 
 let portfolio;
-const reloadPortfolio = async () => {
+export const reloadPortfolio = async () => {
   portfolio = await getPortfolioFromApi();
 };
 
