@@ -1,10 +1,17 @@
-import { STOCK_POOL } from './settings';
+import { STOCK_POOL, THRESHOLD } from './settings';
+
+// 使用每个股票的价差阈值设置调整涨跌幅，比如工行涨1.1%，阈值1，交行涨1.55%，阈值1.5，此时应该触发工行的交易信号，
+// 因为工行实际上涨1.1% (1.1%/1) 大于 交行实际上涨1.03%(1.55%/1.5)
+const getFixedRatio = (stock, ratio) => {
+  const threshold = THRESHOLD[stock.code] ? THRESHOLD[stock.code] : THRESHOLD.base;
+  return ratio / threshold;
+};
 
 const getStockWithMinSellingRatio = stocks =>
-  stocks.sort((a, b) => a.sellingRatio - b.sellingRatio)[0];
+  stocks.sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
 
 const getStockWithMaxBuyingRatio = stocks =>
-  stocks.sort((a, b) => b.buyingRatio - a.buyingRatio)[0];
+  stocks.sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
 
 const getGapBetween = (ratio1, ratio2) =>
   Math.round((ratio1 - ratio2) * 100) / 100;
@@ -69,6 +76,11 @@ export const calcSellingGap = (
     .reduce((acc, holding) => { acc[holding.stockCode] = holding.sellableAmount; return acc; }, {});
   const sellableStocks = stocks.filter(stock => Object.keys(holdingStocks).includes(stock.code));
   const stockMaySell = getStockWithMaxBuyingRatio(sellableStocks);
+
+  // No sellable holdings
+  if (!stockMaySell) {
+    return null;
+  }
 
   const gap = getGapBetween(stockMaySell.buyingRatio, stockWithMinSellingRatio.sellingRatio);
   // Gap could be a negative value, which means any trade will lose.
