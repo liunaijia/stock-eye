@@ -1,7 +1,6 @@
 {
-    "eslint.autoFixOnSave": true,
-    "editor.tabSize": 2,
-    "stylelint.additionalDocumentSelectors": [
-        "javascriptreact"
-    ]
+  "eslint.autoFixOnSave": true,
+  "editor.tabSize": 2,
+  "stylelint.additionalDocumentSelectors": ["javascriptreact"],
+  "editor.formatOnSave": false
 }

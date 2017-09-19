@@ -5,8 +5,8 @@ import { buyStock, sellStock } from './newoneApi';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { getPortfolio, reloadPortfolio, getGaps } from './jobs';
 
-const sendTradeSignal = ({ gap = 0, trade = '', stock = '', price = 0, additional = '' }) => {
-  const title = `价差${gap}%`;
+const sendTradeSignal = ({ group = '', gap = 0, trade = '', stock = '', price = 0, additional = '' }) => {
+  const title = `${group}组合价差${gap}%`;
   const message = `${trade} ${stock} ${price} ${additional}`;
   sendNotification({ title, message });
 };
@@ -22,33 +22,37 @@ const calcThreshold = (stockCode1, stockCode2) => {
 const watchGaps = async () => {
   try {
     if (isTradeTime()) {
-      const gaps = await getGaps();
+      Object.entries(await getGaps()).forEach(([group, gaps]) => {
+        const buyingGap = gaps.buying;
+        const buyingThreshold = calcThreshold(buyingGap.toBuy.stockCode, buyingGap.compareWith.stockCode);
+        if (buyingGap.value >= buyingThreshold && buyingGap.toBuy.maxAmount > 0) {
+          sendTradeSignal({
+            group,
+            gap: buyingGap.value,
+            trade: '买',
+            stock: buyingGap.toBuy.stockName,
+            price: buyingGap.toBuy.price,
+            additional: `相比${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`,
+          });
+        }
 
-      const buyingGap = gaps.buying;
-      const buyingThreshold = calcThreshold(buyingGap.toBuy.stockCode, buyingGap.compareWith.stockCode);
-      if (buyingGap.value >= buyingThreshold && buyingGap.toBuy.maxAmount > 0) {
-        sendTradeSignal({
-          gap: buyingGap.value,
-          trade: '买',
-          stock: buyingGap.toBuy.stockName,
-          price: buyingGap.toBuy.price,
-          additional: `相比${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`,
-        });
-      }
+        const sellingGap = gaps.selling;
+        if (sellingGap) {
+          const sellingThreshold = calcThreshold(sellingGap.toSell.stockCode, sellingGap.compareWith.stockCode);
+          if (sellingGap.value >= sellingThreshold) {
+            sendTradeSignal({
+              group,
+              gap: sellingGap.value,
+              trade: '卖',
+              stock: sellingGap.toSell.stockName,
+              price: sellingGap.toSell.price,
+              additional: `相比${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`,
+            });
+          }
+        }
 
-      const sellingGap = gaps.selling;
-      const sellingThreshold = calcThreshold(sellingGap.toSell.stockCode, sellingGap.compareWith.stockCode);
-      if (sellingGap.value >= sellingThreshold) {
-        sendTradeSignal({
-          gap: sellingGap.value,
-          trade: '卖',
-          stock: sellingGap.toSell.stockName,
-          price: sellingGap.toSell.price,
-          additional: `相比${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`,
-        });
-      }
-
-      setBadge(gaps.buying.value.toString());
+        setBadge(gaps.buying.value.toString());
+      });
     } else {
       setBadge('');
     }

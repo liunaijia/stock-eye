@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Quotes from './Quotes';
 import TradeFrom from './TradeForm';
 
-class TradeSuggestion extends Component {
+class StockTradeSuggestion extends Component {
   static propTypes = {
     className: string,
     tradeType: oneOf(['buy', 'sell']).isRequired,
@@ -50,7 +50,7 @@ class TradeSuggestion extends Component {
   }
 }
 
-export default styled(TradeSuggestion) `
+export default styled(StockTradeSuggestion) `
   display: flex;
 
   section {
