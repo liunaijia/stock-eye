@@ -22,6 +22,7 @@ const calcThreshold = (stockCode1, stockCode2) => {
 const watchGaps = async () => {
   try {
     if (isTradeTime()) {
+      let maxGap = 0;
       Object.entries(await getGaps()).forEach(([group, gaps]) => {
         const buyingGap = gaps.buying;
         const buyingThreshold = calcThreshold(buyingGap.toBuy.stockCode, buyingGap.compareWith.stockCode);
@@ -51,8 +52,10 @@ const watchGaps = async () => {
           }
         }
 
-        setBadge(gaps.buying.value.toString());
+        maxGap = Math.max(maxGap, buyingGap.value, sellingGap ? sellingGap.value : 0);
       });
+
+      setBadge(maxGap.toString());
     } else {
       setBadge('');
     }
