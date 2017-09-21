@@ -14,6 +14,7 @@ class GroupTradeSuggestions extends Component {
       maxAmount: number,
       timestamp: number,
       gap: number,
+      compareWith: shape(),
     }),
     toSell: shape({
       stockCode: string,
@@ -22,6 +23,7 @@ class GroupTradeSuggestions extends Component {
       maxAmount: number,
       timestamp: number,
       gap: number,
+      compareWith: shape(),
     }),
     onPlaceOrder: func.isRequired,
   };
@@ -40,8 +42,11 @@ class GroupTradeSuggestions extends Component {
         <header>{name}</header>
         {toBuy &&
         <section>
+          <div>
               买入 {toBuy.stockName}
               GAP：[{toBuy.gap}]
+              相比：{`${toBuy.compareWith.stockName} ${toBuy.compareWith.price}`}
+          </div>
           <time>{new Date(toBuy.timestamp).toLocaleTimeString()}</time>
           <StockTradeSuggestion
             tradeType="buy"
@@ -55,8 +60,11 @@ class GroupTradeSuggestions extends Component {
         }
         {toSell &&
         <section>
+          <div>
               卖出 {toSell.stockName}
               GAP：[{toSell.gap}]
+              相比：{`${toSell.compareWith.stockName} ${toSell.compareWith.price}`}
+          </div>
           <time>{new Date(toSell.timestamp).toLocaleTimeString()}</time>
           <StockTradeSuggestion
             tradeType="sell"

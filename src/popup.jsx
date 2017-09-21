@@ -78,6 +78,7 @@ class Popup extends Component {
             stockName: suggestion.buying.toBuy.stockName,
             price: suggestion.buying.toBuy.price,
             maxAmount: suggestion.buying.toBuy.maxAmount,
+            compareWith: suggestion.buying.compareWith,
           } : null;
           const toSell = suggestion.selling ? {
             gap: suggestion.selling.value,
@@ -86,6 +87,7 @@ class Popup extends Component {
             stockName: suggestion.selling.toSell.stockName,
             price: suggestion.selling.toSell.price,
             maxAmount: suggestion.selling.toSell.maxAmount,
+            compareWith: suggestion.selling.compareWith,
           } : null;
           return { name: groupName, toBuy, toSell };
         }),
