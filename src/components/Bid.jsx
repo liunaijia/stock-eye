@@ -16,16 +16,16 @@ const defaultProps = {
 };
 
 const BidType = styled.span`
-  width: 2rem;
+  flex: 1;
 `;
 
 const Price = styled.span`
-  width: 3rem;
-  text-align: right;
+  flex: 1;
+  text-align: center;
 `;
 
 const Lot = styled.span`
-  flex-grow: 1;
+  flex: 1;
   text-align: right;
 `;
 
