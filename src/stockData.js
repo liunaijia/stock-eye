@@ -1,4 +1,36 @@
-import { STOCK_CODES } from './settings';
+import { STOCK_CODES, YESTERDAY_RATIO_FACTOR } from './settings';
+import { yesterday } from './time';
+
+const cachedYesterdayData = {};
+
+const fetchYesterdayData = async () => {
+  const day = yesterday().toISOString().substring(0, 10).replace(/-/g, '');
+
+  if (cachedYesterdayData.date === day) {
+    return cachedYesterdayData;
+  }
+
+  const paramCode = STOCK_CODES.map(code => `cn_${code.substring(2)}`).join(',');
+  const response = await fetch(
+    // http://q.stock.sohu.com/hisHq?code=cn_601988,cn_601288&start=20170921&end=20170921&r=asdf
+    `http://q.stock.sohu.com/hisHq?code=${paramCode}&start=${day}&end=${day}&r=${new Date().getTime()}`,
+  );
+  const text = await response.text();
+  const data = JSON.parse(text).map((stockData) => {
+    const stockCodeWithoutPrefix = stockData.code.substring(3);
+    const fullStockCode = STOCK_CODES.find(code => code.includes(stockCodeWithoutPrefix));
+    // hq is an array which has values: [日期, 开盘价, 收盘价, 涨跌额, 涨跌幅, 最低价, 最高价, 成交量, 未知, 换手率]
+    const ratio = parseFloat(stockData.hq[0][4].replace('%', ''));
+    return [fullStockCode, ratio];
+  });
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [stockCode, ratio] of data) {
+    cachedYesterdayData[stockCode] = ratio;
+  }
+  cachedYesterdayData.date = day;
+  return cachedYesterdayData;
+};
 
 const fetchData = async () => {
   const response = await fetch(`http://hq.sinajs.cn/rn=${new Date().getTime()}&list=${STOCK_CODES.join(',')}`);
@@ -55,6 +87,14 @@ const parse = (text = '') =>
 export const fetchAllStocks = async () => {
   const text = await fetchData();
   const stocks = parse(text);
+
+  const yesterdayData = await fetchYesterdayData();
+  stocks.forEach((stock) => {
+    const yesterdayRatio = YESTERDAY_RATIO_FACTOR * yesterdayData[stock.code];
+    stock.buyingRatio += yesterdayRatio; // eslint-disable-line no-param-reassign
+    stock.sellingRatio += yesterdayRatio; // eslint-disable-line no-param-reassign
+  });
+
   return stocks;
 };
 

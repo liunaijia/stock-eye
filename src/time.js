@@ -24,3 +24,9 @@ export const isTradeTime = (time = new Date()) => {
 };
 
 export const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+export const yesterday = () => {
+  const time = new Date();
+  time.setDate(time.getDate() - 1);
+  return time;
+};
