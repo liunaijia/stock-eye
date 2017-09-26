@@ -107,7 +107,7 @@ const login = async () => {
   let captcha = 2;
   while (captcha <= 20) {
     if (await doLogin(formData, String(captcha))) { // eslint-disable-line no-await-in-loop
-      sendNotification({ title: 'Login successful', message: `captcha is ${captcha}`, iconUrl: captchaImage });
+      // sendNotification({ title: '登录成功', message: `captcha is ${captcha}`, iconUrl: captchaImage });
       return;
     }
     captcha += 1;
