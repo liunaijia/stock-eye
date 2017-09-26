@@ -1,10 +1,18 @@
 import { STOCK_CODES, YESTERDAY_RATIO_FACTOR } from './settings';
-import { yesterday } from './time';
+import { lastTradeDay } from './time';
 
-const cachedYesterdayData = {};
+// const cachedYesterdayData = {};
+const cachedYesterdayData = {
+  date: '20170925',
+  sh601398: 2.17,
+  sh601988: 0.95,
+  sh601288: 1.58,
+  sh601939: 1.29,
+  sh601328: 0.79,
+};
 
 const fetchYesterdayData = async () => {
-  const day = yesterday().toISOString().substring(0, 10).replace(/-/g, '');
+  const day = lastTradeDay().toISOString().substring(0, 10).replace(/-/g, '');
 
   if (cachedYesterdayData.date === day) {
     return cachedYesterdayData;
