@@ -3,12 +3,12 @@ import { lastTradeDay } from './time';
 
 // const cachedYesterdayData = {};
 const cachedYesterdayData = {
-  date: '20170925',
-  sh601398: 2.17,
-  sh601988: 0.95,
-  sh601288: 1.58,
-  sh601939: 1.29,
-  sh601328: 0.79,
+  // date: '20170925',
+  // sh601398: 2.17,
+  // sh601988: 0.95,
+  // sh601288: 1.58,
+  // sh601939: 1.29,
+  // sh601328: 0.79,
 };
 
 const fetchYesterdayData = async () => {
