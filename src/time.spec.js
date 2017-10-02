@@ -57,6 +57,11 @@ describe('isTradeTime in Brisbane time zone', () => {
       });
     });
   });
+
+  it('is not trade time for public holidays', () => {
+    const time = new Date('2017-10-2 12:00');
+    expect(isTradeTime(time)).toBe(false);
+  });
 });
 
 describe('sleep', () => {

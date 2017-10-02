@@ -8,9 +8,26 @@ const isTimeInAnyTimeSlots = (timeInMinutes, ...timeSlots) =>
       timeInMinutes <= totalMinutes(durations[2], durations[3]);
   });
 
+const publicHolidays = [
+  '2017-10-2',
+  '2017-10-3',
+  '2017-10-4',
+  '2017-10-5',
+  '2017-10-6',
+].map(day => new Date(day));
+
 const isTradeDay = (time) => {
   const day = time.getDay();
-  return day > 0 && day < 6;
+  const isWeekend = day === 0 || day === 6;
+  if (isWeekend) { return false; }
+
+  const onTheSameDay = (date1, date2) =>
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate();
+
+  const isPublicHoliday = publicHolidays.some(publicHoliday => onTheSameDay(publicHoliday, time));
+  return !isPublicHoliday;
 };
 
 export const isTradeTime = (time = new Date()) => {
