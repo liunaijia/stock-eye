@@ -6,16 +6,14 @@ import Holding from './Holding';
 
 const propTypes = {
   className: string,
-  holdings: arrayOf(
-    shape({
-      stockCode: string,
-      stockName: string,
-      stockAmount: number,
-      sellableAmount: number,
-      floating: number,
-      floatingRate: string,
-    }),
-  ),
+  holdings: arrayOf(shape({
+    stockCode: string,
+    stockName: string,
+    stockAmount: number,
+    sellableAmount: number,
+    floating: number,
+    floatingRate: string,
+  })),
 };
 
 const defaultProps = {

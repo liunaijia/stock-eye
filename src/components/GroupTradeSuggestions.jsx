@@ -36,7 +36,9 @@ class GroupTradeSuggestions extends Component {
   };
 
   render() {
-    const { className, name, toBuy, toSell, onPlaceOrder } = this.props;
+    const {
+      className, name, toBuy, toSell, onPlaceOrder,
+    } = this.props;
     return (
       <article className={className}>
         <header>{name}</header>

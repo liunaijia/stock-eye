@@ -14,9 +14,6 @@ class Quotes extends Component {
 
   static defaultProps = {
     className: null,
-    currentPrice: 0,
-    buyingBids: [],
-    sellingBids: [],
   };
 
   state = {
@@ -32,7 +29,7 @@ class Quotes extends Component {
 
   async initStock(interval) {
     if (isTradeTime() || !this.state.isInitialized) {
-      const stockCode = this.props.stockCode;
+      const { stockCode } = this.props;
       const stock = await fetchStock(stockCode);
       this.setState({
         currentPrice: stock.current,

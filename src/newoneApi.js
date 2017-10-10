@@ -1,6 +1,5 @@
 import { decode } from 'iconv-lite';
 import { MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER } from './secrets';
-import { sendNotification } from './chromeApi';
 
 const ROOT_URL = 'https://etrade.newone.com.cn';
 
@@ -28,17 +27,17 @@ const readContentType = (response = new Response()) => {
 const readAsText = async (response = new Response()) => {
   const { charset } = readContentType(response);
   const bytes = await response.arrayBuffer();
-  const text = decode(new Buffer(bytes), charset);
+  const text = decode(Buffer.from(bytes), charset);
   return text;
 };
 
-const readAsDataUrl = async (response = new Response()) => {
-  const { mimeType } = readContentType(response);
-  const data = await response.arrayBuffer();
-  const base64String = btoa(String.fromCharCode(...new Uint8Array(data)));
+// const readAsDataUrl = async (response = new Response()) => {
+//   const { mimeType } = readContentType(response);
+//   const data = await response.arrayBuffer();
+//   const base64String = btoa(String.fromCharCode(...new Uint8Array(data)));
 
-  return `data:${mimeType};base64,${base64String}`;
-};
+//   return `data:${mimeType};base64,${base64String}`;
+// };
 
 const readAsDom = async (response = new Response()) => {
   const text = await readAsText(response);
@@ -48,14 +47,14 @@ const readAsDom = async (response = new Response()) => {
   return dom;
 };
 
-const loadCaptcha = async () => {
-  const response = await sendRequest('/validatecode/imgcode');
-  if (!response.ok) {
-    throw new Error(`fail to load captcha: ${response.statusText}`);
-  }
+// const loadCaptcha = async () => {
+//   const response = await sendRequest('/validatecode/imgcode');
+//   if (!response.ok) {
+//     throw new Error(`fail to load captcha: ${response.statusText}`);
+//   }
 
-  return readAsDataUrl(response);
-};
+//   return readAsDataUrl(response);
+// };
 
 const loadLoginForm = async () => {
   const response = await sendRequest(`/include/loginFormNew.jsp?khxxbh_sj=${MOBILE_TOKEN}`);
@@ -81,7 +80,8 @@ export const readAlertMessage = (text = '') => {
 };
 
 const doLogin = async (payload, captcha) => {
-  const response = await sendRequest('/xtrade', { ...payload,
+  const response = await sendRequest('/xtrade', {
+    ...payload,
     f_khh: ACCOUNT_NUMBER,
     f_mm: PASSWORD,
     validatecode: captcha,
@@ -102,12 +102,16 @@ const doLogin = async (payload, captcha) => {
 const login = async () => {
   const formData = await loadLoginForm();
 
-  const captchaImage = await loadCaptcha();
+  // const captchaImage = await loadCaptcha();
 
   let captcha = 2;
   while (captcha <= 20) {
     if (await doLogin(formData, String(captcha))) { // eslint-disable-line no-await-in-loop
-      // sendNotification({ title: '登录成功', message: `captcha is ${captcha}`, iconUrl: captchaImage });
+      // sendNotification({
+      //   title: '登录成功',
+      //   message: `captcha is ${captcha}`,
+      //   iconUrl: captchaImage,
+      // });
       return;
     }
     captcha += 1;

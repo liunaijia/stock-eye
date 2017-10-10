@@ -125,7 +125,13 @@ class Popup extends Component {
               <p>{this.state.operationResults}</p>
             </section>
             {this.state.tradeSuggestion.groups.map(group => (
-              <GroupTradeSuggestions key={group.name} name={group.name} toBuy={group.toBuy} toSell={group.toSell} onPlaceOrder={this.handlePlaceOrder} />
+              <GroupTradeSuggestions
+                key={group.name}
+                name={group.name}
+                toBuy={group.toBuy}
+                toSell={group.toSell}
+                onPlaceOrder={this.handlePlaceOrder}
+              />
             ))}
           </div>
           }

@@ -29,7 +29,9 @@ const Lot = styled.span`
   text-align: right;
 `;
 
-const Bid = ({ className, index, type, price, amount, currentPrice }) => {
+const Bid = ({
+  className, index, type, price, amount, currentPrice,
+}) => {
   let vsCurrentPrice = 'equal';
   if (price < currentPrice) vsCurrentPrice = 'lower';
   else if (price > currentPrice) vsCurrentPrice = 'higher';

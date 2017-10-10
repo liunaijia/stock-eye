@@ -19,10 +19,8 @@ const fetchYesterdayData = async () => {
   }
 
   const paramCode = STOCK_CODES.map(code => `cn_${code.substring(2)}`).join(',');
-  const response = await fetch(
-    // http://q.stock.sohu.com/hisHq?code=cn_601988,cn_601288&start=20170921&end=20170921&r=asdf
-    `http://q.stock.sohu.com/hisHq?code=${paramCode}&start=${day}&end=${day}&r=${new Date().getTime()}`,
-  );
+  // http://q.stock.sohu.com/hisHq?code=cn_601988,cn_601288&start=20170921&end=20170921&r=asdf
+  const response = await fetch(`http://q.stock.sohu.com/hisHq?code=${paramCode}&start=${day}&end=${day}&r=${new Date().getTime()}`);
   const text = await response.text();
   const data = JSON.parse(text).map((stockData) => {
     const stockCodeWithoutPrefix = stockData.code.substring(3);

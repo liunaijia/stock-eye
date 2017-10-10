@@ -29,7 +29,9 @@ class StockTradeSuggestion extends Component {
   };
 
   render() {
-    const { className, tradeType, stockCode, stockName, price, maxAmount } = this.props;
+    const {
+      className, tradeType, stockCode, stockName, price, maxAmount,
+    } = this.props;
     return (
       <article className={className}>
         <section>
@@ -50,7 +52,7 @@ class StockTradeSuggestion extends Component {
   }
 }
 
-export default styled(StockTradeSuggestion) `
+export default styled(StockTradeSuggestion)`
   display: flex;
 
   section {

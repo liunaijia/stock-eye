@@ -34,9 +34,9 @@ class TradeForm extends Component {
   }
 
   handleChange = (event = new Event()) => {
-    const target = event.target;
+    const { target } = event;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+    const { name } = target;
 
     this.setState({
       [name]: value,
@@ -44,7 +44,9 @@ class TradeForm extends Component {
   }
 
   render() {
-    const { className, tradeType, stockName, price, maxAmount } = this.props;
+    const {
+      className, tradeType, stockName, price, maxAmount,
+    } = this.props;
     return (
       <form className={className} onSubmit={this.handleSubmit}>
         <p>
@@ -69,7 +71,7 @@ class TradeForm extends Component {
   }
 }
 
-export default styled(TradeForm) `
+export default styled(TradeForm)`
   input {
     color: var(${({ tradeType }) => (tradeType === 'buy' ? '--red' : '--green')});
   }

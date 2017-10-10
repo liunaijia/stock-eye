@@ -18,7 +18,9 @@ const defaultProps = {
   className: null,
 };
 
-const Bids = ({ className, type, bids, currentPrice }) => {
+const Bids = ({
+  className, type, bids, currentPrice,
+}) => {
   // There is another way to display selling bids in descending order.
   // flex-direction: ${props => (props.type === 'buy' ? 'column' : 'column-reverse')};
   // However, this makes test code ignorant

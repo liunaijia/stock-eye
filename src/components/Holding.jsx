@@ -18,7 +18,9 @@ const defaultProps = {
   floatingRate: null,
 };
 
-function Holding({ stockName, stockAmount, sellableAmount, floating, floatingRate }) {
+function Holding({
+  stockName, stockAmount, sellableAmount, floating, floatingRate,
+}) {
   return (
     <tr>
       <td>{stockName}</td>

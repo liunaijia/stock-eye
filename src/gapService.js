@@ -28,14 +28,13 @@ const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
   }
   return amount;
 };
-export const calcBuyingGap = (
-  stocks = [{
-    code: '',
-    buyingAt: 0,
-    buyingRatio: 0,
-    sellingAt: 0,
-    sellingRatio: 0,
-  }], availableCash = 0) => {
+export const calcBuyingGap = (stocks = [{
+  code: '',
+  buyingAt: 0,
+  buyingRatio: 0,
+  sellingAt: 0,
+  sellingRatio: 0,
+}], availableCash = 0) => {
   const stockMayBuy = getStockWithMinSellingRatio(stocks);
   const stockWithMaxBuyingRatio = getStockWithMaxBuyingRatio(stocks);
 
@@ -68,7 +67,8 @@ export const calcSellingGap = (
     sellingAt: 0,
     sellingRatio: 0,
   }],
-  holdings = [{ stockCode: '', sellableAmount: 0 }]) => {
+  holdings = [{ stockCode: '', sellableAmount: 0 }],
+) => {
   const stockWithMinSellingRatio = getStockWithMinSellingRatio(stocks);
 
   const holdingStocks = holdings

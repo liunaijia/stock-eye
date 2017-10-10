@@ -5,14 +5,16 @@ import { buyStock, sellStock } from './newoneApi';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { getPortfolio, reloadPortfolio, getGaps } from './jobs';
 
-const sendTradeSignal = ({ group = '', gap = 0, trade = '', stock = '', price = 0, additional = '' }) => {
+const sendTradeSignal = ({
+  group = '', gap = 0, trade = '', stock = '', price = 0, additional = '',
+}) => {
   const title = `${group}组合价差${gap}%`;
   const message = `${trade} ${stock} ${price} ${additional}`;
   sendNotification({ title, message });
 };
 
 const calcThreshold = (stockCode1, stockCode2) => {
-  const base = THRESHOLD.base;
+  const { base } = THRESHOLD;
   const stock1Threshold = THRESHOLD[stockCode1] ? THRESHOLD[stockCode1] : base;
   const stock2Threshold = THRESHOLD[stockCode2] ? THRESHOLD[stockCode2] : base;
 
@@ -25,7 +27,10 @@ const watchGaps = async () => {
       let maxGap = 0;
       Object.entries(await getGaps()).forEach(([group, gaps]) => {
         const buyingGap = gaps.buying;
-        const buyingThreshold = calcThreshold(buyingGap.toBuy.stockCode, buyingGap.compareWith.stockCode);
+        const buyingThreshold = calcThreshold(
+          buyingGap.toBuy.stockCode,
+          buyingGap.compareWith.stockCode,
+        );
         if (buyingGap.value >= buyingThreshold && buyingGap.toBuy.maxAmount > 0) {
           sendTradeSignal({
             group,
@@ -39,7 +44,10 @@ const watchGaps = async () => {
 
         const sellingGap = gaps.selling;
         if (sellingGap) {
-          const sellingThreshold = calcThreshold(sellingGap.toSell.stockCode, sellingGap.compareWith.stockCode);
+          const sellingThreshold = calcThreshold(
+            sellingGap.toSell.stockCode,
+            sellingGap.compareWith.stockCode,
+          );
           if (sellingGap.value >= sellingThreshold) {
             sendTradeSignal({
               group,
@@ -86,7 +94,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   run(async () => {
     // wrap async code in a function, then the listener does not have to be an async one, which
     // makes calling sendResponse asynchronously work.
-    const payload = message.payload;
+    const { payload } = message;
     switch (message.type) {
       case GET_PORTFOLIO:
         sendResponse(await getPortfolio());
