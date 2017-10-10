@@ -14,6 +14,7 @@ describe('portfolioJob', () => {
   function setIsTradeTime(mockValue) {
     jest.doMock('../time', () => ({
       isTradeTime: jest.fn().mockReturnValue(mockValue),
+      sleep: jest.fn().mockReturnValue(new Promise(() => {})),
     }));
   }
 

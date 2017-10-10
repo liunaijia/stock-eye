@@ -10,9 +10,9 @@ export const runDuringTradeTime = ({ interval = 1, runOnStartUp = true }) => {
         hasStarted = true;
         await block();
       }
-    // else {
-    // setBadge('');
-    // }
+      // else {
+      // setBadge('');
+      // }
     } catch (e) {
       console.error(e);
       sendNotification({ title: e.message });
