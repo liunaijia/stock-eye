@@ -31,13 +31,13 @@ const readAsText = async (response = new Response()) => {
   return text;
 };
 
-// const readAsDataUrl = async (response = new Response()) => {
-//   const { mimeType } = readContentType(response);
-//   const data = await response.arrayBuffer();
-//   const base64String = btoa(String.fromCharCode(...new Uint8Array(data)));
+const readAsDataUrl = async (response = new Response()) => {
+  const { mimeType } = readContentType(response);
+  const data = await response.arrayBuffer();
+  const base64String = btoa(String.fromCharCode(...new Uint8Array(data)));
 
-//   return `data:${mimeType};base64,${base64String}`;
-// };
+  return `data:${mimeType};base64,${base64String}`;
+};
 
 const readAsDom = async (response = new Response()) => {
   const text = await readAsText(response);
@@ -47,14 +47,14 @@ const readAsDom = async (response = new Response()) => {
   return dom;
 };
 
-// const loadCaptcha = async () => {
-//   const response = await sendRequest('/validatecode/imgcode');
-//   if (!response.ok) {
-//     throw new Error(`fail to load captcha: ${response.statusText}`);
-//   }
+const loadCaptcha = async () => {
+  const response = await sendRequest('/validatecode/imgcode');
+  if (!response.ok) {
+    throw new Error(`fail to load captcha: ${response.statusText}`);
+  }
 
-//   return readAsDataUrl(response);
-// };
+  return readAsDataUrl(response);
+};
 
 const loadLoginForm = async () => {
   const response = await sendRequest(`/include/loginFormNew.jsp?khxxbh_sj=${MOBILE_TOKEN}`);
@@ -102,7 +102,7 @@ const doLogin = async (payload, captcha) => {
 const login = async () => {
   const formData = await loadLoginForm();
 
-  // const captchaImage = await loadCaptcha();
+  await loadCaptcha();
 
   let captcha = 2;
   while (captcha <= 20) {
