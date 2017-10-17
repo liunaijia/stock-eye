@@ -145,4 +145,3 @@ class Popup extends Component {
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Popup />, document.getElementById('root'));
 });
-

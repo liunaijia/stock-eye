@@ -4,7 +4,8 @@ import { mount } from 'enzyme';
 import Bid from './Bid';
 
 describe('<Bid />', () => {
-  let component =
+  let component;
+
   beforeAll(() => {
     component = mount(<Bid index={0} type="buy" price={4} amount={532100} currentPrice={4.01} />);
   });
