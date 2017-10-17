@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Portfolio from './components/Portfolio';
 import GroupTradeSuggestions from './components/GroupTradeSuggestions';
 import ProgressBar from './components/ProgressBar';
+import ErrorBoundary from './components/ErrorBoundary';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
 import { sleep } from './time';
@@ -111,7 +112,7 @@ class Popup extends Component {
 
   render() {
     return (
-      <div>
+      <ErrorBoundary>
         <Portfolio
           availableCash={this.state.portfolio.availableCash}
           holdings={this.state.portfolio.holdings}
@@ -136,8 +137,7 @@ class Popup extends Component {
           </div>
           }
         </article>
-
-      </div>
+      </ErrorBoundary>
     );
   }
 }
