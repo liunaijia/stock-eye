@@ -1,6 +1,6 @@
 node_modules
 .DS_Store
-dist/background.js
-dist/popup.js
-dist/vendor.js
+dist/background.js*
+dist/popup.js*
+dist/vendor.js*
 secrets.js

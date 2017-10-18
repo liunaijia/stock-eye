@@ -15,6 +15,7 @@ const config = {
       'styled-components',
     ],
   },
+  devtool: 'eval-source-map',
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].js',
@@ -45,6 +46,7 @@ const config = {
 // NODE_ENV=production npx webpack
 if (process.env.NODE_ENV === 'production') {
   Object.assign(config, {
+    devtool: 'source-map',
     plugins: [
       ...config.plugins,
       new webpack.DefinePlugin({
@@ -52,7 +54,7 @@ if (process.env.NODE_ENV === 'production') {
           NODE_ENV: JSON.stringify('production'),
         },
       }),
-      new UglifyJSPlugin(),
+      new UglifyJSPlugin({sourceMap: true}),
     ],
   });
 }
