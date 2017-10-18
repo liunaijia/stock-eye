@@ -46,12 +46,13 @@ const config = {
 if (process.env.NODE_ENV === 'production') {
   Object.assign(config, {
     plugins: [
+      ...config.plugins,
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify('production'),
         },
       }),
-      new UglifyJSPlugin({ uglifyOptions: { ecma: 8 } }),
+      new UglifyJSPlugin(),
     ],
   });
 }
