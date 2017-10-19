@@ -3,7 +3,7 @@ import { string } from 'prop-types';
 import styled from 'styled-components';
 
 import Bids from './Bids';
-import { fetchStock } from '../stockData';
+import { fetchStocks } from '../stockData';
 import { isTradeTime, sleep } from '../time';
 
 class Quotes extends Component {
@@ -30,7 +30,7 @@ class Quotes extends Component {
   async initStock(interval) {
     if (isTradeTime() || !this.state.isInitialized) {
       const { stockCode } = this.props;
-      const stock = await fetchStock(stockCode);
+      const [stock] = await fetchStocks([stockCode]);
       this.setState({
         currentPrice: stock.current,
         buyingBids: stock.buyingBids,

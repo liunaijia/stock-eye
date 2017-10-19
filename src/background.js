@@ -1,9 +1,10 @@
 import { isTradeTime, sleep } from './time';
-import { THRESHOLD } from './settings';
+import { THRESHOLD, HOLDING_NEW_STOCK } from './settings';
 import { setBadge, sendNotification } from './chromeApi';
 import { buyStock, sellStock } from './newoneApi';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { getPortfolio, reloadPortfolio, getGaps } from './jobs';
+import { fetchStocks } from './stockData';
 
 const sendTradeSignal = ({
   group = '', gap = 0, trade = '', stock = '', price = 0, additional = '',
@@ -20,6 +21,8 @@ const calcThreshold = (stockCode1, stockCode2) => {
 
   return base + Math.abs(stock1Threshold - stock2Threshold);
 };
+
+let rememberedAmount = 0;
 
 const watchGaps = async () => {
   try {
@@ -64,6 +67,19 @@ const watchGaps = async () => {
       });
 
       setBadge(maxGap.toString());
+
+      // extra steps
+      {
+        const [newStock] = await fetchStocks([HOLDING_NEW_STOCK]);
+        const buyingAmount = newStock.buyingBids[0].amount;
+        if (newStock.current !== newStock.openAt) {
+          sendNotification({ title: '新股开板！', message: `开盘 ${newStock.openAt} 现价 ${newStock.current}` });
+        }
+        if (buyingAmount < 0.9 * rememberedAmount || rememberedAmount === 0) {
+          sendNotification({ title: '新股', message: `买一价手数：${Math.round(buyingAmount / 100)}` });
+          rememberedAmount = buyingAmount;
+        }
+      }
     } else {
       setBadge('');
     }

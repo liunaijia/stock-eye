@@ -1,13 +1,13 @@
 import { runDuringTradeTime } from './job';
-import { fetchAllStocks } from '../stockData';
-import { STOCK_GROUPS } from '../settings';
+import { fetchStocks } from '../stockData';
+import { STOCK_GROUPS, STOCK_CODES } from '../settings';
 import { getPortfolio } from './portfolioJob';
 import { calcBuyingGap, calcSellingGap } from '../gapService';
 
 const gapGroups = {};
 
 const calcGaps = async () => {
-  const allStocks = await fetchAllStocks();
+  const allStocks = await fetchStocks(STOCK_CODES);
   const portfolio = await getPortfolio();
 
   Object.entries(STOCK_GROUPS).forEach(([group, stocksInGroup]) => {

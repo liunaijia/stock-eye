@@ -31,3 +31,5 @@ export const STOCK_CODES = Object.keys(STOCK_POOL);
 
 // export const YESTERDAY_RATIO_FACTOR = 0.5;
 export const YESTERDAY_RATIO_FACTOR = 0;
+
+export const HOLDING_NEW_STOCK = 'sh601086';
