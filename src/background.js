@@ -69,10 +69,10 @@ const watchGaps = async () => {
       setBadge(maxGap.toString());
 
       // extra steps
-      {
+      if (HOLDING_NEW_STOCK) {
         const [newStock] = await fetchStocks([HOLDING_NEW_STOCK]);
         const buyingAmount = newStock.buyingBids[0].amount;
-        if (newStock.current !== newStock.openAt) {
+        if (newStock.current !== newStock.openAt && newStock.openAt > 0) {
           sendNotification({ title: '新股开板！', message: `开盘 ${newStock.openAt} 现价 ${newStock.current}` });
         }
         if (buyingAmount < 0.9 * rememberedAmount || rememberedAmount === 0) {
