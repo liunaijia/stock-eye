@@ -7,7 +7,9 @@
     "lint:css": "stylelint ./src/**/*.jsx",
     "lint:js": "eslint --ext .js --ext .jsx src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=production npx webpack"
+    "build": "NODE_ENV=production npx webpack",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +45,9 @@
     "stylelint-processor-styled-components": "^1.0.0",
     "uglifyjs-webpack-plugin": "^1.0.0-beta.3",
     "webpack": "^3.8.1",
-    "webpack-bundle-analyzer": "^2.9.0"
+    "webpack-bundle-analyzer": "^2.9.0",
+    "@storybook/react": "^3.2.12",
+    "@storybook/addon-actions": "^3.2.12",
+    "@storybook/addon-links": "^3.2.12"
   }
 }
