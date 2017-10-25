@@ -8,6 +8,7 @@
     "lint:js": "eslint --ext .js --ext .jsx src",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production npx webpack",
+    "start": "webpack-dev-server --open",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -48,6 +49,7 @@
     "stylelint-processor-styled-components": "^1.0.0",
     "uglifyjs-webpack-plugin": "^1.0.0-rc.0",
     "webpack": "^3.8.1",
-    "webpack-bundle-analyzer": "^2.9.0"
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-dev-server": "^2.9.3"
   }
 }

@@ -16,6 +16,9 @@ const config = {
     ],
   },
   devtool: 'eval-source-map',
+  devServer: {
+    contentBase: './dist',
+  },
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].js',
@@ -54,7 +57,7 @@ if (process.env.NODE_ENV === 'production') {
           NODE_ENV: JSON.stringify('production'),
         },
       }),
-      new UglifyJSPlugin({sourceMap: true}),
+      new UglifyJSPlugin({ sourceMap: true }),
     ],
   });
 }
