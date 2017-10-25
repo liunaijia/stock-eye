@@ -1,5 +1,5 @@
 import { isTradeTime, sleep } from '../time';
-import { sendNotification } from '../chromeApi';
+import { sendNotification } from '../notification';
 
 // eslint-disable-next-line import/prefer-default-export
 export const runDuringTradeTime = ({ interval = 1, runOnStartUp = true }) => {

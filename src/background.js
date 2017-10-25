@@ -1,6 +1,7 @@
 import { isTradeTime, sleep } from './time';
 import { THRESHOLD, HOLDING_NEW_STOCK } from './settings';
-import { setBadge, sendNotification } from './chromeApi';
+import { setBadge } from './chromeApi';
+import { sendNotification } from './notification';
 import { buyStock, sellStock } from './newoneApi';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { getPortfolio, reloadPortfolio, getGaps } from './jobs';

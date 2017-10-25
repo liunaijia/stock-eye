@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     'react/no-did-mount-set-state': 'off',
+    'import/prefer-default-export': 'off',
     'no-debugger': 'warn'
   },
 };
