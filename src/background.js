@@ -11,8 +11,8 @@ const sendTradeSignal = ({
   group = '', gap = 0, trade = '', stock = '', price = 0, additional = '',
 }) => {
   const title = `${group}组合价差${gap}%`;
-  const message = `${trade} ${stock} ${price} ${additional}`;
-  sendNotification({ title, message });
+  const body = `${trade} ${stock} ${price} ${additional}`;
+  sendNotification({ title, body });
 };
 
 const calcThreshold = (stockCode1, stockCode2) => {
@@ -74,10 +74,10 @@ const watchGaps = async () => {
         const [newStock] = await fetchStocks([HOLDING_NEW_STOCK]);
         const buyingAmount = newStock.buyingBids[0].amount;
         if (newStock.current !== newStock.openAt && newStock.openAt > 0) {
-          sendNotification({ title: '新股开板！', message: `开盘 ${newStock.openAt} 现价 ${newStock.current}` });
+          sendNotification({ title: '新股开板！', body: `开盘 ${newStock.openAt} 现价 ${newStock.current}` });
         }
         if (buyingAmount < 0.9 * rememberedAmount || rememberedAmount === 0) {
-          sendNotification({ title: '新股', message: `买一价手数：${Math.round(buyingAmount / 100)}` });
+          sendNotification({ title: '新股', body: `买一价手数：${Math.round(buyingAmount / 100)}` });
           rememberedAmount = buyingAmount;
         }
       }
@@ -127,11 +127,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             await sellStock(payload.stockCode, payload.price, payload.amount);
           }
           sendResponse('下单成功');
-          sendNotification({ title: '下单成功', message: JSON.stringify(payload) });
+          sendNotification({ title: '下单成功', body: JSON.stringify(payload) });
           reloadPortfolio();
         } catch (error) {
           sendResponse(`下单失败：${error.message}`);
-          sendNotification({ title: '下单失败', message: error.message });
+          sendNotification({ title: '下单失败', body: error.message });
         }
         break;
       default:
