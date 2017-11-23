@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const WebpackMonitor = require('webpack-monitor');
 
 const config = {
   entry: {
@@ -42,7 +42,12 @@ const config = {
       name: 'vendor',
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    // new BundleAnalyzerPlugin(),
+    new WebpackMonitor({
+      capture: true, // -> default 'true'
+      target: '../monitor/stats.json', // default -> '../monitor/stats.json'
+      launch: true, // -> default 'false'
+      port: 8081, // default -> 8081
+    }),
   ],
 };
 
