@@ -4,3 +4,4 @@ dist/background.js*
 dist/popup.js*
 dist/vendor.js*
 secrets.js
+monitor
