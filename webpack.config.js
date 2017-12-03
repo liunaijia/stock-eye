@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const WebpackMonitor = require('webpack-monitor');
 
 const config = {
   entry: {
@@ -21,7 +20,7 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -38,16 +37,21 @@ const config = {
     ],
   },
   plugins: [
+    new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
+      minChunks: m => m.context && m.context.includes('node_modules'),
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime',
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new WebpackMonitor({
-      capture: true, // -> default 'true'
-      target: '../monitor/stats.json', // default -> '../monitor/stats.json'
-      launch: true, // -> default 'false'
-      port: 8081, // default -> 8081
-    }),
+    // new WebpackMonitor({
+    //   capture: true, // -> default 'true'
+    //   target: '../monitor/stats.json', // default -> '../monitor/stats.json'
+    //   launch: true, // -> default 'false'
+    //   port: 8082, // default -> 8081
+    // }),
   ],
 };
 

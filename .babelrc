@@ -12,6 +12,7 @@
     "stage-0",
     "react"
   ],
+  "plugins": [["direct-import", ["material-ui"]]],
   "env": {
     "test": {
       "plugins": [
