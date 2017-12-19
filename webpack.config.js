@@ -6,13 +6,13 @@ const config = {
   entry: {
     background: './src/background.js',
     popup: './src/popup.jsx',
-    vendor: [
-      'iconv-lite',
-      'prop-types',
-      'react',
-      'react-dom',
-      'styled-components',
-    ],
+    // vendor: [
+    //   'iconv-lite',
+    //   'prop-types',
+    //   'react',
+    //   'react-dom',
+    //   'styled-components',
+    // ],
   },
   devtool: 'eval-source-map',
   devServer: {
@@ -20,7 +20,7 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],

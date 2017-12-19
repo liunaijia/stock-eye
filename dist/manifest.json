@@ -5,6 +5,7 @@
     "version": "0.1",
     "background": {
         "scripts": [
+            "runtime.js",
             "vendor.js",
             "background.js"
         ]

@@ -3,5 +3,6 @@ node_modules
 dist/background.js*
 dist/popup.js*
 dist/vendor.js*
+dist/runtime.js*
 secrets.js
 monitor
