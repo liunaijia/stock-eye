@@ -1,5 +1,5 @@
 import { isTradeTime, sleep } from './time';
-import { THRESHOLD, HOLDING_NEW_STOCK } from './settings';
+import { HOLDING_NEW_STOCK } from './settings';
 import { setBadge } from './chromeApi';
 import { sendNotification } from './notification';
 import { buyStock, sellStock } from './newoneApi';
@@ -15,14 +15,6 @@ const sendTradeSignal = ({
   sendNotification({ title, body });
 };
 
-const calcThreshold = (stockCode1, stockCode2) => {
-  const { base } = THRESHOLD;
-  const stock1Threshold = THRESHOLD[stockCode1] ? THRESHOLD[stockCode1] : base;
-  const stock2Threshold = THRESHOLD[stockCode2] ? THRESHOLD[stockCode2] : base;
-
-  return base + Math.abs(stock1Threshold - stock2Threshold);
-};
-
 let rememberedAmount = 0;
 
 const watchGaps = async () => {
@@ -31,11 +23,8 @@ const watchGaps = async () => {
       let maxGap = 0;
       Object.entries(await getGaps()).forEach(([group, gaps]) => {
         const buyingGap = gaps.buying;
-        const buyingThreshold = calcThreshold(
-          buyingGap.toBuy.stockCode,
-          buyingGap.compareWith.stockCode,
-        );
-        if (buyingGap.value >= buyingThreshold && buyingGap.toBuy.maxAmount > 0) {
+
+        if (buyingGap.value >= gaps.threshold && buyingGap.toBuy.maxAmount > 0) {
           sendTradeSignal({
             group,
             gap: buyingGap.value,
@@ -48,11 +37,7 @@ const watchGaps = async () => {
 
         const sellingGap = gaps.selling;
         if (sellingGap) {
-          const sellingThreshold = calcThreshold(
-            sellingGap.toSell.stockCode,
-            sellingGap.compareWith.stockCode,
-          );
-          if (sellingGap.value >= sellingThreshold) {
+          if (sellingGap.value >= gaps.threshold) {
             sendTradeSignal({
               group,
               gap: sellingGap.value,

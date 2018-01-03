@@ -1,10 +1,10 @@
-import { STOCK_POOL, THRESHOLD } from './settings';
+import { STOCK_POOL, ZOOM } from './settings';
 
-// 使用每个股票的价差阈值设置调整涨跌幅，比如工行涨1.1%，阈值1，交行涨1.55%，阈值1.5，此时应该触发工行的交易信号，
-// 因为工行实际上涨1.1% (1.1%/1) 大于 交行实际上涨1.03%(1.55%/1.5)
+// 使用每个股票的zoom系数调整涨跌幅，比如工行涨1.1%，系数为1，交行涨1.55%，系数为0.67，此时应该触发工行的交易信号，
+// 因为工行实际上涨1.1% (1.1% * 1) 大于 交行实际上涨1.04%(1.55% * 0.67)
 const getFixedRatio = (stock, ratio) => {
-  const threshold = THRESHOLD[stock.code] ? THRESHOLD[stock.code] : THRESHOLD.base;
-  return ratio / threshold;
+  const zoomFactor = ZOOM[stock.code] ? ZOOM[stock.code] : 1.0;
+  return ratio * zoomFactor;
 };
 
 const getStockWithMinSellingRatio = stocks =>

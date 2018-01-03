@@ -10,8 +10,8 @@ const calcGaps = async () => {
   const allStocks = await fetchStocks(STOCK_CODES);
   const portfolio = await getPortfolio();
 
-  Object.entries(STOCK_GROUPS).forEach(([group, stocksInGroup]) => {
-    const stockCodesInGroup = Object.keys(stocksInGroup);
+  Object.entries(STOCK_GROUPS).forEach(([groupName, group]) => {
+    const stockCodesInGroup = Object.keys(group.stocks);
     const stocks = allStocks.filter(stock => stockCodesInGroup.includes(stock.code));
 
     // calculate gap to buy stock
@@ -20,7 +20,7 @@ const calcGaps = async () => {
     // calculate gap to sell holding stock
     const sellingGap = calcSellingGap(stocks, portfolio.holdings);
 
-    gapGroups[group] = { buying: buyingGap, selling: sellingGap };
+    gapGroups[groupName] = { buying: buyingGap, selling: sellingGap, threshold: group.threshold };
   });
 };
 

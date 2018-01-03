@@ -1,30 +1,32 @@
-export const THRESHOLD = {
-  // YESTERDAY_RATIO_FACTOR = 0.5 时用
-  // base: 1.5,
-  // sh601328: 2.25, // 交行
-
-  base: 1.0,
+// 使用股票的实际涨幅乘以zoom系数的结果计算价差，比如交行的波动比池中其它股票大，交行波动1.5%和其它股票波动1%视为一样的振幅，所以设置0.67（1/1.5）
+// 作为振幅系数，注意zoom系数永远是倍数，和用来触发交易信号的阈值没有关系
+export const ZOOM = {
   sh601328: 1.5, // 交行
-  // sh601688: 1.5, // 华泰
 };
 
 export const STOCK_GROUPS = {
   沪银: {
-    sh601398: '工行',
-    sh601988: '中行',
-    sh601288: '农行',
-    sh601939: '建行',
-    sh601328: '交行',
+    threshold: 1.0,
+    stocks: {
+      sh601398: '工行',
+      sh601988: '中行',
+      sh601288: '农行',
+      sh601939: '建行',
+      sh601328: '交行',
+    },
   },
   深银: {
-    sz000001: '平安',
-    sz002142: '宁波',
-    sh600036: '招商',
+    threshold: 2.0,
+    stocks: {
+      sz000001: '平安',
+      sz002142: '宁波',
+      sh600036: '招商',
+    },
   },
 };
 
 export const STOCK_POOL = Object.values(STOCK_GROUPS)
-  .reduce((all, stocks) => Object.assign(all, stocks), {});
+  .reduce((all, group) => Object.assign(all, group.stocks), {});
 
 export const STOCK_CODES = Object.keys(STOCK_POOL);
 
