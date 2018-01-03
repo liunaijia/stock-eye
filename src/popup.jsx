@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { shape } from 'prop-types';
 
 import Portfolio from './components/Portfolio';
 import GroupTradeSuggestions from './components/GroupTradeSuggestions';
@@ -8,15 +9,24 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
 import { sleep } from './time';
+import withPortfolio from './withPortfolio';
 import './popup.css';
 
 class Popup extends Component {
+  static propTypes = {
+    portfolio: shape(),
+  };
+
+  static defaultProps = {
+    portfolio: null,
+  }
+
   state = {
-    portfolio: {
-      availableCash: null,
-      holdings: [],
-      isLoading: false,
-    },
+    // portfolio: {
+    //   availableCash: null,
+    //   holdings: [],
+    //   isLoading: false,
+    // },
     tradeSuggestion: {
       groups: [
         {
@@ -45,25 +55,25 @@ class Popup extends Component {
   };
 
   async componentDidMount() {
-    this.initPortfolio();
-    this.initTradeSuggestion();
+    // this.initPortfolio();
+    // this.initTradeSuggestion();
   }
 
-  async initPortfolio(interval = 10) {
-    this.setState({ portfolio: { ...this.state.portfolio, isLoading: true } });
+  // async initPortfolio(interval = 10) {
+  //   this.setState({ portfolio: { ...this.state.portfolio, isLoading: true } });
 
-    const portfolio = await sendMessage({ type: GET_PORTFOLIO });
-    this.setState({
-      portfolio: {
-        availableCash: portfolio.availableCash,
-        holdings: portfolio.holdings,
-        isLoading: false,
-      },
-    });
+  //   const portfolio = await sendMessage({ type: GET_PORTFOLIO });
+  //   this.setState({
+  //     portfolio: {
+  //       availableCash: portfolio.availableCash,
+  //       holdings: portfolio.holdings,
+  //       isLoading: false,
+  //     },
+  //   });
 
-    await sleep(interval);
-    this.initPortfolio(interval);
-  }
+  //   await sleep(interval);
+  //   this.initPortfolio(interval);
+  // }
 
   async initTradeSuggestion() {
     this.setState({ tradeSuggestion: { ...this.state.tradeSuggestion, isLoading: true } });
@@ -111,30 +121,29 @@ class Popup extends Component {
   }
 
   render() {
+    const { portfolio } = this.props;
     return (
       <ErrorBoundary>
-        <Portfolio
-          availableCash={this.state.portfolio.availableCash}
-          holdings={this.state.portfolio.holdings}
-          isLoading={this.state.portfolio.isLoading}
-        />
+        {portfolio &&
+          <Portfolio {...portfolio} />
+        }
         <article>
           <ProgressBar visible={this.state.tradeSuggestion.isLoading} />
           {this.state.tradeSuggestion.isInitialized &&
-          <div>
-            <section>
-              <p>{this.state.operationResults}</p>
-            </section>
-            {this.state.tradeSuggestion.groups.map(group => (
-              <GroupTradeSuggestions
-                key={group.name}
-                name={group.name}
-                toBuy={group.toBuy}
-                toSell={group.toSell}
-                onPlaceOrder={this.handlePlaceOrder}
-              />
-            ))}
-          </div>
+            <div>
+              <section>
+                <p>{this.state.operationResults}</p>
+              </section>
+              {this.state.tradeSuggestion.groups.map(group => (
+                <GroupTradeSuggestions
+                  key={group.name}
+                  name={group.name}
+                  toBuy={group.toBuy}
+                  toSell={group.toSell}
+                  onPlaceOrder={this.handlePlaceOrder}
+                />
+              ))}
+            </div>
           }
         </article>
       </ErrorBoundary>
@@ -142,6 +151,8 @@ class Popup extends Component {
   }
 }
 
+const Wrapper = withPortfolio(Popup);
+
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<Popup />, document.getElementById('root'));
+  ReactDOM.render(<Wrapper />, document.getElementById('root'));
 });

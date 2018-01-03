@@ -1,7 +1,11 @@
+// import axios from 'axios';
 import { decode } from 'iconv-lite';
 import { MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER } from './secrets';
 
 const ROOT_URL = 'https://etrade.newone.com.cn';
+// axios.defaults.baseURL = ROOT_URL;
+// axios.defaults.withCredentials = true;
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const param = (data = {}) => Object.entries(data).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
 
@@ -9,6 +13,7 @@ const sendRequest = async (url = '', payload = {}) => {
   const hasPayload = Object.keys(payload).length;
   const response = await fetch(`${ROOT_URL}${url}`, {
     method: hasPayload ? 'POST' : 'GET',
+    // mode: 'no-cors',
     headers: new Headers({
       'Content-Type': 'application/x-www-form-urlencoded',
     }),
