@@ -43,7 +43,6 @@ function withTradeSuggestion(WrappedComponent) {
             sellingGap,
             threshold: group.threshold,
           });
-          // [groupName] = { buying: buyingGap, selling: sellingGap, threshold: group.threshold };
         });
 
         this.setState({ groups, loading: false });
