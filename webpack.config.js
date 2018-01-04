@@ -5,14 +5,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const config = {
   entry: {
     background: './src/background.js',
-    popup: './src/popup.jsx',
-    // vendor: [
-    //   'iconv-lite',
-    //   'prop-types',
-    //   'react',
-    //   'react-dom',
-    //   'styled-components',
-    // ],
+    popup: './src/App.jsx',
   },
   devtool: 'eval-source-map',
   devServer: {

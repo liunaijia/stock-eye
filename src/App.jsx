@@ -6,13 +6,12 @@ import Portfolio from './components/Portfolio';
 import GroupTradeSuggestions from './components/GroupTradeSuggestions';
 import ProgressBar from './components/ProgressBar';
 import ErrorBoundary from './components/ErrorBoundary';
-import { GET_PORTFOLIO, GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
+import { GET_TRADE_SUGGESTION, PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
-import { sleep } from './time';
 import withPortfolio from './withPortfolio';
-import './popup.css';
+import './App.css';
 
-class Popup extends Component {
+class App extends Component {
   static propTypes = {
     portfolio: shape(),
   };
@@ -151,7 +150,7 @@ class Popup extends Component {
   }
 }
 
-const Wrapper = withPortfolio(Popup);
+const Wrapper = withPortfolio(App);
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Wrapper />, document.getElementById('root'));
