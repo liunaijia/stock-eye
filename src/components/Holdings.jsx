@@ -1,8 +1,10 @@
 import React from 'react';
 import { string, number, arrayOf, shape } from 'prop-types';
 import styled from 'styled-components';
+import { Table } from 'antd';
+import Number from './Number';
 
-import Holding from './Holding';
+const { Column } = Table;
 
 const propTypes = {
   className: string,
@@ -22,41 +24,23 @@ const defaultProps = {
 };
 
 const Holdings = ({ className, holdings }) => (
-  <table className={className}>
-    <thead>
-      <tr>
-        <th>股票</th>
-        <th>持有量</th>
-        <th>可卖量</th>
-        <th>浮动盈亏</th>
-      </tr>
-    </thead>
-    <tbody>
-      {(holdings || [])
-        .map(stock => (
-          <Holding
-            key={stock.stockCode}
-            stockName={stock.stockName}
-            stockAmount={stock.stockAmount}
-            sellableAmount={stock.sellableAmount}
-            floating={stock.floating}
-            floatingRate={stock.floatingRate}
-          />
-        ))}
-    </tbody>
-  </table>
+  <Table className={className} dataSource={holdings} size="small" pagination={false}>
+    <Column title="股票" dataIndex="stockName" />
+    <Column title="持有量" dataIndex="stockAmount" />
+    <Column title="可卖量" dataIndex="sellableAmount" />
+    <Column
+      title="浮动盈亏"
+      key="floating"
+      render={(text, record) => (<Number>{record.floating} ({record.floatingRate})</Number>)
+    }
+    />
+  </Table>
 );
 
 Holdings.propTypes = propTypes;
 Holdings.defaultProps = defaultProps;
 
 export default styled(Holdings)`
-  width: 100%;
-
-  tr {
-    line-height: 1.3rem;
-  }
-
   th,
   td {
     &:nth-child(1) {

@@ -27,6 +27,10 @@ const config = {
           { loader: 'babel-loader' },
         ],
       },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
     ],
   },
   plugins: [

@@ -12,6 +12,16 @@
     "stage-0",
     "react"
   ],
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": "css"
+      }
+    ]
+  ],
   "env": {
     "test": {
       "plugins": [
