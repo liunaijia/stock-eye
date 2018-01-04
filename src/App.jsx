@@ -21,11 +21,6 @@ class App extends Component {
   }
 
   state = {
-    // portfolio: {
-    //   availableCash: null,
-    //   holdings: [],
-    //   isLoading: false,
-    // },
     tradeSuggestion: {
       groups: [
         {
@@ -54,25 +49,8 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    // this.initPortfolio();
     // this.initTradeSuggestion();
   }
-
-  // async initPortfolio(interval = 10) {
-  //   this.setState({ portfolio: { ...this.state.portfolio, isLoading: true } });
-
-  //   const portfolio = await sendMessage({ type: GET_PORTFOLIO });
-  //   this.setState({
-  //     portfolio: {
-  //       availableCash: portfolio.availableCash,
-  //       holdings: portfolio.holdings,
-  //       isLoading: false,
-  //     },
-  //   });
-
-  //   await sleep(interval);
-  //   this.initPortfolio(interval);
-  // }
 
   async initTradeSuggestion() {
     this.setState({ tradeSuggestion: { ...this.state.tradeSuggestion, isLoading: true } });
@@ -123,9 +101,7 @@ class App extends Component {
     const { portfolio } = this.props;
     return (
       <ErrorBoundary>
-        {portfolio &&
-          <Portfolio {...portfolio} />
-        }
+        <Portfolio {...portfolio} />
         <article>
           <ProgressBar visible={this.state.tradeSuggestion.isLoading} />
           {this.state.tradeSuggestion.isInitialized &&

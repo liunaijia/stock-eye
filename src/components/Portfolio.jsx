@@ -11,7 +11,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  availableCash: 0,
+  availableCash: Number.NaN,
   holdings: [],
   isLoading: false,
 };
