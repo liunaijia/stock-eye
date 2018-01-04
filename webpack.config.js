@@ -42,7 +42,7 @@ const config = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'runtime',
     }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
+    // new webpack.optimize.ModuleConcatenationPlugin(),
     // new WebpackMonitor({
     //   capture: true, // -> default 'true'
     //   target: '../monitor/stats.json', // default -> '../monitor/stats.json'
