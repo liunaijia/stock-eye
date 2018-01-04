@@ -1,86 +1,59 @@
-import React, { Component } from 'react';
-import { string, number, shape, func } from 'prop-types';
+import React from 'react';
+import { string, shape, func } from 'prop-types';
 
 import StockTradeSuggestion from './StockTradeSuggestion';
 
-class GroupTradeSuggestions extends Component {
-  static propTypes = {
-    className: string,
-    name: string,
-    toBuy: shape({
-      stockCode: string,
-      stockName: string,
-      price: number,
-      maxAmount: number,
-      timestamp: number,
-      gap: number,
-      compareWith: shape(),
-    }),
-    toSell: shape({
-      stockCode: string,
-      stockName: string,
-      price: number,
-      maxAmount: number,
-      timestamp: number,
-      gap: number,
-      compareWith: shape(),
-    }),
-    onPlaceOrder: func.isRequired,
-  };
+const GroupTradeSuggestions = ({
+  className, groupName, buyingGap, sellingGap, onPlaceOrder,
+}) => (
+  <article className={className}>
+    <h1>{groupName}</h1>
+    {buyingGap &&
+    <section>
+      <div>
+        买入 {buyingGap.toBuy.stockName}
+        GAP：[{buyingGap.value}]
+        相比：{`${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`}
+      </div>
+      <time>{new Date(buyingGap.timestamp).toLocaleTimeString()}</time>
+      <StockTradeSuggestion
+        tradeType="buy"
+        {...buyingGap.toBuy}
+        onPlaceOrder={onPlaceOrder}
+      />
+    </section>
+    }
+    {sellingGap &&
+    <section>
+      <div>
+        卖出 {sellingGap.toSell.stockName}
+        GAP：[{sellingGap.value}]
+        相比：{`${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`}
+      </div>
+      <time>{new Date(sellingGap.timestamp).toLocaleTimeString()}</time>
+      <StockTradeSuggestion
+        tradeType="sell"
+        {...sellingGap.toSell}
+        onPlaceOrder={onPlaceOrder}
+      />
+    </section>
+    }
+  </article>
+);
 
-  static defaultProps = {
-    className: null,
-    name: null,
-    toBuy: null,
-    toSell: null,
-  };
+GroupTradeSuggestions.propTypes = {
+  className: string,
+  groupName: string,
+  buyingGap: shape(),
+  sellingGap: shape(),
+  onPlaceOrder: func.isRequired,
+};
 
-  render() {
-    const {
-      className, name, toBuy, toSell, onPlaceOrder,
-    } = this.props;
-    return (
-      <article className={className}>
-        <header>{name}</header>
-        {toBuy &&
-        <section>
-          <div>
-              买入 {toBuy.stockName}
-              GAP：[{toBuy.gap}]
-              相比：{`${toBuy.compareWith.stockName} ${toBuy.compareWith.price}`}
-          </div>
-          <time>{new Date(toBuy.timestamp).toLocaleTimeString()}</time>
-          <StockTradeSuggestion
-            tradeType="buy"
-            stockCode={toBuy.stockCode}
-            stockName={toBuy.stockName}
-            price={toBuy.price}
-            maxAmount={toBuy.maxAmount}
-            onPlaceOrder={onPlaceOrder}
-          />
-        </section>
-        }
-        {toSell &&
-        <section>
-          <div>
-              卖出 {toSell.stockName}
-              GAP：[{toSell.gap}]
-              相比：{`${toSell.compareWith.stockName} ${toSell.compareWith.price}`}
-          </div>
-          <time>{new Date(toSell.timestamp).toLocaleTimeString()}</time>
-          <StockTradeSuggestion
-            tradeType="sell"
-            stockCode={toSell.stockCode}
-            stockName={toSell.stockName}
-            price={toSell.price}
-            maxAmount={toSell.maxAmount}
-            onPlaceOrder={onPlaceOrder}
-          />
-        </section>
-        }
-      </article>
-    );
-  }
-}
+GroupTradeSuggestions.defaultProps = {
+  className: null,
+  groupName: null,
+  buyingGap: null,
+  sellingGap: null,
+};
 
 export default GroupTradeSuggestions;
