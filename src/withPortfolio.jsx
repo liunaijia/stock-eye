@@ -4,27 +4,20 @@ import { runDuringTradeTime } from './jobs/job';
 
 function withPortfolio(WrappedComponent) {
   return class extends Component {
-    state = { portfolio: null }
+    state = { }
 
     componentDidMount() {
       runDuringTradeTime({ interval: 10, runOnStartUp: true })(async () => {
+        this.setState({ ...this.state, isLoading: true });
         const portfolio = await getPortfolioFromApi();
-        this.setState({ portfolio });
+        this.setState({ ...portfolio, isLoading: false });
       });
     }
 
     render() {
-      return <WrappedComponent {...this.props} portfolio={this.state.portfolio} />;
+      return <WrappedComponent {...this.props} portfolio={this.state} />;
     }
   };
 }
-
-// function getTradeSuggesion() {
-
-// }
-
-// function placeOrder() {
-
-// }
 
 export default withPortfolio;

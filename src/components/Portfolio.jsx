@@ -17,12 +17,16 @@ const defaultProps = {
 };
 
 const Portfolio = ({ availableCash, holdings, isLoading }) => (
-  <article>
+  <section>
+    <h1>持仓</h1>
     <ProgressBar visible={isLoading} />
-    <header>持仓</header>
-    可用资金：{availableCash}
-    <Holdings holdings={holdings} />
-  </article>
+    <section>
+      <h2>可用资金：{availableCash}</h2>
+    </section>
+    <section>
+      <Holdings holdings={holdings} />
+    </section>
+  </section>
 );
 
 Portfolio.propTypes = propTypes;
