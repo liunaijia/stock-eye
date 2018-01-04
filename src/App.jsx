@@ -48,18 +48,16 @@ class App extends Component {
           <Content>
             <Portfolio {...portfolio} />
             <ProgressBar visible={tradeSuggestion.loading} />
-            <div>
-              <section>
-                <p>{this.state.operationResults}</p>
-              </section>
-              {tradeSuggestion.groups.map(group => (
-                <GroupTradeSuggestions
-                  key={group.groupName}
-                  {...group}
-                  onPlaceOrder={this.handlePlaceOrder}
-                />
+            <section>
+              <p>{this.state.operationResults}</p>
+            </section>
+            {tradeSuggestion.groups.map(group => (
+              <GroupTradeSuggestions
+                key={group.groupName}
+                {...group}
+                onPlaceOrder={this.handlePlaceOrder}
+              />
               ))}
-            </div>
           </Content>
         </Layout>
 

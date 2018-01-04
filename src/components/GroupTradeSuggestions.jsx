@@ -1,44 +1,53 @@
 import React from 'react';
 import { string, shape, func } from 'prop-types';
+import { Card } from 'antd';
+import styled from 'styled-components';
 
 import StockTradeSuggestion from './StockTradeSuggestion';
+
+const CardTitle = styled.span`
+  color: var(${({ tradeType }) => (tradeType === 'buy' ? '--red' : '--green')});
+`;
 
 const GroupTradeSuggestions = ({
   className, groupName, buyingGap, sellingGap, onPlaceOrder,
 }) => (
-  <article className={className}>
-    <h1>{groupName}</h1>
+  <Card className={className} title={groupName}>
     {buyingGap &&
-    <section>
-      <div>
-        买入 {buyingGap.toBuy.stockName}
+    <Card
+      type="inner"
+      title={<CardTitle tradeType="buy">买入{buyingGap.toBuy.stockName}{buyingGap.toBuy.price}</CardTitle>}
+    >
+      <p>
         GAP：[{buyingGap.value}]
         相比：{`${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`}
-      </div>
+      </p>
       <time>{new Date(buyingGap.timestamp).toLocaleTimeString()}</time>
       <StockTradeSuggestion
         tradeType="buy"
         {...buyingGap.toBuy}
         onPlaceOrder={onPlaceOrder}
       />
-    </section>
+    </Card>
     }
     {sellingGap &&
-    <section>
-      <div>
-        卖出 {sellingGap.toSell.stockName}
+    <Card
+      type="inner"
+      title={<CardTitle tradeType="sell">卖出{sellingGap.toSell.stockName}{sellingGap.toSell.price}</CardTitle>}
+    >
+      <p>
         GAP：[{sellingGap.value}]
         相比：{`${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`}
-      </div>
+      </p>
       <time>{new Date(sellingGap.timestamp).toLocaleTimeString()}</time>
       <StockTradeSuggestion
         tradeType="sell"
         {...sellingGap.toSell}
         onPlaceOrder={onPlaceOrder}
       />
-    </section>
+    </Card>
     }
-  </article>
+  </Card>
 );
 
 GroupTradeSuggestions.propTypes = {

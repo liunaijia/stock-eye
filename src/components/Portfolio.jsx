@@ -1,6 +1,6 @@
 import React from 'react';
 import { bool, number, arrayOf, object } from 'prop-types';
-import { Spin } from 'antd';
+import { Spin, Card } from 'antd';
 
 import Holdings from './Holdings';
 
@@ -17,17 +17,12 @@ const defaultProps = {
 };
 
 const Portfolio = ({ availableCash, holdings, isLoading }) => (
-  <section>
-    <h1>持仓</h1>
+  <Card title="持仓">
     <Spin spinning={isLoading}>
-      <section>
-        <h2>可用资金：{availableCash}</h2>
-      </section>
-      <section>
-        <Holdings holdings={holdings} />
-      </section>
+      <p>可用资金：{availableCash}</p>
+      <Holdings holdings={holdings} />
     </Spin>
-  </section>
+  </Card>
 );
 
 Portfolio.propTypes = propTypes;
