@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { shape } from 'prop-types';
+import { Layout } from 'antd';
 
 import Portfolio from './components/Portfolio';
 import GroupTradeSuggestions from './components/GroupTradeSuggestions';
@@ -11,6 +12,8 @@ import { sendMessage } from './chromeApi';
 import withPortfolio from './withPortfolio';
 import withTradeSuggesion from './withTradeSuggesion';
 import './App.css';
+
+const { Content } = Layout;
 
 class App extends Component {
   static propTypes = {
@@ -41,20 +44,25 @@ class App extends Component {
     const { portfolio, tradeSuggestion } = this.props;
     return (
       <ErrorBoundary>
-        <Portfolio {...portfolio} />
-        <ProgressBar visible={tradeSuggestion.loading} />
-        <div>
-          <section>
-            <p>{this.state.operationResults}</p>
-          </section>
-          {tradeSuggestion.groups.map(group => (
-            <GroupTradeSuggestions
-              key={group.groupName}
-              {...group}
-              onPlaceOrder={this.handlePlaceOrder}
-            />
+        <Layout>
+          <Content>
+            <Portfolio {...portfolio} />
+            <ProgressBar visible={tradeSuggestion.loading} />
+            <div>
+              <section>
+                <p>{this.state.operationResults}</p>
+              </section>
+              {tradeSuggestion.groups.map(group => (
+                <GroupTradeSuggestions
+                  key={group.groupName}
+                  {...group}
+                  onPlaceOrder={this.handlePlaceOrder}
+                />
               ))}
-        </div>
+            </div>
+          </Content>
+        </Layout>
+
       </ErrorBoundary>
     );
   }

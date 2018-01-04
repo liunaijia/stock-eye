@@ -1,8 +1,8 @@
 import React from 'react';
 import { bool, number, arrayOf, object } from 'prop-types';
+import { Spin } from 'antd';
 
 import Holdings from './Holdings';
-import ProgressBar from './ProgressBar';
 
 const propTypes = {
   availableCash: number,
@@ -19,13 +19,14 @@ const defaultProps = {
 const Portfolio = ({ availableCash, holdings, isLoading }) => (
   <section>
     <h1>持仓</h1>
-    <ProgressBar visible={isLoading} />
-    <section>
-      <h2>可用资金：{availableCash}</h2>
-    </section>
-    <section>
-      <Holdings holdings={holdings} />
-    </section>
+    <Spin spinning={isLoading}>
+      <section>
+        <h2>可用资金：{availableCash}</h2>
+      </section>
+      <section>
+        <Holdings holdings={holdings} />
+      </section>
+    </Spin>
   </section>
 );
 
