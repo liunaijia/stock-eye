@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { string, number, func, oneOf } from 'prop-types';
 import styled from 'styled-components';
+import { Form } from 'antd';
+
+const FormItem = Form.Item;
 
 class TradeForm extends Component {
   static propTypes = {
@@ -48,25 +51,25 @@ class TradeForm extends Component {
       className, tradeType, stockName, price, maxAmount,
     } = this.props;
     return (
-      <form className={className} onSubmit={this.handleSubmit}>
-        <p>
+      <Form className={className} onSubmit={this.handleSubmit}>
+        <FormItem>
           股票：<input name="stockName" value={stockName} readOnly />
           <input name="stockCode" value={this.state.stockCode} type="hidden" />
-        </p>
-        <p>
+        </FormItem>
+        <FormItem>
           价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
-        </p>
-        <p>
+        </FormItem>
+        <FormItem>
           建议：{price}
-        </p>
-        <p>
+        </FormItem>
+        <FormItem>
           数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
-        </p>
-        <p>
+        </FormItem>
+        <FormItem>
           可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
-        </p>
+        </FormItem>
         <input type="submit" value={tradeType === 'buy' ? '买入' : '卖出'} />
-      </form>
+      </Form>
     );
   }
 }
