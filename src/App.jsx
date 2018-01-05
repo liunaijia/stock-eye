@@ -11,7 +11,7 @@ import { PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
 import withPortfolio from './withPortfolio';
 import withTradeSuggesion from './withTradeSuggesion';
-import Quotes from './components/QuotesContainer';
+import Hq from './components/hq';
 import './App.css';
 
 const { Content } = Layout;
@@ -47,7 +47,7 @@ class App extends Component {
       <ErrorBoundary>
         <Layout>
           <Content>
-            <Quotes />
+            <Hq />
             <Portfolio {...portfolio} />
             <ProgressBar visible={tradeSuggestion.loading} />
             <section>

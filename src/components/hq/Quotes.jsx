@@ -2,7 +2,7 @@ import React from 'react';
 import { string, number, arrayOf, shape, bool } from 'prop-types';
 import { Card, Table } from 'antd';
 import styled from 'styled-components';
-import Number from './Number';
+import Number from '../Number';
 
 const { Column } = Table;
 
@@ -24,13 +24,11 @@ const defaultProps = {
 };
 
 const Quotes = ({ className, quotes }) => (
-  <Card title="行情">
-    <Table className={className} dataSource={quotes.stocks} size="small" pagination={false}>
-      <Column title="股票" dataIndex="name" />
-      <Column title="当前价" dataIndex="current" />
-      <Column title="涨跌" dataIndex="ratio" render={(text, record) => (<Number>{text}%</Number>)} />
-    </Table>
-  </Card>
+  <Table className={className} dataSource={quotes.stocks} size="small" pagination={false}>
+    <Column title="股票" dataIndex="name" />
+    <Column title="当前价" dataIndex="current" />
+    <Column title="涨跌" dataIndex="ratio" render={text => (<Number>{text}%</Number>)} />
+  </Table>
 );
 
 Quotes.propTypes = propTypes;
