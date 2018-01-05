@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { string, number, func, oneOf } from 'prop-types';
 import styled from 'styled-components';
 
-import Quotes from './Quotes';
+import Pankou from './Pankou';
 import TradeFrom from './TradeForm';
 
 class StockTradeSuggestion extends Component {
@@ -45,7 +45,7 @@ class StockTradeSuggestion extends Component {
           />
         </section>
         <section>
-          <Quotes stockCode={stockCode} />
+          <Pankou stockCode={stockCode} />
         </section>
       </article>
     );

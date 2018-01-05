@@ -6,7 +6,7 @@ import Bids from './Bids';
 import { fetchStocks } from '../stockData';
 import { isTradeTime, sleep } from '../time';
 
-class Quotes extends Component {
+class Pankou extends Component {
   static propTypes = {
     className: string,
     stockCode: string.isRequired,
@@ -55,7 +55,7 @@ class Quotes extends Component {
   }
 }
 
-export default styled(Quotes)`
+export default styled(Pankou)`
   p {
     margin: 0;
   }
