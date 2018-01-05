@@ -1,3 +1,4 @@
+import { readAsText } from './responseHelper';
 import { YESTERDAY_RATIO_FACTOR } from './settings';
 import { lastTradeDay } from './time';
 
@@ -21,7 +22,7 @@ const fetchYesterdayData = async (stockCodes) => {
   const paramCode = stockCodes.map(code => `cn_${code.substring(2)}`).join(',');
   // http://q.stock.sohu.com/hisHq?code=cn_601988,cn_601288&start=20170921&end=20170921&r=asdf
   const response = await fetch(`http://q.stock.sohu.com/hisHq?code=${paramCode}&start=${day}&end=${day}&r=${new Date().getTime()}`);
-  const text = await response.text();
+  const text = readAsText(response);
   const data = JSON.parse(text).map((stockData) => {
     const stockCodeWithoutPrefix = stockData.code.substring(3);
     const fullStockCode = stockCodes.find(code => code.includes(stockCodeWithoutPrefix));
@@ -40,7 +41,7 @@ const fetchYesterdayData = async (stockCodes) => {
 
 const fetchData = async (stockCodes = []) => {
   const response = await fetch(`http://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes.join(',')}`);
-  const text = await response.text();
+  const text = readAsText(response);
   return text;
 };
 
@@ -76,6 +77,7 @@ const parse = (text = '') =>
       const [stockCode, rawValues] = item;
       const stock = {
         code: stockCode,
+        name: rawValues[0],
         openAt: getValueFrom(rawValues, 1),
         closeAt: getValueFrom(rawValues, 2),
         current: getValueFrom(rawValues, 3),

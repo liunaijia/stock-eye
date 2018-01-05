@@ -4,8 +4,6 @@ import { runDuringTradeTime } from './jobs/job';
 
 function withPortfolio(WrappedComponent) {
   return class extends Component {
-    state = { }
-
     componentDidMount() {
       runDuringTradeTime({ interval: 10, runOnStartUp: true })(async () => {
         this.setState({ ...this.state, isLoading: true });

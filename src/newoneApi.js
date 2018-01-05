@@ -1,5 +1,5 @@
-import { decode } from 'iconv-lite';
 import { MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER } from './secrets';
+import { readAsDataUrl, readAsDom, readAsText } from './responseHelper';
 
 const ROOT_URL = 'https://etrade.newone.com.cn';
 
@@ -18,35 +18,6 @@ const sendRequest = async (url = '', payload = {}) => {
     body: hasPayload ? params.toString() : null,
   });
   return response;
-};
-
-const readContentType = (response = new Response()) => {
-  const contentType = response.headers.get('Content-Type');
-  const groups = contentType.match(/([^;]+)(;\s*charset=([^;]+))?(;\s*boundary=([^;]+))?/);
-  return { mimeType: groups[1], charset: groups[3], boundary: groups[5] };
-};
-
-const readAsText = async (response = new Response()) => {
-  const { charset } = readContentType(response);
-  const bytes = await response.arrayBuffer();
-  const text = decode(Buffer.from(bytes), charset);
-  return text;
-};
-
-const readAsDataUrl = async (response = new Response()) => {
-  const { mimeType } = readContentType(response);
-  const data = await response.arrayBuffer();
-  const base64String = btoa(String.fromCharCode(...new Uint8Array(data)));
-
-  return `data:${mimeType};base64,${base64String}`;
-};
-
-const readAsDom = async (response = new Response()) => {
-  const text = await readAsText(response);
-  const { mimeType } = readContentType(response);
-
-  const dom = new DOMParser().parseFromString(text, mimeType);
-  return dom;
 };
 
 const loadCaptcha = async () => {

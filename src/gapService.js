@@ -1,4 +1,4 @@
-import { STOCK_POOL, ZOOM } from './settings';
+import { ZOOM } from './settings';
 
 // 使用每个股票的zoom系数调整涨跌幅，比如工行涨1.1%，系数为1，交行涨1.55%，系数为0.67，此时应该触发工行的交易信号，
 // 因为工行实际上涨1.1% (1.1% * 1) 大于 交行实际上涨1.04%(1.55% * 0.67)
@@ -45,13 +45,13 @@ export const calcBuyingGap = (stocks = [{
     value: gap,
     toBuy: {
       stockCode: stockMayBuy.code,
-      stockName: STOCK_POOL[stockMayBuy.code],
+      stockName: stockMayBuy.name,
       price: stockMayBuy.sellingAt,
       maxAmount: cutoffAmount(stockMayBuy.sellingAt, availableCash),
     },
     compareWith: {
       stockCode: stockWithMaxBuyingRatio.code,
-      stockName: STOCK_POOL[stockWithMaxBuyingRatio.code],
+      stockName: stockWithMaxBuyingRatio.name,
       price: stockWithMaxBuyingRatio.buyingAt,
     },
     timestamp: new Date().getTime(),
@@ -89,13 +89,13 @@ export const calcSellingGap = (
     value: gap,
     toSell: {
       stockCode: stockMaySell.code,
-      stockName: STOCK_POOL[stockMaySell.code],
+      stockName: stockMaySell.name,
       price: stockMaySell.buyingAt,
       maxAmount: holdingStocks[stockMaySell.code],
     },
     compareWith: {
       stockCode: stockWithMinSellingRatio.code,
-      stockName: STOCK_POOL[stockWithMinSellingRatio.code],
+      stockName: stockWithMinSellingRatio.name,
       price: stockWithMinSellingRatio.sellingAt,
     },
     timestamp: new Date().getTime(),

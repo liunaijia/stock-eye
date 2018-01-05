@@ -21,11 +21,12 @@ function withTradeSuggestion(WrappedComponent) {
     }
 
     componentDidMount() {
-      runDuringTradeTime({ interval: 3, runOnStartUp: false })(async () => {
+      runDuringTradeTime({ interval: 3, runOnStartUp: true })(async () => {
         this.setState({ ...this.state, loading: true });
 
         const groups = [];
         const allStocks = await fetchStocks(STOCK_CODES);
+        console.log('TradeSuggesion is fetching stock data');
 
         Object.entries(STOCK_GROUPS).forEach(([groupName, group]) => {
           const stockCodesInGroup = Object.keys(group.stocks);
