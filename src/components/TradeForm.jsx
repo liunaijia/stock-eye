@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { string, number, func, oneOf } from 'prop-types';
 import styled from 'styled-components';
-import { Form } from 'antd';
+import { Form, Button, InputNumber } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -25,15 +25,15 @@ class TradeForm extends Component {
   }
 
   state = {
-    stockCode: this.props.stockCode,
     price: this.props.price,
     amount: this.props.maxAmount,
   }
 
   handleSubmit = (event = new Event()) => {
     event.preventDefault();
-    const { stockCode, price, amount } = this.state;
-    this.props.onSubmit({ stockCode, price, amount });
+    const { stockCode, onSubmit } = this.props;
+    const { price, amount } = this.state;
+    onSubmit({ stockCode, price, amount });
   }
 
   handleChange = (event = new Event()) => {
@@ -50,25 +50,42 @@ class TradeForm extends Component {
     const {
       className, tradeType, stockName, price, maxAmount,
     } = this.props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 16 },
+      },
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 16,
+          offset: 8,
+        },
+      },
+    };
     return (
       <Form className={className} onSubmit={this.handleSubmit}>
-        <FormItem>
-          股票：<input name="stockName" value={stockName} readOnly />
-          <input name="stockCode" value={this.state.stockCode} type="hidden" />
+        <FormItem {...formItemLayout} label="股票">
+          <span className="ant-form-text">{stockName}</span>
         </FormItem>
-        <FormItem>
-          价格：<input name="price" value={this.state.price} type="number" required onChange={this.handleChange} />
+        <FormItem {...formItemLayout} label="价格">
+          <InputNumber name="price" defaultValue={this.state.price} step={0.01} required onChange={this.handleChange} />
         </FormItem>
-        <FormItem>
-          建议：{price}
+        <FormItem {...formItemLayout} label="建议">
+          <span className="ant-form-text">{price}</span>
         </FormItem>
-        <FormItem>
-          数量：<input name="amount" value={this.state.amount} type="number" required onChange={this.handleChange} />
+        <FormItem {...formItemLayout} label="数量">
+          <InputNumber name="amount" defaultValue={this.state.amount} max={maxAmount} required onChange={this.handleChange} />
         </FormItem>
-        <FormItem>
-          可{tradeType === 'buy' ? '买' : '卖'}：{maxAmount}
+        <FormItem {...formItemLayout} label={tradeType === 'buy' ? '可买' : '可卖'}>
+          <span className="ant-form-text">{maxAmount}</span>
         </FormItem>
-        <input type="submit" value={tradeType === 'buy' ? '买入' : '卖出'} />
+        <FormItem {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">{tradeType === 'buy' ? '买入' : '卖出'}</Button>
+        </FormItem>
       </Form>
     );
   }
