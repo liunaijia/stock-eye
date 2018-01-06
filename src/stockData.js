@@ -1,6 +1,7 @@
 import { readAsText } from './responseHelper';
 import { YESTERDAY_RATIO_FACTOR } from './settings';
 import { lastTradeDay } from './time';
+import { getBuyGap } from './gapService';
 
 // const cachedYesterdayData = {};
 const cachedYesterdayData = {
@@ -105,6 +106,10 @@ const fetchStocks = async (stockCodes = []) => {
       stock.sellingRatio += yesterdayRatio; // eslint-disable-line no-param-reassign
     });
   }
+
+  stocks.forEach((stock) => {
+    stock.buyGap = getBuyGap(stocks, stock); // eslint-disable-line no-param-reassign
+  });
 
   return stocks;
 };

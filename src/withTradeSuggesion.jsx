@@ -25,11 +25,10 @@ function withTradeSuggestion(WrappedComponent) {
         this.setState({ ...this.state, loading: true });
 
         const groups = [];
-        const allStocks = await fetchStocks(STOCK_CODES);
         console.log('TradeSuggesion is fetching stock data');
 
-        Object.entries(STOCK_GROUPS).forEach(([groupName, group]) => {
-          const stocks = allStocks.filter(stock => group.stocks.includes(stock.code));
+        Object.entries(STOCK_GROUPS).forEach(async ([groupName, group]) => {
+          const stocks = await fetchStocks(group.stocks);
 
           // calculate gap to buy stock
           const buyingGap = calcBuyingGap(stocks, this.props.portfolio.availableCash);

@@ -7,11 +7,10 @@ import { calcBuyingGap, calcSellingGap } from '../gapService';
 const gapGroups = {};
 
 const calcGaps = async () => {
-  const allStocks = await fetchStocks(STOCK_CODES);
   const portfolio = await getPortfolio();
 
-  Object.entries(STOCK_GROUPS).forEach(([groupName, group]) => {
-    const stocks = allStocks.filter(stock => group.stocks.includes(stock.code));
+  Object.entries(STOCK_GROUPS).forEach(async ([groupName, group]) => {
+    const stocks = await fetchStocks(group.stocks);
 
     // calculate gap to buy stock
     const buyingGap = calcBuyingGap(stocks, portfolio.availableCash);
