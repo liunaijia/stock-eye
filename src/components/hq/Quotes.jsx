@@ -45,7 +45,8 @@ export default styled(Quotes)`
 
     &:nth-child(2),
     &:nth-child(3),
-    &:nth-child(4) {
+    &:nth-child(4),
+    &:nth-child(5) {
       text-align: right;
     }
   }
