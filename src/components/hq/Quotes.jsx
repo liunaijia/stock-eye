@@ -1,6 +1,6 @@
 import React from 'react';
 import { string, number, arrayOf, shape, bool } from 'prop-types';
-import { Card, Table } from 'antd';
+import { Table } from 'antd';
 import styled from 'styled-components';
 import Number from '../Number';
 
@@ -10,7 +10,7 @@ const propTypes = {
   className: string,
   quotes: shape({
     stocks: arrayOf(shape({
-      stockName: string,
+      name: string,
       price: number,
       ratio: number,
     })),
@@ -24,7 +24,7 @@ const defaultProps = {
 };
 
 const Quotes = ({ className, quotes }) => (
-  <Table className={className} dataSource={quotes.stocks} size="small" pagination={false}>
+  <Table className={className} dataSource={quotes.stocks} size="small" pagination={false} rowKey="name">
     <Column title="股票" dataIndex="name" />
     <Column title="当前价" dataIndex="current" />
     <Column title="涨跌" dataIndex="ratio" render={text => (<Number>{text}%</Number>)} />

@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
+import { arrayOf, string } from 'prop-types';
 import { fetchStocks } from '../../stockData';
-import { STOCK_CODES } from '../../settings';
 import { runDuringTradeTime } from '../../jobs/job';
 import Quotes from './Quotes';
 
 function withQuotes(WrappedComponent) {
   return class extends Component {
+    static propTypes = {
+      stockCodes: arrayOf(string),
+    }
+
+    static defaultProps = {
+      stockCodes: null,
+    }
+
     state = {
       stocks: null,
       loading: false,

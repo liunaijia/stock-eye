@@ -24,7 +24,7 @@ const defaultProps = {
 };
 
 const Holdings = ({ className, holdings }) => (
-  <Table className={className} dataSource={holdings} size="small" pagination={false}>
+  <Table className={className} dataSource={holdings} size="small" pagination={false} rowKey={record => record.stockCode}>
     <Column title="股票" dataIndex="stockName" />
     <Column title="持有量" dataIndex="stockAmount" />
     <Column title="可卖量" dataIndex="sellableAmount" />
