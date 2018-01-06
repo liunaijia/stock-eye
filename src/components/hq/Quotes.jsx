@@ -28,6 +28,7 @@ const Quotes = ({ className, quotes }) => (
     <Column title="股票" dataIndex="name" />
     <Column title="当前价" dataIndex="current" />
     <Column title="买进GAP" dataIndex="buyGap.value" />
+    <Column title="卖出GAP" dataIndex="sellGap.value" />
     <Column title="涨跌" dataIndex="ratio" render={text => (<Number>{text}%</Number>)} />
   </Table>
 );

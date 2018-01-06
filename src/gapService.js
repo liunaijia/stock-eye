@@ -31,14 +31,15 @@ const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
 
 export const getBuyGap = (stocks, stockToBuy) => {
   const stockWithMaxBuyingRatio = getStockWithMaxBuyingRatio(stocks);
+  // Gap could be a negative value, which means any trade will lose.
   const gap = getGapBetween(stockWithMaxBuyingRatio.buyingRatio, stockToBuy.sellingRatio);
   return {
     value: gap,
     compareWith: {
       stockCode: stockWithMaxBuyingRatio.code,
       stockName: stockWithMaxBuyingRatio.name,
-      buyingRatio: stockWithMaxBuyingRatio.buyingRatio,
-      buyingPrice: stockWithMaxBuyingRatio.buyingAt,
+      ratio: stockWithMaxBuyingRatio.buyingRatio,
+      price: stockWithMaxBuyingRatio.buyingAt,
     },
   };
 };
@@ -51,28 +52,33 @@ export const calcBuyingGap = (stocks = [{
   sellingRatio: 0,
 }], availableCash = 0) => {
   const stockMayBuy = getStockWithMinSellingRatio(stocks);
-  const stockWithMaxBuyingRatio = getStockWithMaxBuyingRatio(stocks);
-
-  const gap = getGapBetween(stockWithMaxBuyingRatio.buyingRatio, stockMayBuy.sellingRatio);
-  // Gap could be a negative value, which means any trade will lose.
+  const gap = getBuyGap(stocks, stockMayBuy);
 
   return {
-    value: gap,
+    ...gap,
     toBuy: {
       stockCode: stockMayBuy.code,
       stockName: stockMayBuy.name,
       price: stockMayBuy.sellingAt,
       maxAmount: cutoffAmount(stockMayBuy.sellingAt, availableCash),
     },
-    compareWith: {
-      stockCode: stockWithMaxBuyingRatio.code,
-      stockName: stockWithMaxBuyingRatio.name,
-      price: stockWithMaxBuyingRatio.buyingAt,
-    },
     timestamp: new Date().getTime(),
   };
 };
 
+export const getSellGap = (stocks, stockToSell) => {
+  const stockWithMinSellingRatio = getStockWithMinSellingRatio(stocks);
+  const gap = getGapBetween(stockToSell.buyingRatio, stockWithMinSellingRatio.sellingRatio);
+  return {
+    value: gap,
+    compareWith: {
+      stockCode: stockWithMinSellingRatio.code,
+      stockName: stockWithMinSellingRatio.name,
+      ratio: stockWithMinSellingRatio.buyingRatio,
+      price: stockWithMinSellingRatio.buyingAt,
+    },
+  };
+};
 
 export const calcSellingGap = (
   stocks = [{
@@ -84,7 +90,7 @@ export const calcSellingGap = (
   }],
   holdings = [{ stockCode: '', sellableAmount: 0 }],
 ) => {
-  const stockWithMinSellingRatio = getStockWithMinSellingRatio(stocks);
+  // const stockWithMinSellingRatio = getStockWithMinSellingRatio(stocks);
 
   const holdingStocks = holdings
     .filter(holding => holding.sellableAmount > 0)
@@ -97,21 +103,14 @@ export const calcSellingGap = (
     return null;
   }
 
-  const gap = getGapBetween(stockMaySell.buyingRatio, stockWithMinSellingRatio.sellingRatio);
-  // Gap could be a negative value, which means any trade will lose.
-
+  const gap = getSellGap(stocks, stockMaySell);
   return {
-    value: gap,
+    ...gap,
     toSell: {
       stockCode: stockMaySell.code,
       stockName: stockMaySell.name,
       price: stockMaySell.buyingAt,
       maxAmount: holdingStocks[stockMaySell.code],
-    },
-    compareWith: {
-      stockCode: stockWithMinSellingRatio.code,
-      stockName: stockWithMinSellingRatio.name,
-      price: stockWithMinSellingRatio.sellingAt,
     },
     timestamp: new Date().getTime(),
   };
