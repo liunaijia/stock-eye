@@ -8,10 +8,10 @@ const getFixedRatio = (stock, ratio) => {
 };
 
 const getStockWithMinSellingRatio = stocks =>
-  stocks.sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
+  [...stocks].sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
 
 const getStockWithMaxBuyingRatio = stocks =>
-  stocks.sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
+  [...stocks].sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
 
 const getGapBetween = (ratio1, ratio2) =>
   Math.round((ratio1 - ratio2) * 100) / 100;
@@ -28,6 +28,21 @@ const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
   }
   return amount;
 };
+
+export const getBuyGap = (stocks, stockToBuy) => {
+  const stockWithMaxBuyingRatio = getStockWithMaxBuyingRatio(stocks);
+  const gap = getGapBetween(stockWithMaxBuyingRatio.buyingRatio, stockToBuy.sellingRatio);
+  return {
+    value: gap,
+    compareWith: {
+      stockCode: stockWithMaxBuyingRatio.code,
+      stockName: stockWithMaxBuyingRatio.name,
+      buyingRatio: stockWithMaxBuyingRatio.buyingRatio,
+      buyingPrice: stockWithMaxBuyingRatio.buyingAt,
+    },
+  };
+};
+
 export const calcBuyingGap = (stocks = [{
   code: '',
   buyingAt: 0,
