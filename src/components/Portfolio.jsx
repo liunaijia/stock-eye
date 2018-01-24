@@ -4,18 +4,6 @@ import { Spin, Card } from 'antd';
 
 import Holdings from './Holdings';
 
-const propTypes = {
-  availableCash: number,
-  holdings: arrayOf(object),
-  isLoading: bool,
-};
-
-const defaultProps = {
-  availableCash: Number.NaN,
-  holdings: [],
-  isLoading: false,
-};
-
 const Portfolio = ({ availableCash, holdings, isLoading }) => (
   <Card title="持仓">
     <Spin spinning={isLoading}>
@@ -25,7 +13,16 @@ const Portfolio = ({ availableCash, holdings, isLoading }) => (
   </Card>
 );
 
-Portfolio.propTypes = propTypes;
-Portfolio.defaultProps = defaultProps;
+Portfolio.propTypes = {
+  availableCash: number,
+  holdings: arrayOf(object),
+  isLoading: bool,
+};
+
+Portfolio.defaultProps = {
+  availableCash: Number.NaN,
+  holdings: [],
+  isLoading: false,
+};
 
 export default Portfolio;

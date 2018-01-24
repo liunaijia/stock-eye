@@ -50,7 +50,7 @@ class App extends Component {
       <ErrorBoundary>
         <Layout className={className}>
           <Content>
-            <Hq />
+            <Hq {...portfolio} />
             <Portfolio {...portfolio} />
             <ProgressBar visible={tradeSuggestion.loading} />
             <section>
