@@ -12,8 +12,7 @@ import { PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
 import withPortfolio from './withPortfolio';
 import withTradeSuggesion from './withTradeSuggesion';
-import Hq from './components/hq';
-import LiteHq from './components/liteHq';
+import { Hq, LiteHq } from './components/hq';
 import './App.css';
 
 const { Content, Sider } = Layout;

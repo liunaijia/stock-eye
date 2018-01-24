@@ -6,8 +6,6 @@ import LiteQuotes from './LiteQuotes';
 
 const QuotesContainer = withQuotes(LiteQuotes);
 
-const LiteHq = () => (
-  <QuotesContainer stockCodes={STOCK_CODES} />
-);
+const LiteHq = () => <QuotesContainer stockCodes={STOCK_CODES} />;
 
 export default LiteHq;
