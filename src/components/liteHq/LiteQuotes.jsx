@@ -29,7 +29,7 @@ const Quotes = ({ className, quotes }) => (
     renderItem={item => (
       <List.Item title={item.current}>
         <span className="title">{item.name.substr(0, 1)}</span>
-        <Number className="content">{item.ratio}%</Number>
+        <Number>{item.ratio}%</Number>
       </List.Item>)
   }
   />
@@ -39,11 +39,9 @@ Quotes.propTypes = propTypes;
 Quotes.defaultProps = defaultProps;
 
 export default styled(Quotes)`
+  opacity: 0.8;
+
   .title {
     color: #808080;
-  }
-
-  .content {
-    opacity: 0.8;
   }
 `;
