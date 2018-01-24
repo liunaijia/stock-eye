@@ -29,7 +29,7 @@ const Quotes = ({ className, quotes }) => (
     renderItem={item => (
       <List.Item title={item.current}>
         <span className="title">{item.name.substr(0, 1)}</span>
-        <Number>{item.ratio}%</Number>
+        <Number>{item.ratio.toFixed(2)}%</Number>
       </List.Item>)
   }
   />

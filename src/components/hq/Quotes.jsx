@@ -3,6 +3,7 @@ import { string, number, arrayOf, shape, bool } from 'prop-types';
 import { Table } from 'antd';
 import styled from 'styled-components';
 import Number from '../Number';
+import Floating from './Floating';
 
 const { Column } = Table;
 
@@ -50,10 +51,6 @@ const StockChange = ({ current, closeAt, ratio }) => {
     </Number>);
 };
 
-const Floating = ({ floating, floatingRate }) => (
-  floating ? <Number>{floating} ({floatingRate})</Number> : null
-);
-
 const Quotes = ({
   className, groupName, quotes, holdings,
 }) => {
@@ -61,7 +58,7 @@ const Quotes = ({
   return (
     <Table className={className} dataSource={data} size="small" pagination={false} rowKey="name" title={() => groupName}>
       <Column title="股票" dataIndex="name" />
-      <Column title="当前价" dataIndex="current" />
+      <Column title="当前价" dataIndex="current" render={current => current.toFixed(2)} />
       <Column title="持有量" dataIndex="holding.stockAmount" />
       <Column
         title="持有市值"
