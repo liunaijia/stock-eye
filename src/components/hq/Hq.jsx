@@ -2,7 +2,10 @@
 import React from 'react';
 import { Card, Row, Col } from 'antd';
 import { STOCK_GROUPS } from '../../settings';
-import QuotesContainer from './QuotesContainer';
+import withQuotes from '../withQuotes';
+import Quotes from './Quotes';
+
+const QuotesContainer = withQuotes(Quotes);
 
 const Hq = () => (
   <Card title="行情">

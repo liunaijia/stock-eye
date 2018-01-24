@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { shape } from 'prop-types';
+import { shape, string } from 'prop-types';
 import { Layout } from 'antd';
+import styled from 'styled-components';
 
 import Portfolio from './components/Portfolio';
 import GroupTradeSuggestions from './components/GroupTradeSuggestions';
@@ -12,19 +13,22 @@ import { sendMessage } from './chromeApi';
 import withPortfolio from './withPortfolio';
 import withTradeSuggesion from './withTradeSuggesion';
 import Hq from './components/hq';
+import LiteHq from './components/liteHq';
 import './App.css';
 
-const { Content } = Layout;
+const { Content, Sider } = Layout;
 
 class App extends Component {
   static propTypes = {
     portfolio: shape(),
     tradeSuggestion: shape(),
+    className: string,
   };
 
   static defaultProps = {
     portfolio: null,
     tradeSuggestion: null,
+    className: null,
   }
 
   state = {
@@ -42,10 +46,10 @@ class App extends Component {
   }
 
   render() {
-    const { portfolio, tradeSuggestion } = this.props;
+    const { portfolio, tradeSuggestion, className } = this.props;
     return (
       <ErrorBoundary>
-        <Layout>
+        <Layout className={className}>
           <Content>
             <Hq />
             <Portfolio {...portfolio} />
@@ -59,15 +63,23 @@ class App extends Component {
                 {...group}
                 onPlaceOrder={this.handlePlaceOrder}
               />
-              ))}
+            ))}
           </Content>
+          <Sider className="sider" width="1%">
+            <LiteHq />
+          </Sider>
         </Layout>
       </ErrorBoundary>
     );
   }
 }
 
-const Wrapper = withPortfolio(withTradeSuggesion(App));
+
+const Wrapper = withPortfolio(withTradeSuggesion(styled(App)`
+  .sider {
+    background: #1e1e1d;
+  }
+`));
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Wrapper />, document.getElementById('root'));

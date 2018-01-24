@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { arrayOf, string } from 'prop-types';
-import { fetchStocks } from '../../stockData';
-import { runDuringTradeTime } from '../../jobs/job';
-import Quotes from './Quotes';
+import { fetchStocks } from '../stockData';
+import { runDuringTradeTime } from '../jobs/job';
 
 function withQuotes(WrappedComponent) {
   return class extends Component {
@@ -34,4 +33,4 @@ function withQuotes(WrappedComponent) {
   };
 }
 
-export default withQuotes(Quotes);
+export default withQuotes;
