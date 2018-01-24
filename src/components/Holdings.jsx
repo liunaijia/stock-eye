@@ -2,7 +2,7 @@ import React from 'react';
 import { string, number, arrayOf, shape } from 'prop-types';
 import styled from 'styled-components';
 import { Table } from 'antd';
-import Number from './Number';
+import NumberRate from './NumberRate';
 
 const { Column } = Table;
 
@@ -31,7 +31,7 @@ const Holdings = ({ className, holdings }) => (
     <Column
       title="浮动盈亏"
       key="floating"
-      render={(text, record) => (<Number>{record.floating} ({record.floatingRate})</Number>)
+      render={(_, record) => <NumberRate value={record.floating} rate={record.floatingRate} />
     }
     />
   </Table>

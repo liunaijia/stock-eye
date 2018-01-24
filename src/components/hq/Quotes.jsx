@@ -2,8 +2,7 @@ import React from 'react';
 import { string, number, arrayOf, shape, bool } from 'prop-types';
 import { Table } from 'antd';
 import styled from 'styled-components';
-import Number from '../Number';
-import Floating from './Floating';
+import NumberRate from '../NumberRate';
 
 const { Column } = Table;
 
@@ -41,14 +40,9 @@ const quotesWithHoldings = (stocks, holdings) => (stocks || [])
     holding: holdings.find(holding => holding.stockCode === stock.code) || {},
   }));
 
-const sign = number => (Math.sign(number) >= 0 ? '+' : '');
-
 const StockChange = ({ current, closeAt, ratio }) => {
   const change = ((current * 1000) - (closeAt * 1000)) / 1000;
-  return (
-    <Number>
-      {change} ({sign(ratio)}{ratio.toFixed(2)}%)
-    </Number>);
+  return <NumberRate value={change} rate={ratio} />;
 };
 
 const Quotes = ({
@@ -64,12 +58,12 @@ const Quotes = ({
         title="持有市值"
         dataIndex="holdingValue"
         render={(_, record) =>
-         (record.holding.stockAmount ? record.current * record.holding.stockAmount : null)}
+          (record.holding.stockAmount ? record.current * record.holding.stockAmount : null)}
       />
       <Column
         title="浮动盈亏"
         dataIndex="floating"
-        render={(_, record) => <Floating {...record.holding} />}
+        render={(_, record) => <NumberRate value={record.holding.floating} rate={record.holding.floatingRate} />}
       />
       <Column title="买进GAP" dataIndex="buyGap.value" />
       <Column title="卖出GAP" dataIndex="sellGap.value" />
