@@ -73,7 +73,6 @@ class App extends Component {
   }
 }
 
-
 const Wrapper = withPortfolio(withTradeSuggesion(styled(App)`
   .sider {
     background: #1e1e1d;

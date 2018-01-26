@@ -11,7 +11,9 @@ const config = {
   devtool: 'eval-source-map',
   devServer: {
     contentBase: './dist',
-    proxy: { // use proxy to avoid cros request
+    // use proxy to avoid cros request
+    // https://github.com/chimurai/http-proxy-middleware
+    proxy: {
       '/sinajs': {
         target: 'http://hq.sinajs.cn',
         pathRewrite: { '^/sinajs': '' },
