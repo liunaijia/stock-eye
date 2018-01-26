@@ -1,7 +1,7 @@
 import { MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER } from './secrets';
 import { readAsDataUrl, readAsDom, readAsText } from './responseHelper';
 
-const ROOT_URL = 'https://etrade.newone.com.cn';
+const ROOT_URL = '/newone';
 
 const sendRequest = async (url = '', payload = {}) => {
   const hasPayload = Object.keys(payload).length;

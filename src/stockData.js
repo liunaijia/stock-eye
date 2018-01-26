@@ -41,7 +41,7 @@ const fetchYesterdayData = async (stockCodes) => {
 };
 
 const fetchData = async (stockCodes = []) => {
-  const response = await fetch(`http://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes.join(',')}`);
+  const response = await fetch(`/sinajs/rn=${new Date().getTime()}&list=${stockCodes.join(',')}`);
   const text = readAsText(response);
   return text;
 };

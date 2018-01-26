@@ -11,7 +11,38 @@ const config = {
   devtool: 'eval-source-map',
   devServer: {
     contentBase: './dist',
-    // headers 实现CROS
+    proxy: {
+      '/sinajs': {
+        target: 'http://hq.sinajs.cn',
+        pathRewrite: { '^/sinajs': '' },
+        changeOrigin: true,
+        // onProxyRes(proxyRes, req, res) {
+        //   proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+        // },
+        onError: (err, req, res) => {
+          console.log(err);
+          res.writeHead(500, {
+            'Content-Type': 'text/plain',
+          });
+          res.end('Something went wrong. And we are reporting a custom error message.');
+        },
+      },
+      '/newone': {
+        target: 'https://etrade.newone.com.cn',
+        pathRewrite: { '^/newone': '' },
+        changeOrigin: true,
+        // onProxyRes(proxyRes, req, res) {
+        //   proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+        // },
+        onError: (err, req, res) => {
+          console.log(err);
+          res.writeHead(500, {
+            'Content-Type': 'text/plain',
+          });
+          res.end('Something went wrong. And we are reporting a custom error message.');
+        },
+      },
+    },
   },
   output: {
     path: path.resolve(__dirname, './dist'),

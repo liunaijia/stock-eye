@@ -8,7 +8,7 @@
     "lint:js": "eslint --ext .js --ext .jsx src",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production npx webpack",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server"
   },
   "keywords": [],
   "author": "",
