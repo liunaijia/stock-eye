@@ -58,7 +58,7 @@ const Quotes = ({
         title="持有市值"
         dataIndex="holdingValue"
         render={(_, record) =>
-          (record.holding.stockAmount ? record.current * record.holding.stockAmount : null)}
+          (record.holding.stockAmount ? (record.current * 1000 * record.holding.stockAmount) / 1000 : null)}
       />
       <Column
         title="浮动盈亏"
