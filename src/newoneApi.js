@@ -157,24 +157,30 @@ const sellStock = async (stockCode = '', price = 0.0, amount = 0) => {
 
 const parseNumber = (str = '') => parseFloat(str.replace(/,|\s/g, ''));
 
+const isNoHoldings = holdingRows => holdingRows.length === 1 && holdingRows[0].innerText.includes('没有相应的查询记录！');
+
 const parsePortfolio = async (dom = new Document()) => {
   const availableCash = parseFloat(dom.querySelector('#zongzichan').innerText.match(/可用：\s*([\d|.]+)/)[1]);
   const [, ...holdingRows] = Array.from(dom.querySelectorAll('#tabbuy tr'));
-  const holdings = holdingRows.map((row) => {
-    const cells = row.querySelectorAll('td');
-    const codePrefix = cells[0].attributes.scdm.value === '1' ? 'sh' : 'sz';
-    return {
-      stockCode: codePrefix + cells[0].attributes.zqdm.value,
-      stockName: cells[1].innerText,
-      stockAmount: parseNumber(cells[2].innerText),
-      sellableAmount: parseNumber(cells[3].innerText), // 可卖数量
-      cost: parseNumber(cells[5].innerText), // 成本价
-      floating: parseNumber(cells[6].innerText), // 浮动盈亏
-      floatingRate: cells[7].innerText, // 盈亏比例
-      boughtToday: parseNumber(cells[11].innerText), // 今买数量
-      soldToday: parseNumber(cells[12].innerText), // 今卖数量
-    };
-  });
+
+  const holdings = [];
+  if (!isNoHoldings(holdingRows)) {
+    holdings.push(...holdingRows.map((row) => {
+      const cells = row.querySelectorAll('td');
+      const codePrefix = cells[0].attributes.scdm.value === '1' ? 'sh' : 'sz';
+      return {
+        stockCode: codePrefix + cells[0].attributes.zqdm.value,
+        stockName: cells[1].innerText,
+        stockAmount: parseNumber(cells[2].innerText),
+        sellableAmount: parseNumber(cells[3].innerText), // 可卖数量
+        cost: parseNumber(cells[5].innerText), // 成本价
+        floating: parseNumber(cells[6].innerText), // 浮动盈亏
+        floatingRate: cells[7].innerText, // 盈亏比例
+        boughtToday: parseNumber(cells[11].innerText), // 今买数量
+        soldToday: parseNumber(cells[12].innerText), // 今卖数量
+      };
+    }));
+  }
   return {
     availableCash,
     holdings,

@@ -73,11 +73,11 @@ class App extends Component {
   }
 }
 
-const Wrapper = withPortfolio(withTradeSuggesion(styled(App)`
+const Wrapper = styled(withTradeSuggesion(withPortfolio(App)))`
   .sider {
     background: #1e1e1d;
   }
-`));
+`;
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Wrapper />, document.getElementById('root'));

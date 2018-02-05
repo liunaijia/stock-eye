@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { shape } from 'prop-types';
 import { fetchStocks } from './stockData';
-import { STOCK_GROUPS, STOCK_CODES } from './settings';
+import { STOCK_GROUPS } from './settings';
 import { calcBuyingGap, calcSellingGap } from './gapService';
 import { runDuringTradeTime } from './jobs/job';
 
@@ -12,7 +12,7 @@ function withTradeSuggestion(WrappedComponent) {
     };
 
     static defaultProps = {
-      portfolio: null,
+      portfolio: {},
     }
 
     state = {
