@@ -18,4 +18,4 @@ function withPortfolio(WrappedComponent) {
   };
 }
 
-export default withPortfolio;
+export default () => withPortfolio;

@@ -54,4 +54,4 @@ function withTradeSuggestion(WrappedComponent) {
   };
 }
 
-export default withTradeSuggestion;
+export default () => withTradeSuggestion;

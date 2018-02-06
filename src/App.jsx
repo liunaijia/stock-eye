@@ -75,7 +75,7 @@ class App extends Component {
   }
 }
 
-const Wrapper = styled(withPortfolio(withTradeSuggesion(withNotification(App))))`
+const Wrapper = styled(withPortfolio()(withTradeSuggesion()(withNotification()(App))))`
   .sider {
     background: #1e1e1d;
   }
