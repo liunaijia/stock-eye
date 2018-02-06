@@ -24,7 +24,7 @@ class Pankou extends Component {
   };
 
   async componentDidMount() {
-    this.initStock(1);
+    await this.initStock(1);
   }
 
   async initStock(interval) {

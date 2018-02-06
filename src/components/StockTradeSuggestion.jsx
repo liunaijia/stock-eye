@@ -45,7 +45,7 @@ class StockTradeSuggestion extends Component {
           />
         </section>
         <section>
-          <Pankou stockCode={stockCode} />
+          {/* <Pankou stockCode={stockCode} /> */}
         </section>
       </article>
     );
