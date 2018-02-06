@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { shape, string } from 'prop-types';
-import { Layout } from 'antd';
+import { Layout, Switch } from 'antd';
 import styled from 'styled-components';
 
 import { PLACE_ORDER } from './actions';
@@ -46,12 +46,17 @@ class App extends Component {
     this.setState({ operationResults: response });
   }
 
+  handleChangeEnableNotification = (checked) => {
+    console.log(checked);
+  }
+
   render() {
     const { portfolio, tradeSuggestion, className } = this.props;
     return (
       <ErrorBoundary>
         <Layout className={className}>
           <Content>
+            <Switch defaultChecked onChange={this.handleChangeEnableNotification} />
             <Hq {...portfolio} />
             <Portfolio {...portfolio} />
             <ProgressBar visible={tradeSuggestion.loading} />
@@ -82,5 +87,5 @@ const Wrapper = styled(withPortfolio()(withTradeSuggesion()(withNotification()(A
 `;
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<Wrapper />, document.getElementById('root'));
+  ReactDOM.render(<Wrapper disabled />, document.getElementById('root'));
 });
