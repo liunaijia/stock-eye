@@ -33,11 +33,8 @@ const isTradeDay = (time) => {
 export const isTradeTime = (time = new Date()) => {
   if (!isTradeDay(time)) { return false; }
 
-  const BEIJING_TIMEZONE = -480;
-  const timezoneDiff = time.getTimezoneOffset() - BEIJING_TIMEZONE;
-  const timeInMinutes = timezoneDiff + totalMinutes(time.getHours(), time.getMinutes());
-
-  return isTimeInAnyTimeSlots(timeInMinutes, '9:15-11:30', '13:00-15:00');
+  const timeInMinutes = totalMinutes(time.getHours(), time.getMinutes());
+  return isTimeInAnyTimeSlots(timeInMinutes, '11:15-13:30', '15:00-17:00');
 };
 
 export const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));

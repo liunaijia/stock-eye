@@ -1,6 +1,6 @@
 import { isTradeTime, sleep } from './time';
 
-describe('isTradeTime in Brisbane time zone', () => {
+describe('isTradeTime', () => {
   it('is not trade time on Saturday', () => {
     const aSaturday = new Date('2017-8-19');
     Array.from({ length: 24 }).forEach((_, hour) => {
