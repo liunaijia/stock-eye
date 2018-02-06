@@ -4,14 +4,16 @@ import { shape, string } from 'prop-types';
 import { Layout } from 'antd';
 import styled from 'styled-components';
 
-import Portfolio from './components/Portfolio';
-import GroupTradeSuggestions from './components/GroupTradeSuggestions';
-import ProgressBar from './components/ProgressBar';
-import ErrorBoundary from './components/ErrorBoundary';
 import { PLACE_ORDER } from './actions';
 import { sendMessage } from './chromeApi';
 import withPortfolio from './withPortfolio';
 import withTradeSuggesion from './withTradeSuggesion';
+import withNotification from './withNotification';
+
+import Portfolio from './components/Portfolio';
+import GroupTradeSuggestions from './components/GroupTradeSuggestions';
+import ProgressBar from './components/ProgressBar';
+import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import './App.css';
 
@@ -73,7 +75,7 @@ class App extends Component {
   }
 }
 
-const Wrapper = styled(withTradeSuggesion(withPortfolio(App)))`
+const Wrapper = styled(withPortfolio(withTradeSuggesion(withNotification(App))))`
   .sider {
     background: #1e1e1d;
   }
