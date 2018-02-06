@@ -1,5 +1,7 @@
 import { readAlertMessage } from './newoneApi';
 
+jest.mock('./secrets', () => {});
+
 describe('newoneApi', () => {
   describe('readAlertMessage', () => {
     it('returns the last alert message', () => {
