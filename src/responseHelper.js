@@ -8,9 +8,12 @@ export const readContentType = (response = new Response()) => {
 
 export const readAsText = async (response = new Response()) => {
   const { charset } = readContentType(response);
-  const bytes = await response.arrayBuffer();
-  const text = decode(Buffer.from(bytes), charset);
-  return text;
+  if (charset) {
+    const bytes = await response.arrayBuffer();
+    const text = decode(Buffer.from(bytes), charset);
+    return text;
+  }
+  return response.text();
 };
 
 export const readAsDataUrl = async (response = new Response()) => {
