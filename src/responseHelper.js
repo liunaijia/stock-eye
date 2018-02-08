@@ -25,6 +25,10 @@ export const readAsDataUrl = async (response = new Response()) => {
 };
 
 export const readAsDom = async (response = new Response()) => {
+  if (!response.ok) {
+    return null;
+  }
+
   const text = await readAsText(response);
   const { mimeType } = readContentType(response);
 

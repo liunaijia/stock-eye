@@ -190,6 +190,10 @@ const parsePortfolio = async (dom = new Document()) => {
 export const getPortfolio = async () => {
   const response = await sendRequest(`/xtrade?random=${new Date().getTime()}`, { jybm: '100040' });
   const dom = await readAsDom(response);
+  if (!dom) {
+    return null;
+  }
+
   if (dom.body.childElementCount === 0) {
     await login();
     return getPortfolio();
