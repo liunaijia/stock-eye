@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const config = {
-  // mode: 'development',
+  mode: 'development',
   entry: {
     background: './src/background.js',
     popup: './src/App.jsx',
@@ -68,21 +68,21 @@ const config = {
       },
     ],
   },
-  // optimization: {
-  //   // CommonsChunkPlugin is removed, see https://gist.github.com/sokra/1522d586b8e5c0f5072d7565c2bee693
-  //   splitChunks: {
-  //     chunks: 'all',
-  //   },
-  // },
+  optimization: {
+    // CommonsChunkPlugin is removed, see https://gist.github.com/sokra/1522d586b8e5c0f5072d7565c2bee693
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: m => m.context && m.context.includes('node_modules'),
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'runtime',
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   minChunks: m => m.context && m.context.includes('node_modules'),
+    // }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'runtime',
+    // }),
     // new webpack.optimize.ModuleConcatenationPlugin(),
     // new WebpackMonitor({
     //   capture: true, // -> default 'true'
