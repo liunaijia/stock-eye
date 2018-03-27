@@ -87,5 +87,5 @@ const Wrapper = styled(withPortfolio()(withTradeSuggesion()(withNotification()(A
 `;
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<Wrapper disabled />, document.getElementById('root'));
+  ReactDOM.render(<Wrapper />, document.getElementById('root'));
 });
