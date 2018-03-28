@@ -4,7 +4,6 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 
 const config = {
-  mode: 'development',
   devtool: 'eval-source-map',
   devServer: {
     contentBase: './dist',
