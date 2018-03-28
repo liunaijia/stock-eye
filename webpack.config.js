@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const DashboardPlugin = require('webpack-dashboard/plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
   devtool: 'source-map',
@@ -42,7 +43,7 @@ const config = {
     },
   },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
   },
   resolve: {
@@ -71,7 +72,10 @@ const config = {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new DashboardPlugin(),
+    // new DashboardPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: 'vendor',
     //   minChunks: m => m.context && m.context.includes('node_modules'),
