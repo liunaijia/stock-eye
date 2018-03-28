@@ -1,13 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 
 const config = {
   mode: 'development',
-  entry: {
-    background: './src/background.js',
-    popup: './src/App.jsx',
-  },
+  entry: './src/App.jsx',
   devtool: 'eval-source-map',
   devServer: {
     contentBase: './dist',
@@ -76,6 +74,7 @@ const config = {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
+    new DashboardPlugin(),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: 'vendor',
     //   minChunks: m => m.context && m.context.includes('node_modules'),
