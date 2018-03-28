@@ -1,10 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 
 const config = {
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   devServer: {
     contentBase: './dist',
     // use proxy to avoid cros request
@@ -89,21 +88,5 @@ const config = {
     // }),
   ],
 };
-
-// NODE_ENV=production npx webpack
-if (process.env.NODE_ENV === 'production') {
-  Object.assign(config, {
-    devtool: 'source-map',
-    plugins: [
-      ...config.plugins,
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production'),
-        },
-      }),
-      new UglifyJSPlugin({ sourceMap: true }),
-    ],
-  });
-}
 
 module.exports = config;
