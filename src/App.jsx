@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { shape, string } from 'prop-types';
 import { Layout, Switch } from 'antd';
 import styled from 'styled-components';
@@ -80,12 +79,8 @@ class App extends Component {
   }
 }
 
-const Wrapper = styled(withPortfolio()(withTradeSuggesion()(withNotification()(App))))`
+export default styled(withPortfolio()(withTradeSuggesion()(withNotification()(App))))`
   .sider {
     background: #1e1e1d;
   }
 `;
-
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<Wrapper />, document.getElementById('root'));
-});
