@@ -1,12 +1,5 @@
 node_modules
+dist
 .DS_Store
-dist/background.js*
-dist/popup.js*
-dist/vendor.js*
-dist/runtime.js*
-dist/vendors~*
-dist/index.html
-dist/main.js
-dist/main.js.map
 secrets.js
 monitor
