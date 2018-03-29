@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const DashboardPlugin = require('webpack-dashboard/plugin');
+// const DashboardPlugin = require('webpack-dashboard/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
@@ -69,10 +69,14 @@ const config = {
     splitChunks: {
       chunks: 'all',
     },
+    runtimeChunk: true,
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    // new DashboardPlugin(),
+    // new DashboardPlugin({
+    //   minified: false,
+    //   gzip: false,
+    // }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
