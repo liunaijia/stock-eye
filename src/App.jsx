@@ -60,7 +60,9 @@ class App extends Component {
             <Portfolio {...portfolio} />
             <ProgressBar visible={tradeSuggestion.loading} />
             <section>
-              <p>{this.state.operationResults}</p>
+              <p>
+                {this.state.operationResults}
+              </p>
             </section>
             {tradeSuggestion.groups.map(group => (
               <GroupTradeSuggestions
@@ -70,7 +72,7 @@ class App extends Component {
               />
             ))}
           </Content>
-          <Sider className="sider" width="1%">
+          <Sider className="sider" width="1">
             <LiteHq />
           </Sider>
         </Layout>

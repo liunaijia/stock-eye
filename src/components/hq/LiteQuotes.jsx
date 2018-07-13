@@ -1,5 +1,7 @@
 import React from 'react';
-import { string, number, arrayOf, shape, bool } from 'prop-types';
+import {
+  string, number, arrayOf, shape, bool,
+} from 'prop-types';
 import { List } from 'antd';
 import styled from 'styled-components';
 import Number from '../Number';
@@ -28,8 +30,13 @@ const Quotes = ({ className, quotes }) => (
     size="small"
     renderItem={item => (
       <List.Item title={item.current}>
-        <span className="title">{item.name.substr(0, 1)}</span>
-        <Number>{item.ratio.toFixed(2)}%</Number>
+        <span className="title">
+          {item.name.match(/[^A-Z]/)[0]}
+        </span>
+        <Number>
+          {item.ratio.toFixed(2)}
+          %
+        </Number>
       </List.Item>)
   }
   />
