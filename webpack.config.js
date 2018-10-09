@@ -27,6 +27,8 @@ const config = {
       },
       '/newone': {
         target: 'https://etrade.newone.com.cn',
+        // ignore invalid SSL certificate
+        secure: false,
         pathRewrite: { '^/newone': '' },
         changeOrigin: true,
         // onProxyRes(proxyRes, req, res) {
