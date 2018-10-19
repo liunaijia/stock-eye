@@ -14,6 +14,7 @@ import GroupTradeSuggestions from './components/GroupTradeSuggestions';
 import ProgressBar from './components/ProgressBar';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
+import { sendNotification } from './notification';
 import './App.css';
 
 const { Content, Sider } = Layout;
@@ -33,6 +34,11 @@ class App extends Component {
 
   state = {
   };
+
+  componentDidMount() {
+    sendNotification({ title: 'started' });
+  }
+
 
   handlePlaceOrder = async (order) => {
     const payload = {
@@ -72,7 +78,7 @@ class App extends Component {
               />
             ))}
           </Content>
-          <Sider className="sider" width="1">
+          <Sider className="sider" width="auto">
             <LiteHq />
           </Sider>
         </Layout>
