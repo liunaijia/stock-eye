@@ -1,5 +1,8 @@
-import { MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER } from './secrets';
+import {
+  MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER,
+} from './secrets';
 import { readAsDataUrl, readAsDom, readAsText } from './responseHelper';
+import { sendNotification } from './notification';
 
 const ROOT_URL = '/newone';
 
@@ -67,7 +70,7 @@ const doLogin = async (payload, captcha) => {
   const text = await readAsText(response);
   const message = readAlertMessage(text);
 
-  if (message.includes('系统维护')) { throw new Error(`登录失败：${message}`); }
+  if (message) { throw new Error(`登录失败：${message}`); }
 
   return !text.includes('验证码输入错误');
 };
@@ -75,7 +78,11 @@ const doLogin = async (payload, captcha) => {
 const login = async () => {
   const formData = await loadLoginForm();
 
-  await loadCaptcha();
+  const captchaImage = await loadCaptcha();
+  sendNotification({
+    title: '验证码',
+    icon: captchaImage,
+  });
 
   let captcha = 2;
   while (captcha <= 20) {
@@ -203,4 +210,3 @@ export const getPortfolio = async () => {
 };
 
 export { login, buyStock, sellStock };
-
