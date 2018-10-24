@@ -12,7 +12,7 @@ const propTypes = {
     stocks: arrayOf(shape({
       name: string,
       price: number,
-      ratio: number,
+      currentRatio: number,
     })),
     loading: bool,
   }),
@@ -34,7 +34,7 @@ const Quotes = ({ className, quotes }) => (
           {item.name.match(/[^A-Z]/)[0]}
         </span>
         <Number>
-          {item.ratio.toFixed(2)}
+          {item.currentRatio.toFixed(2)}
           %
         </Number>
       </List.Item>)

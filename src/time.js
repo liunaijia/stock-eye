@@ -1,12 +1,10 @@
-const totalMinutes = (hour, minute) =>
-  ((parseInt(hour, 10) * 60) + parseInt(minute, 10));
+const totalMinutes = (hour, minute) => ((parseInt(hour, 10) * 60) + parseInt(minute, 10));
 
-const isTimeInAnyTimeSlots = (timeInMinutes, ...timeSlots) =>
-  timeSlots.some((slot) => {
-    const [, ...durations] = slot.match(/(\d+):(\d+)-(\d+):(\d+)/) || [];
-    return timeInMinutes >= totalMinutes(durations[0], durations[1]) &&
-      timeInMinutes <= totalMinutes(durations[2], durations[3]);
-  });
+const isTimeInAnyTimeSlots = (timeInMinutes, ...timeSlots) => timeSlots.some((slot) => {
+  const [, ...durations] = slot.match(/(\d+):(\d+)-(\d+):(\d+)/) || [];
+  return timeInMinutes >= totalMinutes(durations[0], durations[1])
+      && timeInMinutes <= totalMinutes(durations[2], durations[3]);
+});
 
 const publicHolidays = [
   '2017-10-2',
@@ -21,10 +19,9 @@ const isTradeDay = (time) => {
   const isWeekend = day === 0 || day === 6;
   if (isWeekend) { return false; }
 
-  const onTheSameDay = (date1, date2) =>
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate();
+  const onTheSameDay = (date1, date2) => date1.getFullYear() === date2.getFullYear()
+    && date1.getMonth() === date2.getMonth()
+    && date1.getDate() === date2.getDate();
 
   const isPublicHoliday = publicHolidays.some(publicHoliday => onTheSameDay(publicHoliday, time));
   return !isPublicHoliday;
@@ -39,8 +36,8 @@ export const isTradeTime = (time = new Date()) => {
 
 export const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
-export const lastTradeDay = () => {
-  const time = new Date();
+export const lastTradeDay = (untilDay = new Date()) => {
+  const time = untilDay;
   do {
     time.setDate(time.getDate() - 1);
   } while (!isTradeDay(time));
