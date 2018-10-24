@@ -7,7 +7,7 @@ function withPortfolio(WrappedComponent) {
     componentDidMount() {
       runDuringTradeTime({ interval: 10, runOnStartUp: true })(async () => {
         this.setState({ ...this.state, isLoading: true });
-        //   const portfolio = await getPortfolioFromApi();
+        // const portfolio = await getPortfolioFromApi();
         const portfolio = {};
         this.setState({ ...portfolio, isLoading: false });
       });

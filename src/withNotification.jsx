@@ -12,7 +12,7 @@ const sendTradeSignal = ({
 
 function withNotification(WrappedComponent) {
   const WithNotification = ({ disabled, ...other }) => {
-    console.log('WithNotification disabled?', disabled);
+    // console.log('WithNotification disabled?', disabled);
     if (!disabled) {
       const { tradeSuggestion } = other;
       const { groups } = tradeSuggestion;
