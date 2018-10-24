@@ -14,44 +14,16 @@ const config = {
         target: 'http://hq.sinajs.cn',
         pathRewrite: { '^/sinajs': '' },
         changeOrigin: true,
-        // onProxyRes(proxyRes, req, res) {
-        //   proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-        // },
-        onError: (err, req, res) => {
-          console.log(err);
-          res.writeHead(500, {
-            'Content-Type': 'text/plain',
-          });
-          res.end('Something went wrong. And we are reporting a custom error message.');
-        },
       },
       '/hisHq': {
         target: 'http://q.stock.sohu.com',
         changeOrigin: true,
-        onError: (err, req, res) => {
-          console.log(err);
-          res.writeHead(500, {
-            'Content-Type': 'text/plain',
-          });
-          res.end('Something went wrong. And we are reporting a custom error message.');
-        },
       },
       '/newone': {
         target: 'https://etrade.newone.com.cn',
-        // ignore invalid SSL certificate
-        secure: false,
+        secure: false, // ignore invalid SSL certificate
         pathRewrite: { '^/newone': '' },
         changeOrigin: true,
-        // onProxyRes(proxyRes, req, res) {
-        //   proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-        // },
-        onError: (err, req, res) => {
-          console.log(err);
-          res.writeHead(500, {
-            'Content-Type': 'text/plain',
-          });
-          res.end('Something went wrong. And we are reporting a custom error message.');
-        },
       },
     },
   },
