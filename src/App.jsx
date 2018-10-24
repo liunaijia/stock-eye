@@ -52,7 +52,7 @@ class App extends Component {
   }
 
   handleChangeEnableNotification = (checked) => {
-    console.log(checked);
+    // console.log(checked);
   }
 
   render() {

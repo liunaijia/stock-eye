@@ -46,7 +46,7 @@ const fetchHistoryCloseAt = async (stockCodes, daysBefore) => {
   }, {});
   cachedHistoryData[day] = { ...(cachedHistoryData[day] || {}), ...newData };
   // eslint-disable-next-line no-restricted-syntax
-  console.log(cachedHistoryData);
+  // console.log(cachedHistoryData);
   return cachedHistoryData[day];
 };
 
@@ -103,7 +103,7 @@ const fetchStocks = async (stockCodes = [], lookbackDays = 1) => {
   const stocks = parse(text);
 
   const historyCloseAtData = await fetchHistoryCloseAt(stockCodes, lookbackDays);
-  console.log('my - historyCloseAtData', historyCloseAtData);
+  // console.log('my - historyCloseAtData', historyCloseAtData);
   stocks.forEach((stock) => {
     // 用基价计算买入、卖出GAP，默认基价为昨收价
     stock.baseAt = historyCloseAtData[stock.code];
@@ -119,7 +119,7 @@ const fetchStocks = async (stockCodes = [], lookbackDays = 1) => {
     stock.sellGap = getSellGap(stocks, stock); // eslint-disable-line no-param-reassign
   });
 
-  console.log('my - stocks', stocks);
+  // console.log('my - stocks', stocks);
   return stocks;
 };
 

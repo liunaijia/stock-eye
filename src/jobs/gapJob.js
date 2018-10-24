@@ -27,6 +27,6 @@ runDuringTradeTime({ interval: 3, runOnStartUp: false })(calcGaps);
 // eslint-disable-next-line import/prefer-default-export
 export const getGaps = async () => {
   if (!Object.keys(gapGroups).length) { await calcGaps(); }
-  console.log('gapJob.getGaps: ', gapGroups);
+  // console.log('gapJob.getGaps: ', gapGroups);
   return gapGroups;
 };

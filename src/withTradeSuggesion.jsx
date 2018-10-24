@@ -25,7 +25,7 @@ function withTradeSuggestion(WrappedComponent) {
         this.setState({ ...this.state, loading: true });
 
         const groups = [];
-        console.log('TradeSuggesion is fetching stock data');
+        // console.log('TradeSuggesion is fetching stock data');
 
         Object.entries(STOCK_GROUPS).forEach(async ([groupName, group]) => {
           const stocks = await fetchStocks(group.stocks, group.lookbackDays);

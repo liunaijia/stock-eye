@@ -22,7 +22,7 @@ function withQuotes(WrappedComponent) {
       runDuringTradeTime({ interval: 3, runOnStartUp: true })(async () => {
         this.setState({ ...this.state, loading: true });
         const stocks = await fetchStocks(this.props.stockCodes, this.props.lookbackDays);
-        console.log('QuotesContainer is fetching stock data');
+        // console.log('QuotesContainer is fetching stock data');
         this.setState({ stocks, loading: false });
       });
     }
