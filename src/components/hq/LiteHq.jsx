@@ -1,11 +1,13 @@
 
 import React from 'react';
 import { STOCK_CODES } from '../../settings';
-import withQuotes from '../withQuotes';
+import WithQuotes from './WithQuotes';
 import LiteQuotes from './LiteQuotes';
 
-const QuotesContainer = withQuotes(LiteQuotes);
-
-const LiteHq = () => <QuotesContainer stockCodes={STOCK_CODES} />;
+const LiteHq = () => (
+  <WithQuotes stockCodes={STOCK_CODES}>
+    {quotes => <LiteQuotes quotes={quotes} />}
+  </WithQuotes>
+);
 
 export default LiteHq;

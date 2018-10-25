@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  string, number, arrayOf, shape, bool,
+  string, number, arrayOf, shape,
 } from 'prop-types';
 import { List } from 'antd';
 import styled from 'styled-components';
@@ -8,25 +8,22 @@ import Number from '../Number';
 
 const propTypes = {
   className: string,
-  quotes: shape({
-    stocks: arrayOf(shape({
-      name: string,
-      price: number,
-      currentRatio: number,
-    })),
-    loading: bool,
-  }),
+  quotes: arrayOf(shape({
+    name: string,
+    price: number,
+    currentRatio: number,
+  })),
 };
 
 const defaultProps = {
   className: null,
-  quotes: {},
+  quotes: [],
 };
 
 const Quotes = ({ className, quotes }) => (
   <List
     className={className}
-    dataSource={quotes.stocks || []}
+    dataSource={quotes || []}
     size="small"
     renderItem={item => (
       <List.Item title={item.current}>
