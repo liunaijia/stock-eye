@@ -15,14 +15,24 @@ const GroupTradeSuggestions = ({
   <Card className={className} title={groupName} styles={{}}>
     <Row gutter={16}>
       <Col span={12}>
-        {buyingGap &&
+        {buyingGap
+        && (
         <Card
           type="inner"
-          title={<CardTitle tradeType="buy">买入{buyingGap.toBuy.stockName}{buyingGap.toBuy.price}</CardTitle>}
+          title={(
+            <CardTitle tradeType="buy">
+              买入
+              {buyingGap.toBuy.stockName}
+              {buyingGap.toBuy.price}
+            </CardTitle>
+          )}
         >
           <p>
-        GAP：[{buyingGap.value}]
-        相比：{`${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`}
+            GAP：[
+            {buyingGap.value}
+            ]
+            相比：
+            {`${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`}
           </p>
           <time>{new Date(buyingGap.timestamp).toLocaleTimeString()}</time>
           <StockTradeSuggestion
@@ -31,17 +41,28 @@ const GroupTradeSuggestions = ({
             onPlaceOrder={onPlaceOrder}
           />
         </Card>
+        )
       }
       </Col>
       <Col span={12}>
-        {sellingGap &&
+        {sellingGap
+        && (
         <Card
           type="inner"
-          title={<CardTitle tradeType="sell">卖出{sellingGap.toSell.stockName}{sellingGap.toSell.price}</CardTitle>}
+          title={(
+            <CardTitle tradeType="sell">
+              卖出
+              {sellingGap.toSell.stockName}
+              {sellingGap.toSell.price}
+            </CardTitle>
+          )}
         >
           <p>
-        GAP：[{sellingGap.value}]
-        相比：{`${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`}
+            GAP：[
+            {sellingGap.value}
+            ]
+            相比：
+            {`${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`}
           </p>
           <time>{new Date(sellingGap.timestamp).toLocaleTimeString()}</time>
           <StockTradeSuggestion
@@ -50,6 +71,7 @@ const GroupTradeSuggestions = ({
             onPlaceOrder={onPlaceOrder}
           />
         </Card>
+        )
       }
       </Col>
     </Row>

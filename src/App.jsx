@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { shape, string } from 'prop-types';
-import { Layout, Switch } from 'antd';
+import { Layout } from 'antd';
 import styled from 'styled-components';
 
 import { PLACE_ORDER } from './actions';
@@ -51,23 +51,19 @@ class App extends Component {
     this.setState({ operationResults: response });
   }
 
-  handleChangeEnableNotification = (checked) => {
-    // console.log(checked);
-  }
-
   render() {
     const { portfolio, tradeSuggestion, className } = this.props;
+    const { operationResults } = this.state;
     return (
       <ErrorBoundary>
         <Layout className={className}>
           <Content>
-            <Switch defaultChecked onChange={this.handleChangeEnableNotification} />
             <Hq {...portfolio} />
             <Portfolio {...portfolio} />
             <ProgressBar visible={tradeSuggestion.loading} />
             <section>
               <p>
-                {this.state.operationResults}
+                {operationResults}
               </p>
             </section>
             {tradeSuggestion.groups.map(group => (

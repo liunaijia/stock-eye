@@ -72,7 +72,7 @@ const collapseArray = (array = []) => array.reduce((acc, _, idx) => {
   return acc;
 }, []);
 
-const calcRatio = ((currentPrice, previousePrice) => Math.round(((currentPrice / previousePrice) - 1) * 10000) / 100);
+const calcRatio = (currentPrice, previousPrice) => Math.round(((currentPrice / previousPrice) - 1) * 10000) / 100;
 
 const parse = (text = '') => text
   .split(';')
@@ -105,19 +105,21 @@ const fetchStocks = async (stockCodes = [], lookbackDays = 1) => {
   const historyCloseAtData = await fetchHistoryCloseAt(stockCodes, lookbackDays);
   // console.log('my - historyCloseAtData', historyCloseAtData);
   stocks.forEach((stock) => {
-    // 用基价计算买入、卖出GAP，默认基价为昨收价
-    stock.baseAt = historyCloseAtData[stock.code];
-
-    stock.currentRatio = calcRatio(stock.current, stock.closeAt);
-    stock.baseRatio = calcRatio(stock.current, stock.baseAt);
-    stock.buyingRatio = calcRatio(stock.buyingAt, stock.baseAt);
-    stock.sellingRatio = calcRatio(stock.sellingAt, stock.baseAt);
+    // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价
+    const baseAt = historyCloseAtData[stock.code];
+    Object.assign(stock, {
+      baseAt,
+      currentRatio: calcRatio(stock.current, stock.closeAt),
+      baseRatio: calcRatio(stock.current, baseAt),
+      buyingRatio: calcRatio(stock.buyingAt, baseAt),
+      sellingRatio: calcRatio(stock.sellingAt, baseAt),
+    });
   });
 
-  stocks.forEach((stock) => {
-    stock.buyGap = getBuyGap(stocks, stock); // eslint-disable-line no-param-reassign
-    stock.sellGap = getSellGap(stocks, stock); // eslint-disable-line no-param-reassign
-  });
+  stocks.forEach(stock => Object.assign(stock, {
+    buyGap: getBuyGap(stocks, stock), // eslint-disable-line no-param-reassign
+    sellGap: getSellGap(stocks, stock), // eslint-disable-line no-param-reassign
+  }));
 
   // console.log('my - stocks', stocks);
   return stocks;

@@ -1,5 +1,7 @@
 import React from 'react';
-import { string, number, arrayOf, shape } from 'prop-types';
+import {
+  string, number, arrayOf, shape,
+} from 'prop-types';
 import styled from 'styled-components';
 import { Table } from 'antd';
 import NumberRate from './NumberRate';

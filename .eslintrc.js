@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     'react/no-did-mount-set-state': 'off',
     'import/prefer-default-export': 'off',
-    'no-debugger': 'warn'
+    'no-debugger': 'warn',
+    'max-len': ['error', {code: 200}],
   },
 };
