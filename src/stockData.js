@@ -98,11 +98,11 @@ const parse = (text = '') => text
     return stock;
   });
 
-const fetchStocks = async (stockCodes = [], lookbackDays = 1) => {
+const fetchStocks = async (stockCodes = [], lookBackDays = 1) => {
   const text = await fetchData(stockCodes);
   const stocks = parse(text);
 
-  const historyCloseAtData = await fetchHistoryCloseAt(stockCodes, lookbackDays);
+  const historyCloseAtData = await fetchHistoryCloseAt(stockCodes, lookBackDays);
   // console.log('my - historyCloseAtData', historyCloseAtData);
   stocks.forEach((stock) => {
     // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价

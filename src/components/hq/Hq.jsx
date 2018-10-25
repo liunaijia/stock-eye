@@ -11,9 +11,9 @@ const QuotesContainer = withQuotes(Quotes);
 const Hq = ({ holdings }) => (
   <Card title="行情">
     <Row gutter={16}>
-      {Object.entries(STOCK_GROUPS).map(([groupName, { stocks, lookbackDays }]) => (
+      {Object.entries(STOCK_GROUPS).map(([groupName, { stocks, lookBackDays }]) => (
         <Col key={groupName}>
-          <QuotesContainer stockCodes={stocks} lookbackDays={lookbackDays} holdings={holdings} groupName={groupName} />
+          <QuotesContainer stockCodes={stocks} lookBackDays={lookBackDays} holdings={holdings} groupName={groupName} />
         </Col>))}
     </Row>
   </Card>
