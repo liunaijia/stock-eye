@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { string } from 'prop-types';
 import { Layout } from 'antd';
 import styled from 'styled-components';
-import withTradeSuggesion from './withTradeSuggesion';
-
-import withNotification from './withNotification';
+import TradeSuggestion from './components/TradeSuggestion';
+import TradeNotification from './components/TradeNotification';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
@@ -38,12 +37,15 @@ class App extends Component {
             <LiteHq />
           </Sider>
         </Layout>
+        <TradeSuggestion>
+          {suggestions => <TradeNotification suggestions={suggestions} />}
+        </TradeSuggestion>
       </ErrorBoundary>
     );
   }
 }
 
-export default styled(withTradeSuggesion()(withNotification()(App)))`
+export default styled(App)`
   .sider {
     background: #1e1e1d;
   }
