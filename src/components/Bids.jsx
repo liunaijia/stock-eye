@@ -1,5 +1,7 @@
 import React from 'react';
-import { arrayOf, string, number, shape, oneOf } from 'prop-types';
+import {
+  arrayOf, string, number, shape, oneOf,
+} from 'prop-types';
 import styled from 'styled-components';
 
 import Bid from './Bid';
