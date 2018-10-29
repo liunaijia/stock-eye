@@ -11,7 +11,7 @@ const config = {
     // https://github.com/chimurai/http-proxy-middleware
     proxy: {
       '/sinajs': {
-        target: 'http://hq.sinajs.cn',
+        target: 'https://hq.sinajs.cn',
         pathRewrite: { '^/sinajs': '' },
         changeOrigin: true,
       },
