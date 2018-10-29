@@ -1,7 +1,7 @@
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 // eslint-disable-next-line
-injectGlobal`
+export default createGlobalStyle`
   :root {
     --red: #c10;
     --green: #383;

@@ -8,7 +8,7 @@ import TradeNotification from './components/TradeNotification';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import { sendNotification } from './notification';
-import './App.css';
+import GlobalStyle from './App.css';
 
 const { Content, Sider } = Layout;
 
@@ -29,6 +29,7 @@ class App extends Component {
     const { className } = this.props;
     return (
       <ErrorBoundary>
+        <GlobalStyle />
         <Layout className={className}>
           <Content>
             <Hq />
