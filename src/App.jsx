@@ -1,4 +1,4 @@
-import React, { Suspense, Component } from 'react';
+import React, { Component } from 'react';
 import { string } from 'prop-types';
 import { Layout } from 'antd';
 import styled from 'styled-components';
@@ -9,7 +9,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import { sendNotification } from './notification';
 import GlobalStyle from './App.css';
-import SuspenseDemo from './components/SuspenseDemo';
 
 const { Content, Sider } = Layout;
 
@@ -42,7 +41,6 @@ class App extends Component {
         <TradeSuggestion>
           {suggestions => <TradeNotification suggestions={suggestions} />}
         </TradeSuggestion>
-        <SuspenseDemo />
       </ErrorBoundary>
     );
   }
