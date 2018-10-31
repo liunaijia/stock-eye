@@ -1,6 +1,7 @@
 import { readAsText } from './responseHelper';
 import { lastTradeDay } from './time';
 import { getBuyGap, getSellGap } from './gapService';
+import { fetchHistoryQuotes } from './api';
 
 // const cachedHistoryData = {};
 const cachedHistoryData = {
@@ -28,20 +29,10 @@ const fetchHistoryCloseAt = async (stockCodes, daysBefore) => {
     return cachedHistoryData[day];
   }
 
-  const paramCode = missedStockCodes.map(code => `cn_${code.substring(2)}`).join(',');
-  // http://q.stock.sohu.com/hisHq?code=cn_601988,cn_601288&start=20170921&end=20170921&r=asdf
-  const response = await fetch(`/hisHq?code=${paramCode}&start=${day}&end=${day}&r=${new Date().getTime()}`);
-  const text = await readAsText(response);
-  const data = JSON.parse(text).map((stockData) => {
-    const stockCodeWithoutPrefix = stockData.code.substring(3);
-    const fullStockCode = stockCodes.find(code => code.includes(stockCodeWithoutPrefix));
-    // hq is an array which has values: [日期, 开盘价, 收盘价, 涨跌额, 涨跌幅, 最低价, 最高价, 成交量, 未知, 换手率]
-    const ratio = parseFloat(stockData.hq[0][2]);
-    return [fullStockCode, ratio];
-  });
+  const data = await fetchHistoryQuotes(missedStockCodes, tradeDay);
 
-  const newData = data.reduce((acc, [stockCode, ratio]) => {
-    acc[stockCode] = ratio;
+  const newData = Object.entries(data).reduce((acc, [stockCode, stockData]) => {
+    acc[stockCode] = stockData.closeAt;
     return acc;
   }, {});
   cachedHistoryData[day] = { ...(cachedHistoryData[day] || {}), ...newData };
