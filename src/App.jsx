@@ -9,6 +9,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import { sendNotification } from './notification';
 import GlobalStyle from './App.css';
+import SettingLoader from './SettingLoader';
 
 const { Content, Sider } = Layout;
 
@@ -30,6 +31,7 @@ class App extends Component {
     return (
       <ErrorBoundary>
         <GlobalStyle />
+        <SettingLoader />
         <Layout className={className}>
           <Content>
             <Hq />
@@ -37,10 +39,10 @@ class App extends Component {
           <Sider className="sider" width="auto">
             <LiteHq />
           </Sider>
+          <TradeSuggestion>
+            {suggestions => <TradeNotification suggestions={suggestions} />}
+          </TradeSuggestion>
         </Layout>
-        <TradeSuggestion>
-          {suggestions => <TradeNotification suggestions={suggestions} />}
-        </TradeSuggestion>
       </ErrorBoundary>
     );
   }
