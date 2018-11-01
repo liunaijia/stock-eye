@@ -1,5 +1,8 @@
 
 import React from 'react';
+import {
+  objectOf, shape, any,
+} from 'prop-types';
 import { Card, Row, Col } from 'antd';
 import WithQuotes from './WithQuotes';
 import Quotes from './Quotes';
@@ -18,7 +21,10 @@ const Hq = ({ groups }) => (
 );
 
 Hq.propTypes = {
-  groups: Object,
+  groups: objectOf(shape({
+    stocks: any.isRequired,
+    lookBackDays: any.isRequired,
+  })),
 };
 
 Hq.defaultProps = {
