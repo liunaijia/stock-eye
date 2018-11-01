@@ -15,6 +15,13 @@ export default {
     },
   }),
   selectors: (slice, createSelector, hasProps) => ({
+    stockCodes() {
+      // return all stock codes from all groups
+      return slice(
+        groups => Object.values(groups)
+          .reduce((all, group) => all.concat(group.stocks), []),
+      );
+    },
     lookBackDaysOfStocks() {
       // return result like {sh601398: 2, sh601988: 1}
       return slice(groups => Object.values(groups).reduce((all, group) => {
