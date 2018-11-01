@@ -2,12 +2,14 @@ export default {
   state: {
     // [id]: { ... }
   },
+
   reducers: {
     // handle state changes with pure functions
     add(state, payload) {
       return { ...state, [payload.id]: payload };
     },
   },
+
   effects: dispatch => ({
     // watch quotes for all stocks in all groups
     async watchQuotes(payload, rootState) {
@@ -15,18 +17,19 @@ export default {
       dispatch.groups.add(payload);
     },
   }),
+
   selectors: (slice, createSelector, hasProps) => ({
-    all() {
+    allGroups() {
       // return all groups as an array
       return slice(
         groups => Object.values(groups),
       );
     },
-    stockCodes() {
+    allStockCodes() {
       // return all stock codes from all groups
-      return slice(
-        groups => Object.values(groups)
-          .reduce((all, group) => all.concat(group.stocks), []),
+      return createSelector(
+        this.allGroups,
+        groups => groups.reduce((all, group) => all.concat(group.stocks), []),
       );
     },
   }),
