@@ -90,6 +90,10 @@ const parse = (text = '') => text
   });
 
 const fetchStocks = async (stockCodes = [], lookBackDays = 1) => {
+  if (stockCodes.length === 0) {
+    return [];
+  }
+
   const text = await fetchData(stockCodes);
   const stocks = parse(text);
 

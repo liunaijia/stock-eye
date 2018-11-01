@@ -1,18 +1,23 @@
 import { Component } from 'react';
 import {
-  arrayOf, string, number, func,
+  arrayOf, string, number, func, any,
 } from 'prop-types';
+import { connect } from 'react-redux';
 import { fetchStocks } from '../../stockData';
 import { runDuringTradeTime } from '../../jobs/job';
 
 class WithQuotes extends Component {
   static propTypes = {
+    lookBackDaysOfStocks: any,
+    fetchQuotes: func.isRequired,
+
     stockCodes: arrayOf(string),
     lookBackDays: number,
     children: func.isRequired,
   }
 
   static defaultProps = {
+    lookBackDaysOfStocks: {},
     stockCodes: null,
     lookBackDays: 1,
   }
@@ -22,8 +27,13 @@ class WithQuotes extends Component {
   }
 
   componentDidMount() {
-    const { stockCodes, lookBackDays } = this.props;
     runDuringTradeTime({ interval: 3, runOnStartUp: true })(async () => {
+      const {
+        stockCodes, lookBackDays, fetchQuotes, lookBackDaysOfStocks,
+      } = this.props;
+      // lookBackDaysOfStocks
+      // const quotes = await fetchQuotes();
+      // console.log(quotes);
       const quotes = await fetchStocks(stockCodes, lookBackDays);
       // console.log('QuotesContainer is fetching stock data');
       this.setState({ quotes });
@@ -37,4 +47,11 @@ class WithQuotes extends Component {
   }
 }
 
-export default WithQuotes;
+const mapState = (state, ownProps) => ({
+});
+
+const mapDispatch = ({ quotes: { fetch } }, ownProps) => ({
+  fetchQuotes: fetch,
+});
+
+export default connect(mapState, mapDispatch)(WithQuotes);
