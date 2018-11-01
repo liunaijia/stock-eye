@@ -26,7 +26,7 @@ class WithQuotes extends Component {
     quotes: null,
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     runDuringTradeTime({ interval: 3, runOnStartUp: true })(async () => {
       const {
         stockCodes, lookBackDays, fetchQuotes, lookBackDaysOfStocks,
