@@ -1,4 +1,4 @@
-import { readAsText } from './responseHelper';
+import { readAsText } from '../responseHelper';
 
 // return {sh601988: {openAt: 3.57, closeAt: 3.68, ...}, sh601288: {...}}
 export async function fetchHistoryQuotes(stockCodes, tradeDay) {
