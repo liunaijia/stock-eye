@@ -9,7 +9,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import GlobalStyle from './App.css';
 import SettingLoader from './SettingLoader';
-import QuotesFetcher from './components/QuotesFetcher';
+import QuoteFetcher from './components/QuoteFetcher';
 
 const { Content, Sider } = Layout;
 
@@ -31,7 +31,7 @@ class App extends Component {
       <ErrorBoundary>
         <GlobalStyle />
         <SettingLoader />
-        <QuotesFetcher />
+        <QuoteFetcher />
         <Layout className={className}>
           <Content>
             <Hq />

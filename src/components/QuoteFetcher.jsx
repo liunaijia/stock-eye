@@ -6,7 +6,7 @@ import {
 import store from '../store';
 import { runDuringTradeTime } from '../jobs/job';
 
-class QuotesFetcher extends Component {
+class QuoteFetcher extends Component {
   static propTypes = {
     groups: arrayOf(shape({
       stocks: any,
@@ -61,7 +61,6 @@ class QuotesFetcher extends Component {
     this.cancelJob = runDuringTradeTime({
       interval: 3, runOnStartUp: true,
     })(() => {
-      console.log('fetchCurrentQuotes', stockCodes);
       if (stockCodes.length) {
         fetchCurrentQuotes({ stockCodes });
       }
@@ -87,4 +86,4 @@ const mapDispatch = ({
   fetchCurrentQuotes,
 });
 
-export default connect(mapState, mapDispatch)(QuotesFetcher);
+export default connect(mapState, mapDispatch)(QuoteFetcher);
