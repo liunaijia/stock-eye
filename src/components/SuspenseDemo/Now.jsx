@@ -18,13 +18,13 @@ class Now extends Component {
   componentDidMount() {
     // request time every 3 seconds
     console.log('componentDidMount');
-    setTimeout(() => this.setState({ cacheKey: new Date().valueOf() }), 3000);
+    setTimeout(() => this.setState({ cacheKey: new Date().getTime() }), 3000);
   }
 
   componentDidUpdate() {
     // request time every 3 seconds
     console.log('componentDidUpdate');
-    setTimeout(() => this.setState({ cacheKey: new Date().valueOf() }), 3000);
+    setTimeout(() => this.setState({ cacheKey: new Date().getTime() }), 3000);
   }
 
 
@@ -32,7 +32,7 @@ class Now extends Component {
   }
 
   render() {
-    // const cacheKey = Math.floor(new Date().valueOf() / 1000 / 3) * 3 * 1000;
+    // const cacheKey = Math.floor(new Date().getTime() / 1000 / 3) * 3 * 1000;
     return (
       <h1>{resource.read(cache, this.state.cacheKey).currentFileTime}</h1>
     );
