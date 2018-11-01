@@ -7,7 +7,6 @@ import TradeNotification from './components/TradeNotification';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
-import { sendNotification } from './notification';
 import GlobalStyle from './App.css';
 import SettingLoader from './SettingLoader';
 import QuotesFetcher from './components/QuotesFetcher';
@@ -24,7 +23,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    sendNotification({ title: 'started' });
   }
 
   render() {
