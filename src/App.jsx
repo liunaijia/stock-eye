@@ -10,6 +10,7 @@ import { Hq, LiteHq } from './components/hq';
 import { sendNotification } from './notification';
 import GlobalStyle from './App.css';
 import SettingLoader from './SettingLoader';
+import QuotesFetcher from './components/QuotesFetcher';
 
 const { Content, Sider } = Layout;
 
@@ -32,6 +33,7 @@ class App extends Component {
       <ErrorBoundary>
         <GlobalStyle />
         <SettingLoader />
+        <QuotesFetcher />
         <Layout className={className}>
           <Content>
             <Hq />

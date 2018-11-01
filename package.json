@@ -18,6 +18,7 @@
     "@rematch/select": "^2.0.3",
     "antd": "^3.10.3",
     "iconv-lite": "^0.4.24",
+    "lodash-es": "^4.17.11",
     "prop-types": "^15.6.2",
     "react": "^16.6.0",
     "react-cache": "^16.6.0-alpha.8af6728",

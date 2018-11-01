@@ -30,7 +30,7 @@ const fetchHistoryCloseAt = async (stockCodes, daysBefore) => {
 
   const data = await fetchHistoryQuotes(missedStockCodes, tradeDay);
 
-  const newData = Object.entries(data).reduce((acc, [stockCode, stockData]) => {
+  const newData = data.reduce((acc, { stockCode, ...stockData }) => {
     acc[stockCode] = stockData.closeAt;
     return acc;
   }, {});
