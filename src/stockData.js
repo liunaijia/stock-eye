@@ -53,7 +53,7 @@ const fetchStocks = async (stockCodes = [], lookBackDays = 1) => {
   // console.log('my - historyCloseAtData', historyCloseAtData);
   stocks.forEach((stock) => {
     // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价
-    const baseAt = historyCloseAtData[stock.code];
+    const baseAt = historyCloseAtData[stock.stockCode];
     Object.assign(stock, {
       baseAt,
       currentRatio: calcRatio(stock.current, stock.closeAt),

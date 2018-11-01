@@ -3,18 +3,15 @@ import { ZOOM } from './settings';
 // 使用每个股票的zoom系数调整涨跌幅，比如工行涨1.1%，系数为1，交行涨1.55%，系数为0.67，此时应该触发工行的交易信号，
 // 因为工行实际上涨1.1% (1.1% * 1) 大于 交行实际上涨1.04%(1.55% * 0.67)
 const getFixedRatio = (stock, ratio) => {
-  const zoomFactor = ZOOM[stock.code] ? ZOOM[stock.code] : 1.0;
+  const zoomFactor = ZOOM[stock.stockCode] ? ZOOM[stock.stockCode] : 1.0;
   return ratio * zoomFactor;
 };
 
-const getStockWithMinSellingRatio = stocks =>
-  [...stocks].sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
+const getStockWithMinSellingRatio = stocks => [...stocks].sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
 
-const getStockWithMaxBuyingRatio = stocks =>
-  [...stocks].sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
+const getStockWithMaxBuyingRatio = stocks => [...stocks].sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
 
-const getGapBetween = (ratio1, ratio2) =>
-  Math.round((ratio1 - ratio2) * 100) / 100;
+const getGapBetween = (ratio1, ratio2) => Math.round((ratio1 - ratio2) * 100) / 100;
 
 const cutoffAmount = (price = 0, balance = 0, commission = 5) => {
   const amount = Math.floor(balance / price / 100) * 100;
@@ -36,7 +33,7 @@ export const getBuyGap = (stocks, stockToBuy) => {
   return {
     value: gap,
     compareWith: {
-      stockCode: stockWithMaxBuyingRatio.code,
+      stockCode: stockWithMaxBuyingRatio.stockCode,
       stockName: stockWithMaxBuyingRatio.name,
       ratio: stockWithMaxBuyingRatio.buyingRatio,
       price: stockWithMaxBuyingRatio.buyingAt,
@@ -57,7 +54,7 @@ export const calcBuyingGap = (stocks = [{
   return {
     ...gap,
     toBuy: {
-      stockCode: stockMayBuy.code,
+      stockCode: stockMayBuy.stockCode,
       stockName: stockMayBuy.name,
       price: stockMayBuy.sellingAt,
       maxAmount: cutoffAmount(stockMayBuy.sellingAt, availableCash),
@@ -72,7 +69,7 @@ export const getSellGap = (stocks, stockToSell) => {
   return {
     value: gap,
     compareWith: {
-      stockCode: stockWithMinSellingRatio.code,
+      stockCode: stockWithMinSellingRatio.stockCode,
       stockName: stockWithMinSellingRatio.name,
       ratio: stockWithMinSellingRatio.buyingRatio,
       price: stockWithMinSellingRatio.buyingAt,
@@ -95,7 +92,7 @@ export const calcSellingGap = (
   const holdingStocks = holdings
     .filter(holding => holding.sellableAmount > 0)
     .reduce((acc, holding) => { acc[holding.stockCode] = holding.sellableAmount; return acc; }, {});
-  const sellableStocks = stocks.filter(stock => Object.keys(holdingStocks).includes(stock.code));
+  const sellableStocks = stocks.filter(stock => Object.keys(holdingStocks).includes(stock.stockCode));
   const stockMaySell = getStockWithMaxBuyingRatio(sellableStocks);
 
   // No sellable holdings
@@ -107,10 +104,10 @@ export const calcSellingGap = (
   return {
     ...gap,
     toSell: {
-      stockCode: stockMaySell.code,
+      stockCode: stockMaySell.stockCode,
       stockName: stockMaySell.name,
       price: stockMaySell.buyingAt,
-      maxAmount: holdingStocks[stockMaySell.code],
+      maxAmount: holdingStocks[stockMaySell.stockCode],
     },
     timestamp: new Date().getTime(),
   };

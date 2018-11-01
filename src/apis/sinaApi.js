@@ -26,7 +26,7 @@ const parse = (text = '') => text
   .map((item) => {
     const [stockCode, rawValues] = item;
     const stock = {
-      code: stockCode,
+      stockCode,
       name: rawValues[0],
       openAt: getValueFrom(rawValues, 1),
       closeAt: getValueFrom(rawValues, 2),
