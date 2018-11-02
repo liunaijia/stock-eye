@@ -31,8 +31,8 @@ const parse = (text = '') => text
       openAt: getValueFrom(rawValues, 1),
       closeAt: getValueFrom(rawValues, 2),
       current: getValueFrom(rawValues, 3),
-      buyingAt: getValueFrom(rawValues, 6),
-      sellingAt: getValueFrom(rawValues, 7),
+      buyingAt: getValueFrom(rawValues, 6), // 竞买价，即“买一“报价
+      sellingAt: getValueFrom(rawValues, 7), // 竞卖价，即“卖一“报价
       buyingBids: collapseArray(getValuesFrom(rawValues, 10, 10)),
       sellingBids: collapseArray(getValuesFrom(rawValues, 20, 10)),
       timestamp: new Date(`${rawValues[30]} ${rawValues[31]}`),

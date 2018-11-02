@@ -19,10 +19,7 @@ const getHistoryQuotesSelector = createSelector(
 const getCurrentQuotesSelector = createSelector(
   store.select.currentQuotes.getBy,
   getBy => memoize(
-    (stockCode) => {
-      console.log(stockCode);
-      return getBy(stockCode);
-    },
+    stockCode => getBy(stockCode),
   ),
 );
 
