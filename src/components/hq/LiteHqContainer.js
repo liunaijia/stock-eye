@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import store from '../../store';
 import LiteHq from './LiteHq';
+import { getAllQuotes } from '../../models/selectors';
 
 const mapState = state => ({
-  stockCodes: store.select.groups.allStockCodes(state),
+  quotes: getAllQuotes(state),
 });
 
 export default connect(mapState)(LiteHq);

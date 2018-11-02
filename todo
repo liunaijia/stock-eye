@@ -1,2 +1,1 @@
 TODO
-1. get rid of WithQuotes, all quotes should be set and updated by QuoteFetcher, all other components connect store to get the data
