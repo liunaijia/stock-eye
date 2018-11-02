@@ -47,7 +47,8 @@ export default {
       return createSelector(
         this.self,
         state => memoize(
-          stockCode => state[stockCode],
+          // freeze value in case it gets modified from outside
+          stockCode => Object.freeze(state[stockCode]),
         ),
       );
     },

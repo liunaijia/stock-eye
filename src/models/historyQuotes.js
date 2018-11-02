@@ -53,7 +53,7 @@ export default {
         state => memoize(
           (stockCode, lookBackDays) => {
             const day = getLastTradeDay(lookBackDays);
-            return (state[stockCode] || {})[toDateString(day)];
+            return Object.freeze((state[stockCode] || {})[toDateString(day)]);
           },
         ),
       );

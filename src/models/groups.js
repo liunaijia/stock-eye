@@ -20,7 +20,6 @@ export default {
 
   selectors: (slice, createSelector, hasProps) => ({
     self() {
-      console.log('groups.self');
       return slice;
     },
     allGroups() {
@@ -34,7 +33,7 @@ export default {
       // return all stock codes from all groups
       return createSelector(
         this.allGroups,
-        groups => groups.reduce((all, group) => all.concat(group.stocks), []),
+        groups => Object.freeze(groups.reduce((all, group) => all.concat(group.stocks), [])),
       );
     },
   }),
