@@ -19,9 +19,14 @@ export default {
   }),
 
   selectors: (slice, createSelector, hasProps) => ({
+    self() {
+      console.log('groups.self');
+      return slice;
+    },
     allGroups() {
       // return all groups as an array
-      return slice(
+      return createSelector(
+        this.self,
         groups => Object.values(groups),
       );
     },

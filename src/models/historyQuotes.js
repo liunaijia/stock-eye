@@ -43,11 +43,19 @@ export default {
     },
   }),
   selectors: (slice, createSelector, hasProps) => ({
-    get() {
+    self() {
+      return slice;
+    },
+    getBy() {
       // return all groups as an array
       return createSelector(
-        slice,
-        state => memoize((stockCode, day) => (state[stockCode] || {})[toDateString(day)]),
+        this.self,
+        state => memoize(
+          ({ stockCode, lookBackDays }) => {
+            const day = getLastTradeDay(lookBackDays);
+            return (state[stockCode] || {})[toDateString(day)];
+          },
+        ),
       );
     },
   }),
