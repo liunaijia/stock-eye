@@ -51,7 +51,7 @@ export default {
       return createSelector(
         this.self,
         state => memoize(
-          ({ stockCode, lookBackDays }) => {
+          (stockCode, lookBackDays) => {
             const day = getLastTradeDay(lookBackDays);
             return (state[stockCode] || {})[toDateString(day)];
           },

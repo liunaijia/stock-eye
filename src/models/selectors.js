@@ -12,14 +12,17 @@ function calcRatio(currentPrice, previousPrice) {
 const getHistoryQuotesSelector = createSelector(
   store.select.historyQuotes.getBy,
   getBy => memoize(
-    (stockCode, lookBackDays) => getBy({ stockCode, lookBackDays }),
+    (stockCode, lookBackDays) => getBy(stockCode, lookBackDays),
   ),
 );
 
 const getCurrentQuotesSelector = createSelector(
-  store.select.currentQuotes.getByStockCode,
-  getByStockCode => memoize(
-    stockCode => getByStockCode(stockCode),
+  store.select.currentQuotes.getBy,
+  getBy => memoize(
+    (stockCode) => {
+      console.log(stockCode);
+      return getBy(stockCode);
+    },
   ),
 );
 
@@ -29,17 +32,26 @@ const getQuotesInGroupSelector = createSelector(
   (getCurrentQuotes, getHistoryQuotes) => memoize(
     group => group.stocks.reduce((result, stockCode) => {
       const stock = getCurrentQuotes(stockCode);
+      // don't modify stock object as doing so changes data in store
       if (stock) {
-        stock.currentRatio = calcRatio(stock.current, stock.closeAt);
         const historyQuote = getHistoryQuotes(stock.stockCode, group.lookBackDays);
         if (historyQuote) {
-          stock.baseAt = historyQuote.closeAt;
-          stock.baseRatio = calcRatio(stock.current, stock.baseAt);
+          const currentRatio = calcRatio(stock.current, stock.closeAt);
+          const baseAt = historyQuote.closeAt;
+          const baseRatio = calcRatio(stock.current, baseAt);
           // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价
-          stock.buyingRatio = calcRatio(stock.buyingAt, stock.baseAt);
-          stock.sellingRatio = calcRatio(stock.sellingAt, stock.baseAt);
+          const buyingRatio = calcRatio(stock.buyingAt, baseAt);
+          const sellingRatio = calcRatio(stock.sellingAt, baseAt);
+
+          result.push({
+            ...stock,
+            currentRatio,
+            baseAt,
+            baseRatio,
+            buyingRatio,
+            sellingRatio,
+          });
         }
-        result.push(stock);
       }
 
       return result;
@@ -54,11 +66,12 @@ export const getGroupedQuotes = createSelector(
     (result, [groupName, group]) => {
       const quotes = getQuotesInGroup(group);
       // calculate gaps
-      quotes.forEach(quote => Object.assign(quote, {
+      const quotesWithGaps = quotes.map(quote => ({
+        ...quote,
         buyGap: getBuyGap(quotes, quote),
         sellGap: getSellGap(quotes, quote),
       }));
-      return Object.assign(result, { [groupName]: quotes });
+      return { ...result, [groupName]: quotesWithGaps };
     },
     {},
   ),

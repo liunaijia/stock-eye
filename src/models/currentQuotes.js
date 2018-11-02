@@ -1,37 +1,49 @@
-import { memoize } from 'lodash-es';
+import { memoize, isEqual } from 'lodash-es';
 import { fetchCurrentQuotes } from '../apis';
 
 export default {
   state: {
     // [stockCode]: {
-    //   code:
+    //   stockCode:
     //   name:
     //   openAt:
     //   closeAt:
     //   current:
     //   buyingAt:
     //   sellingAt:
-    //   buyingBids:
-    //   sellingBids:
-    //   timestamp:
+    //   buyingBids: not saved
+    //   sellingBids: not saved
+    //   timestamp: not saved
     // }
   },
   reducers: {
     add(state, payload) {
-      return { ...state, [payload.stockCode]: payload };
+      // some props are excluded as they get changed frequently and making suggestion doesn't care about their changes
+      const {
+        buyingBids, sellingBids, timestamp, ...quote
+      } = payload;
+      // skip update if there is no changes, it saves selectors from running.
+      if (isEqual(quote, state[quote.stockCode])) {
+        return state;
+      }
+      return { ...state, [quote.stockCode]: quote };
     },
   },
   effects: dispatch => ({
     async fetch(payload) {
       const quotes = await fetchCurrentQuotes(payload.stockCodes);
-      return Promise.all(quotes.map(quote => dispatch.currentQuotes.add(quote)));
+      return Promise.all(
+        quotes.map(
+          quote => dispatch.currentQuotes.add(quote),
+        ),
+      );
     },
   }),
   selectors: (slice, createSelector, hasProps) => ({
     self() {
       return slice;
     },
-    getByStockCode() {
+    getBy() {
       return createSelector(
         this.self,
         state => memoize(
