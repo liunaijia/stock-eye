@@ -12,8 +12,6 @@ const sendTradeSignal = ({
 };
 
 const TradeSuggestion = ({ suggestions, children }) => {
-  // console.log(suggestions);
-  // console.log('WithNotification disabled?', disabled);
   suggestions.forEach(({
     groupName, buyingGap, sellingGap, threshold,
   }) => {

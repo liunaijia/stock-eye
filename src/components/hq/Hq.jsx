@@ -1,18 +1,17 @@
 
 import React from 'react';
 import { instanceOf } from 'prop-types';
-import { Card, Row, Col } from 'antd';
+import { Card } from 'antd';
 import Quotes from './Quotes';
 
 const Hq = ({ quotes }) => (
-  <Card title="行情">
-    <Row gutter={16}>
-      {Object.entries(quotes).map(([groupName, quotesInGroup]) => (
-        <Col key={groupName}>
-          <Quotes quotes={quotesInGroup} groupName={groupName} />
-        </Col>))}
-    </Row>
-  </Card>
+  <>
+    {Object.entries(quotes).map(([groupName, quotesInGroup]) => (
+      <Card key={groupName} bordered={false}>
+        <Quotes quotes={quotesInGroup} groupName={groupName} />
+      </Card>
+    ))}
+  </>
 );
 
 Hq.propTypes = {

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { string } from 'prop-types';
+import { Provider } from 'react-redux';
+import { hot } from 'react-hot-loader';
 import { Layout } from 'antd';
 import styled from 'styled-components';
+import store from './store';
 import TradeSuggestion from './components/TradeSuggestion';
 
 import ErrorBoundary from './components/ErrorBoundary';
@@ -27,26 +30,28 @@ class App extends Component {
   render() {
     const { className } = this.props;
     return (
-      <ErrorBoundary>
-        <GlobalStyle />
-        <SettingLoader />
-        <QuoteFetcher />
-        <Layout className={className}>
-          <Content>
-            <Hq />
-          </Content>
-          <Sider className="sider" width="auto">
-            <LiteHq />
-          </Sider>
-          <TradeSuggestion />
-        </Layout>
-      </ErrorBoundary>
+      <Provider store={store}>
+        <ErrorBoundary>
+          <GlobalStyle />
+          <SettingLoader />
+          <QuoteFetcher />
+          <Layout className={className}>
+            <Content>
+              <Hq />
+            </Content>
+            <Sider className="sider" width="auto">
+              <LiteHq />
+            </Sider>
+            <TradeSuggestion />
+          </Layout>
+        </ErrorBoundary>
+      </Provider>
     );
   }
 }
 
-export default styled(App)`
+export default hot(module)(styled(App)`
   .sider {
     background: #1e1e1d;
   }
-`;
+`);

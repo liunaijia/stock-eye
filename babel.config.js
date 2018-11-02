@@ -22,6 +22,7 @@ module.exports = (api) => {
           style: 'css',
         },
       ],
+      ['react-hot-loader/babel'],
       // Stage 0
       '@babel/plugin-proposal-function-bind',
 

@@ -7,6 +7,7 @@ const config = {
   devtool: 'source-map',
   devServer: {
     contentBase: './dist',
+    hot: true,
     // use proxy to avoid cros request
     // https://github.com/chimurai/http-proxy-middleware
     proxy: {
@@ -79,6 +80,9 @@ const config = {
     //   launch: true, // -> default 'false'
     //   port: 8082, // default -> 8081
     // }),
+
+    // enable hot module replacement
+    new webpack.HotModuleReplacementPlugin(),
   ],
 };
 
