@@ -3,7 +3,6 @@ import { string } from 'prop-types';
 import { Layout } from 'antd';
 import styled from 'styled-components';
 import TradeSuggestion from './components/TradeSuggestion';
-import TradeNotification from './components/TradeNotification';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
@@ -39,9 +38,7 @@ class App extends Component {
           <Sider className="sider" width="auto">
             <LiteHq />
           </Sider>
-          <TradeSuggestion>
-            {suggestions => <TradeNotification suggestions={suggestions} />}
-          </TradeSuggestion>
+          <TradeSuggestion />
         </Layout>
       </ErrorBoundary>
     );

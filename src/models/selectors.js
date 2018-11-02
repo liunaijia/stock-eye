@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import { memoize } from 'lodash-es';
-import { getBuyGap, getSellGap } from '../gapService';
+import {
+  getBuyGap, getSellGap, calcBuyingGap, calcSellingGap,
+} from '../gapService';
 import store from '../store';
 
 function calcRatio(currentPrice, previousPrice) {
@@ -66,6 +68,26 @@ export const getAllQuotes = createSelector(
   getGroupedQuotes,
   groupedQuotes => Object.values(groupedQuotes).reduce(
     (result, quotesInGroup) => result.concat(quotesInGroup),
+    [],
+  ),
+);
+
+export const getSuggestions = createSelector(
+  store.select.groups.self,
+  getGroupedQuotes,
+  (groups, groupedQuotes) => Object.entries(groupedQuotes).reduce(
+    (result, [groupName, quotesInGroup]) => {
+      if (quotesInGroup.length) {
+        const suggestion = {
+          groupName,
+          buyingGap: calcBuyingGap(quotesInGroup),
+          sellingGap: calcSellingGap(quotesInGroup),
+          threshold: groups[groupName].threshold,
+        };
+        result.push(suggestion);
+      }
+      return result;
+    },
     [],
   ),
 );

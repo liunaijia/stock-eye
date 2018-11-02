@@ -1,50 +1,59 @@
-import { Component } from 'react';
-import { func } from 'prop-types';
-import { fetchStocks } from '../stockData';
-import { STOCK_GROUPS } from '../settings';
-import { calcBuyingGap, calcSellingGap } from '../gapService';
-import { runDuringTradeTime } from '../jobs/job';
+import { func, arrayOf } from 'prop-types';
+import { connect } from 'react-redux';
+import { sendNotification } from '../notification';
+import { getSuggestions } from '../models/selectors';
 
-class TradeSuggestion extends Component {
-  static propTypes = {
-    children: func.isRequired,
-  }
+const sendTradeSignal = ({
+  groupName = '', gap = 0, trade = '', stock = '', price = 0, additional = '',
+}) => {
+  const title = `${groupName}组合价差${gap}%`;
+  const body = `${trade} ${stock} ${price} ${additional}`;
+  sendNotification({ title, body });
+};
 
-  state = {
-    suggestions: [],
-  }
+const TradeSuggestion = ({ suggestions, children }) => {
+  // console.log('WithNotification disabled?', disabled);
+  suggestions.forEach(({
+    groupName, buyingGap, sellingGap, threshold,
+  }) => {
+    if (buyingGap && buyingGap.value >= threshold) {
+      sendTradeSignal({
+        groupName,
+        gap: buyingGap.value,
+        trade: '买',
+        stock: buyingGap.toBuy.stockName,
+        price: buyingGap.toBuy.price,
+        additional: `相比${buyingGap.compareWith.stockName} ${buyingGap.compareWith.price}`,
+      });
+    }
 
-  componentDidMount() {
-    runDuringTradeTime({ interval: 3, runOnStartUp: true })(async () => {
-      const suggestions = [];
-      // console.log('TradeSuggesion is fetching stock data');
+    if (sellingGap && sellingGap.value >= threshold) {
+      sendTradeSignal({
+        groupName,
+        gap: sellingGap.value,
+        trade: '卖',
+        stock: sellingGap.toSell.stockName,
+        price: sellingGap.toSell.price,
+        additional: `相比${sellingGap.compareWith.stockName} ${sellingGap.compareWith.price}`,
+      });
+    }
+  });
 
-      await Promise.all(Object.entries(STOCK_GROUPS).map(async ([groupName, group]) => {
-        const stocks = await fetchStocks(group.stocks, group.lookBackDays);
+  return children ? children() : null;
+};
 
-        // calculate gap to buy stock
-        const buyingGap = calcBuyingGap(stocks);
+TradeSuggestion.propTypes = {
+  suggestions: arrayOf(Object),
+  children: func,
+};
 
-        // calculate gap to sell holding stock
-        const sellingGap = calcSellingGap(stocks);
+TradeSuggestion.defaultProps = {
+  suggestions: [],
+  children: undefined,
+};
 
-        suggestions.push({
-          groupName,
-          buyingGap,
-          sellingGap,
-          threshold: group.threshold,
-        });
-      }));
+const mapState = state => ({
+  suggestions: getSuggestions(state),
+});
 
-      this.setState({ suggestions });
-    });
-  }
-
-  render() {
-    const { children } = this.props;
-    const { suggestions } = this.state;
-    return children(suggestions);
-  }
-}
-
-export default TradeSuggestion;
+export default connect(mapState)(TradeSuggestion);
