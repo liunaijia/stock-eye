@@ -11,19 +11,15 @@ export default {
     //   current:
     //   buyingAt:
     //   sellingAt:
-    //   buyingBids: not saved
-    //   sellingBids: not saved
-    //   timestamp: not saved
+    //   buyingBids:
+    //   sellingBids:
+    //   timestamp:
     // }
   },
   reducers: {
     // batch add quotes, payload is an array of quotes
     add(state, payload) {
-      // some props are excluded as they get changed frequently and making suggestion doesn't care about their changes
-      const data = payload.reduce((result, {
-        buyingBids, sellingBids, timestamp, ...quote
-      }) => Object.assign(result, { [quote.stockCode]: quote }),
-      {});
+      const data = payload.reduce((result, quote) => Object.assign(result, { [quote.stockCode]: quote }), {});
       return { ...state, ...data };
     },
   },
