@@ -1,4 +1,4 @@
-import { memoize, isEqual } from 'lodash-es';
+import { memoize } from 'lodash-es';
 import { fetchCurrentQuotes } from '../apis';
 
 export default {
@@ -17,26 +17,20 @@ export default {
     // }
   },
   reducers: {
+    // batch add quotes, payload is an array of quotes
     add(state, payload) {
       // some props are excluded as they get changed frequently and making suggestion doesn't care about their changes
-      const {
+      const data = payload.reduce((result, {
         buyingBids, sellingBids, timestamp, ...quote
-      } = payload;
-      // skip update if there is no changes, it saves selectors from running.
-      if (isEqual(quote, state[quote.stockCode])) {
-        return state;
-      }
-      return { ...state, [quote.stockCode]: quote };
+      }) => Object.assign(result, { [quote.stockCode]: quote }),
+      {});
+      return { ...state, ...data };
     },
   },
   effects: dispatch => ({
     async fetch(payload) {
       const quotes = await fetchCurrentQuotes(payload.stockCodes);
-      return Promise.all(
-        quotes.map(
-          quote => dispatch.currentQuotes.add(quote),
-        ),
-      );
+      return dispatch.currentQuotes.add(quotes);
     },
   }),
   selectors: (slice, createSelector, hasProps) => ({
