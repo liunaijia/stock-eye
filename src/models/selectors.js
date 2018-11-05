@@ -9,29 +9,15 @@ function calcRatio(currentPrice, previousPrice) {
   return Math.round(((currentPrice / previousPrice) - 1) * 10000) / 100;
 }
 
-const getHistoryQuotesSelector = createSelector(
-  store.select.historyQuotes.getBy,
-  getBy => memoize(
-    (stockCode, lookBackDays) => getBy(stockCode, lookBackDays),
-  ),
-);
-
-const getCurrentQuotesSelector = createSelector(
-  store.select.currentQuotes.getBy,
-  getBy => memoize(
-    stockCode => getBy(stockCode),
-  ),
-);
-
 const getQuotesInGroupSelector = createSelector(
-  getCurrentQuotesSelector,
-  getHistoryQuotesSelector,
-  (getCurrentQuotes, getHistoryQuotes) => memoize(
+  store.select.currentQuotes.getBy,
+  store.select.historyQuotes.getBy,
+  (getCurrentQuote, getHistoryQuote) => memoize(
     group => group.stocks.reduce((result, stockCode) => {
-      const stock = getCurrentQuotes(stockCode);
+      const stock = getCurrentQuote(stockCode);
       // don't modify stock object as doing so changes data in store
       if (stock) {
-        const historyQuote = getHistoryQuotes(stock.stockCode, group.lookBackDays);
+        const historyQuote = getHistoryQuote(stock.stockCode, group.lookBackDays);
         if (historyQuote) {
           const currentRatio = calcRatio(stock.current, stock.closeAt);
           const baseAt = historyQuote.closeAt;
