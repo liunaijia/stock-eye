@@ -18,14 +18,14 @@ export default {
   },
   reducers: {
     // batch add quotes, payload is an array of quotes
-    add(state, payload) {
+    add(state, payload = []) {
       const data = payload.reduce((result, quote) => Object.assign(result, { [quote.stockCode]: quote }), {});
       return { ...state, ...data };
     },
   },
   effects: dispatch => ({
-    async fetch(payload) {
-      const quotes = await fetchCurrentQuotes(payload.stockCodes);
+    async fetch({ stockCodes = [] }) {
+      const quotes = await fetchCurrentQuotes(stockCodes);
       return dispatch.currentQuotes.add(quotes);
     },
   }),
