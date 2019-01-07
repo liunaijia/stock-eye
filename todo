@@ -1,1 +1,5 @@
 TODO
+don't use selectors to calculate gaps, invoke a function after resolving quotes instead. In QuoteFetcher
+
+use re-reselect
+how to integrate it with rematch?
