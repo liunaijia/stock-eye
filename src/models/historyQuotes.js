@@ -1,5 +1,5 @@
 import { merge, memoize } from 'lodash-es';
-import { fetchHistoryQuotes } from '../apis';
+import { fetchHistoryQuote } from '../apis';
 import { lastTradeDay } from '../time';
 
 function getLastTradeDay(daysBefore) {
@@ -38,8 +38,12 @@ export default {
   effects: dispatch => ({
     async fetch(payload) {
       const day = getLastTradeDay(payload.lookBackDays);
-      const quotes = await fetchHistoryQuotes(payload.stockCodes, day);
-      return Promise.all(quotes.map(quote => dispatch.historyQuotes.add({ ...quote, day })));
+      return Promise.all(
+        payload.stockCodes.map(async (stockCode) => {
+          const quote = await fetchHistoryQuote(stockCode, day);
+          return dispatch.historyQuotes.add({ ...quote, day });
+        }),
+      );
     },
   }),
   selectors: (slice, createSelector, hasProps) => ({

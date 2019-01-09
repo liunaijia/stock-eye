@@ -1,4 +1,4 @@
-import { readAsText } from '../responseHelper';
+import { readAsText, readAsDom } from '../responseHelper';
 
 const getValueFrom = (array = [], index = 0) => parseFloat(array[index]);
 
@@ -41,8 +41,40 @@ const parse = (text = '') => text
   });
 
 export async function fetchCurrentQuotes(stockCodes) {
-  const response = await fetch(`/sinajs/rn=${new Date().getTime()}&list=${stockCodes.join(',')}`);
+  const response = await fetch(`/current_quotes/rn=${new Date().getTime()}&list=${stockCodes.join(',')}`);
   const text = await readAsText(response);
 
   return parse(text);
+}
+
+export async function fetchHistoryQuote(stockCode, tradeDay) {
+  const date = tradeDay.toISOString().substring(0, 10);
+  // http://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradehistory.php?symbol=sz000001&date=2019-1-8
+  const response = await fetch(`/history_quote?symbol=${stockCode}&date=${date}`);
+  const dom = await readAsDom(response);
+  const quoteString = dom.querySelector('#quote_area').textContent;
+  // quoteString is a string containing
+  // 收盘价:9.66
+  // 涨跌幅:-0.82%
+  // 前收价:9.74
+  // 开盘价:9.73
+  // 最高价:9.74
+  // 最低价:9.62
+  // 成交量(手):402388.11
+  // 成交额(千元):389247.80
+  const quoteData = quoteString.split('\n').reduce((result, line) => {
+    if (line.includes(':')) {
+      const [name, value] = line.split(':');
+      return Object.assign(result, { [name.trim()]: value.trim() });
+    }
+    return result;
+  }, {});
+
+  return {
+    stockCode,
+    openAt: parseFloat(quoteData['开盘价']),
+    closeAt: parseFloat(quoteData['收盘价']),
+    lowestAt: parseFloat(quoteData['最低价']),
+    highestAt: parseFloat(quoteData['最高价']),
+  };
 }

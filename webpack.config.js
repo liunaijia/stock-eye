@@ -11,13 +11,14 @@ const config = {
     // use proxy to avoid cros request
     // https://github.com/chimurai/http-proxy-middleware
     proxy: {
-      '/sinajs': {
+      '/current_quotes': {
         target: 'https://hq.sinajs.cn',
-        pathRewrite: { '^/sinajs': '' },
+        pathRewrite: { '^/current_quotes': '' },
         changeOrigin: true,
       },
-      '/hisHq': {
-        target: 'http://q.stock.sohu.com',
+      '/history_quote': {
+        target: 'http://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradehistory.php',
+        pathRewrite: { '^/history_quote': '' },
         changeOrigin: true,
       },
       '/newone': {

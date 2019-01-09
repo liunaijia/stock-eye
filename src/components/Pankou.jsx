@@ -3,7 +3,7 @@ import { string } from 'prop-types';
 import styled from 'styled-components';
 
 import Bids from './Bids';
-import { fetchStocks } from '../stockData';
+// import { fetchStocks } from '../stockData';
 import { isTradeTime, sleep } from '../time';
 
 class Pankou extends Component {
@@ -48,7 +48,11 @@ class Pankou extends Component {
     return (
       <article className={className}>
         <Bids type="sell" bids={this.state.sellingBids} currentPrice={this.state.currentPrice} />
-        <p>现价 {this.state.currentPrice}</p>
+        <p>
+现价
+{' '}
+{this.state.currentPrice}
+</p>
         <Bids type="buy" bids={this.state.buyingBids} currentPrice={this.state.currentPrice} />
       </article>
     );
