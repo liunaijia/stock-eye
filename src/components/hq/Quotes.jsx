@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  string, number, arrayOf, shape,
+  string, number, arrayOf, shape, func,
 } from 'prop-types';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import styled from 'styled-components';
 import NumberRate from '../NumberRate';
 
@@ -16,12 +16,16 @@ const propTypes = {
     price: number,
     currentRatio: number,
   })),
+  onWatch: func,
+  stockCodeInWatch: string,
 };
 
 const defaultProps = {
   className: null,
   groupName: null,
   quotes: [],
+  onWatch: undefined,
+  stockCodeInWatch: undefined,
 };
 
 const StockChange = ({ current, previous, ratio }) => {
@@ -29,27 +33,41 @@ const StockChange = ({ current, previous, ratio }) => {
   return <NumberRate value={change} rate={ratio} />;
 };
 
+
 const Quotes = ({
-  className, groupName, quotes,
-}) => (
-  <Table className={className} dataSource={quotes} size="small" pagination={false} rowKey="name" title={() => groupName}>
-    <Column title="股票" dataIndex="name" />
-    <Column title="现价" dataIndex="current" render={value => value.toFixed(2)} />
-    <Column
-      title="今日涨跌"
-      dataIndex="currentRatio"
-      render={(_, record) => <StockChange current={record.current} previous={record.closeAt} ratio={record.currentRatio} />}
+  className, groupName, quotes, onWatch, stockCodeInWatch,
+}) => {
+  const renderWatchSwitch = (_, record) => (
+    <Button
+      icon="eye"
+      type={record.stockCode === stockCodeInWatch ? 'primary' : 'default'}
+      shape="circle"
+      size="small"
+      onClick={() => onWatch && onWatch({ target: { value: record.stockCode } })}
     />
-    <Column title="参考价" dataIndex="baseAt" render={value => value.toFixed(2)} />
-    <Column
-      title="参考涨跌"
-      dataIndex="baseRatio"
-      render={(_, record) => <StockChange current={record.current} previous={record.baseAt} ratio={record.baseRatio} />}
-    />
-    <Column title="买进GAP" dataIndex="buyGap.value" />
-    <Column title="卖出GAP" dataIndex="sellGap.value" />
-  </Table>
-);
+  );
+
+  return (
+    <Table className={className} dataSource={quotes} size="small" pagination={false} rowKey="name" title={() => groupName}>
+      <Column title="股票" dataIndex="name" />
+      <Column title="现价" dataIndex="current" render={value => value.toFixed(2)} />
+      <Column
+        title="今日涨跌"
+        dataIndex="currentRatio"
+        render={(_, record) => <StockChange current={record.current} previous={record.closeAt} ratio={record.currentRatio} />}
+      />
+      <Column title="参考价" dataIndex="baseAt" render={value => value.toFixed(2)} />
+      <Column
+        title="参考涨跌"
+        dataIndex="baseRatio"
+        render={(_, record) => <StockChange current={record.current} previous={record.baseAt} ratio={record.baseRatio} />}
+      />
+      <Column title="买进GAP" dataIndex="buyGap.value" />
+      <Column title="卖出GAP" dataIndex="sellGap.value" />
+      <Column render={renderWatchSwitch} />
+    </Table>
+  );
+};
 
 Quotes.propTypes = propTypes;
 Quotes.defaultProps = defaultProps;
