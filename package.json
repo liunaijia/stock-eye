@@ -21,7 +21,7 @@
     "lodash-es": "^4.17.11",
     "prop-types": "^15.6.2",
     "re-reselect": "^2.3.0",
-    "react": "^16.7.0",
+    "react": "^16.8.0-alpha.0",
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
     "react-redux": "^6.0.0",
