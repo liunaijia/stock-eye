@@ -1,6 +1,6 @@
 import { readAlertMessage } from './newoneApi';
 
-jest.mock('./secrets', () => {}, { virtual: true });
+jest.mock('../secrets', () => {}, { virtual: true });
 
 describe('newoneApi', () => {
   describe('readAlertMessage', () => {

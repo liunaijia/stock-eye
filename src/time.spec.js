@@ -74,4 +74,3 @@ describe('sleep', () => {
     expect(setTimeout.mock.calls[0][1]).toBe(1000);
   });
 });
-

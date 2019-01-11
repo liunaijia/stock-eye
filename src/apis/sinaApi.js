@@ -1,4 +1,4 @@
-import { readAsText, readAsDom } from '../responseHelper';
+import { readAsText, readAsDom } from './responseHelper';
 
 const getValueFrom = (array = [], index = 0) => parseFloat(array[index]);
 
