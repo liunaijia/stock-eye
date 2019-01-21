@@ -48,9 +48,15 @@ export async function fetchCurrentQuotes(stockCodes) {
 }
 
 export async function fetchHistoryQuote(stockCode, tradeDay) {
-  const date = tradeDay.toISOString().substring(0, 10);
   // http://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradehistory.php?symbol=sz000001&date=2019-1-8
-  const response = await fetch(`/history_quote?symbol=${stockCode}&date=${date}`);
+  const cache = await caches.open('stock-eye');
+  const date = tradeDay.toISOString().substring(0, 10);
+  const url = `/history_quote?symbol=${stockCode}&date=${date}`;
+  let response = await cache.match(url);
+  if (!response) {
+    await cache.add(url);
+    response = await cache.match(url);
+  }
   const dom = await readAsDom(response);
   const quoteString = dom.querySelector('#quote_area').textContent;
   // quoteString is a string containing
