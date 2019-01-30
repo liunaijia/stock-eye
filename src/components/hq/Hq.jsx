@@ -1,18 +1,21 @@
 
-import React, { useState, useEffect } from 'react';
-import { instanceOf } from 'prop-types';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card } from 'antd';
 import Quotes from './Quotes';
+import { GroupsContext } from '../../contexts';
+import { allQuotesSelector } from '../../models/selectors';
 
-const Hq = ({ quotes }) => {
+const Hq = () => {
   const [stockCodeInWatch, setStockCodeInWatch] = useState();
+  const groups = useContext(GroupsContext);
+  console.log('groups', groups);
 
   useEffect(() => {
     if (stockCodeInWatch) {
-      const allQuotes = Object.values(quotes).reduce((a, b) => a.concat(b), []);
+      const allQuotes = allQuotesSelector(groups);
       const stockInWatch = allQuotes.find(({ stockCode }) => stockCode === stockCodeInWatch);
       if (stockInWatch) {
-        document.title = `${stockInWatch.name.substr(0, 1)} ${stockInWatch.currentRatio.toFixed(2)}%`;
+        document.title = `${stockInWatch.name.substr(0, 1)} ${stockInWatch.current} (${stockInWatch.currentRatio.toFixed(2)}%)`;
       }
     }
   });
@@ -23,10 +26,10 @@ const Hq = ({ quotes }) => {
 
   return (
     <>
-      {Object.entries(quotes).map(([groupName, quotesInGroup]) => (
+      {groups && groups.map(({ groupName, groupQuotes }) => (
         <Card key={groupName} bordered={false}>
           <Quotes
-            quotes={quotesInGroup}
+            quotes={groupQuotes}
             groupName={groupName}
             onWatch={handleWatch}
             stockCodeInWatch={stockCodeInWatch}
@@ -35,14 +38,6 @@ const Hq = ({ quotes }) => {
       ))}
     </>
   );
-};
-
-Hq.propTypes = {
-  quotes: instanceOf(Object),
-};
-
-Hq.defaultProps = {
-  quotes: {},
 };
 
 export default Hq;

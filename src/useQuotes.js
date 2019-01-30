@@ -3,6 +3,7 @@ import { keyBy } from 'lodash-es';
 import { fetchCurrentQuotes, fetchHistoryQuote } from './apis';
 import { lastTradeDay } from './time';
 import { runDuringTradeTime } from './jobs/job';
+import { getBuyGap, getSellGap } from './gapService';
 
 function calcRatio(currentPrice, previousPrice) {
   return Math.round(((currentPrice / previousPrice) - 1) * 10000) / 100;
@@ -47,8 +48,18 @@ async function getQuotesInGroup(group = {
       };
     }),
   );
+
+  // calculate gaps
+  groupQuotes.forEach((quote) => {
+    Object.assign(quote, {
+      buyGap: getBuyGap(groupQuotes, quote),
+      sellGap: getSellGap(groupQuotes, quote),
+    });
+  });
+
   return groupQuotes;
 }
+
 
 export default (stockGroups = {}) => {
   const [quotes, setQuotes] = useState();
