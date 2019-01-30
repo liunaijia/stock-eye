@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { string } from 'prop-types';
 import { Provider } from 'react-redux';
 import { hot } from 'react-hot-loader';
@@ -12,43 +12,42 @@ import { Hq, LiteHq } from './components/hq';
 import GlobalStyle from './App.css';
 import SettingLoader from './SettingLoader';
 import QuoteFetcher from './components/QuoteFetcher';
+import useSettings from './useSettings';
+import useQuotes from './useQuotes';
 
 const { Content, Sider } = Layout;
 
-class App extends Component {
-  static propTypes = {
-    className: string,
-  };
+const App = ({ className }) => {
+  const stockGroups = useSettings();
+  const quotes = useQuotes(stockGroups);
+  console.log(quotes);
+  return (
+    <Provider store={store}>
+      <ErrorBoundary>
+        <GlobalStyle />
+        <SettingLoader />
+        <QuoteFetcher />
+        <Layout className={className}>
+          <Content>
+            <Hq />
+          </Content>
+          <Sider className="sider" width="auto">
+            <LiteHq />
+          </Sider>
+          <TradeSuggestion />
+        </Layout>
+      </ErrorBoundary>
+    </Provider>
+  );
+};
 
-  static defaultProps = {
-    className: null,
-  }
+App.propTypes = {
+  className: string,
+};
 
-  componentDidMount() {
-  }
-
-  render() {
-    const { className } = this.props;
-    return (
-      <Provider store={store}>
-        <ErrorBoundary>
-          <GlobalStyle />
-          <SettingLoader />
-          <QuoteFetcher />
-          <Layout className={className}>
-            <Content>
-              <Hq />
-            </Content>
-            <Sider className="sider" width="auto">
-              <LiteHq />
-            </Sider>
-            <TradeSuggestion />
-          </Layout>
-        </ErrorBoundary>
-      </Provider>
-    );
-  }
-}
+App.defaultProps = {
+  className: null,
+};
 
 export default hot(module)(styled(App)`
   .sider {
