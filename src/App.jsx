@@ -14,28 +14,32 @@ import SettingLoader from './SettingLoader';
 import QuoteFetcher from './components/QuoteFetcher';
 import useSettings from './useSettings';
 import useQuotes from './useQuotes';
+import { GroupsContext } from './contexts';
 
 const { Content, Sider } = Layout;
 
 const App = ({ className }) => {
   const stockGroups = useSettings();
   const quotes = useQuotes(stockGroups);
-  console.log(quotes);
+
+  // console.log(stockGroups, quotes);
   return (
     <Provider store={store}>
       <ErrorBoundary>
-        <GlobalStyle />
-        <SettingLoader />
-        <QuoteFetcher />
-        <Layout className={className}>
-          <Content>
-            <Hq />
-          </Content>
-          <Sider className="sider" width="auto">
-            <LiteHq />
-          </Sider>
-          <TradeSuggestion />
-        </Layout>
+        <GroupsContext.Provider value={quotes}>
+          <GlobalStyle />
+          <SettingLoader />
+          <QuoteFetcher />
+          <Layout className={className}>
+            <Content>
+              <Hq />
+            </Content>
+            <Sider className="sider" width="auto">
+              <LiteHq />
+            </Sider>
+            <TradeSuggestion />
+          </Layout>
+        </GroupsContext.Provider>
       </ErrorBoundary>
     </Provider>
   );

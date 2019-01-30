@@ -34,7 +34,8 @@ const Quotes = ({ className, quotes }) => (
           {item.currentRatio.toFixed(2)}
           %
         </Number>
-      </List.Item>)
+      </List.Item>
+    )
   }
   />
 );

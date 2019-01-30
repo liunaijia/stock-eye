@@ -60,12 +60,9 @@ export const getGroupedQuotes = createSelector(
   ),
 );
 
-export const getAllQuotes = createSelector(
-  getGroupedQuotes,
-  groupedQuotes => Object.values(groupedQuotes).reduce(
-    (result, quotesInGroup) => result.concat(quotesInGroup),
-    [],
-  ),
+export const allQuotesSelector = createSelector(
+  groups => groups,
+  (groups = []) => groups.reduce((result, group) => result.concat(group.groupQuotes), []),
 );
 
 export const getSuggestions = createSelector(
