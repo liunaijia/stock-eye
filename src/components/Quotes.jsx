@@ -15,6 +15,7 @@ const propTypes = {
   })),
   onWatch: func,
   stockCodeInWatch: string,
+  groupName: string,
 };
 
 const defaultProps = {
@@ -22,6 +23,7 @@ const defaultProps = {
   quotes: [],
   onWatch: undefined,
   stockCodeInWatch: undefined,
+  groupName: undefined,
 };
 
 const StockChange = ({ current, previous, ratio }) => {
@@ -31,7 +33,7 @@ const StockChange = ({ current, previous, ratio }) => {
 
 
 const Quotes = ({
-  className, quotes, onWatch, stockCodeInWatch,
+  className, groupName, quotes, onWatch, stockCodeInWatch,
 }) => {
   const renderWatchSwitch = record => (
     <Button
@@ -47,7 +49,7 @@ const Quotes = ({
     <table className={className}>
       <thead>
         <tr>
-          <th>股票</th>
+          <th>{groupName}</th>
           <th>现价</th>
           <th>今日涨跌</th>
           <th>参考价</th>
@@ -84,6 +86,7 @@ Quotes.defaultProps = defaultProps;
 
 export default styled(Quotes)`
   width: 100%;
+  caption-side: top;
 
   tr {
     border-bottom: solid 1px var(--border-color);

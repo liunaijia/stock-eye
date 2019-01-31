@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useContext } from 'react';
-import { Card } from 'antd';
 import Quotes from './Quotes';
 import { StoreContext } from '../contexts';
 import { allQuotesSelector } from '../services/selectors';
@@ -27,14 +26,12 @@ const Hq = () => {
   return (
     <>
       {store.quotes && store.quotes.map(({ groupName, groupQuotes }) => (
-        <Card key={groupName} bordered={false}>
-          <Quotes
-            quotes={groupQuotes}
-            groupName={groupName}
-            onWatch={handleWatch}
-            stockCodeInWatch={stockCodeInWatch}
-          />
-        </Card>
+        <Quotes
+          groupName={groupName}
+          quotes={groupQuotes}
+          onWatch={handleWatch}
+          stockCodeInWatch={stockCodeInWatch}
+        />
       ))}
     </>
   );
