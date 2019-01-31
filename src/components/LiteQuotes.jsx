@@ -37,13 +37,12 @@ export default styled(Quotes)`
   padding: 0;
 
   li {
-    padding: 4px 8px;
-    line-height: 2rem;
-    border-bottom: solid 1px #ddd;
+    padding: var(--size-1);
+    border-bottom: solid 1px var(--border-color);
 
     .title {
       color: #808080;
-      margin-right: 4px;
+      margin-right: var(--size-half);
     }
   }
 `;
