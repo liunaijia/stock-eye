@@ -1,5 +1,5 @@
 import React from 'react';
 
-const GroupsContext = React.createContext(null);
+const StoreContext = React.createContext(null);
 
-export { GroupsContext };
+export { StoreContext };

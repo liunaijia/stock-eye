@@ -10,26 +10,21 @@ import TradeSuggestion from './components/TradeSuggestion';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import GlobalStyle from './App.css';
-import SettingLoader from './SettingLoader';
-import QuoteFetcher from './components/QuoteFetcher';
 import useSettings from './useSettings';
 import useQuotes from './useQuotes';
-import { GroupsContext } from './contexts';
+import { StoreContext } from './contexts';
 
 const { Content, Sider } = Layout;
 
 const App = ({ className }) => {
-  const stockGroups = useSettings();
-  const quotes = useQuotes(stockGroups);
-
-  // console.log(stockGroups, quotes);
+  const groups = useSettings();
+  const quotes = useQuotes(groups);
+  // console.log('quotes', quotes);
   return (
     <Provider store={store}>
       <ErrorBoundary>
-        <GroupsContext.Provider value={quotes}>
+        <StoreContext.Provider value={{ groups, quotes }}>
           <GlobalStyle />
-          <SettingLoader />
-          <QuoteFetcher />
           <Layout className={className}>
             <Content>
               <Hq />
@@ -39,7 +34,7 @@ const App = ({ className }) => {
             </Sider>
             <TradeSuggestion />
           </Layout>
-        </GroupsContext.Provider>
+        </StoreContext.Provider>
       </ErrorBoundary>
     </Provider>
   );

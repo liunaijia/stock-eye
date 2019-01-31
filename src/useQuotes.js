@@ -60,7 +60,6 @@ async function getQuotesInGroup(group = {
   return groupQuotes;
 }
 
-
 export default (stockGroups = {}) => {
   const [quotes, setQuotes] = useState();
 
