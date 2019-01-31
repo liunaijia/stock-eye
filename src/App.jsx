@@ -7,8 +7,8 @@ import {
   Hq, LiteHq, TradeSuggestion, ErrorBoundary,
 } from './components';
 import GlobalStyle from './App.css';
-import useSettings from './useSettings';
-import useQuotes from './useQuotes';
+import useSettings from './services/useSettings';
+import useQuotes from './services/useQuotes';
 import { StoreContext } from './contexts';
 
 const { Content, Sider } = Layout;

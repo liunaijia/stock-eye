@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { keyBy } from 'lodash-es';
-import { fetchCurrentQuotes, fetchHistoryQuote } from './apis';
+import { fetchCurrentQuotes, fetchHistoryQuote } from '../apis';
 import { lastTradeDay } from './time';
-import { runDuringTradeTime } from './jobs/job';
+import { runDuringTradeTime } from '../jobs/job';
 import { getBuyGap, getSellGap } from './gapService';
 
 function calcRatio(currentPrice, previousPrice) {

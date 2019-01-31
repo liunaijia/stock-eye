@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { sendNotification } from '../notification';
-import { suggestionsSelector } from '../selectors';
+import { sendNotification } from '../services/notification';
+import { suggestionsSelector } from '../services/selectors';
 import { StoreContext } from '../contexts';
 
 const sendTradeSignal = ({

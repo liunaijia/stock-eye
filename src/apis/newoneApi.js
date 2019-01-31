@@ -2,7 +2,7 @@ import {
   MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER,
 } from '../secrets';
 import { readAsDataUrl, readAsDom, readAsText } from './responseHelper';
-import { sendNotification } from '../notification';
+import { sendNotification } from '../services/notification';
 
 const ROOT_URL = '/newone';
 

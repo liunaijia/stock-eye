@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { STOCK_GROUPS } from './settings';
+import { STOCK_GROUPS } from '../settings';
 
 export default () => {
   const [stockGroups, setStockGroups] = useState();
