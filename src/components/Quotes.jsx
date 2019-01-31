@@ -2,8 +2,8 @@ import React from 'react';
 import {
   string, number, arrayOf, shape, func,
 } from 'prop-types';
-import { Button } from 'antd';
 import styled from 'styled-components';
+import IconButton from './IconButton';
 import NumberRate from './NumberRate';
 
 const propTypes = {
@@ -36,13 +36,12 @@ const Quotes = ({
   className, groupName, quotes, onWatch, stockCodeInWatch,
 }) => {
   const renderWatchSwitch = record => (
-    <Button
-      icon="eye"
+    <IconButton
       type={record.stockCode === stockCodeInWatch ? 'primary' : 'default'}
-      shape="circle"
-      size="small"
       onClick={() => onWatch && onWatch({ target: { value: record.stockCode } })}
-    />
+    >
+      visibility
+    </IconButton>
   );
 
   return (
@@ -86,7 +85,7 @@ Quotes.defaultProps = defaultProps;
 
 export default styled(Quotes)`
   width: 100%;
-  caption-side: top;
+  border-collapse: collapse;
 
   tr {
     border-bottom: solid 1px var(--border-color);

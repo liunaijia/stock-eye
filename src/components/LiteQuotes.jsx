@@ -35,6 +35,7 @@ export default styled(Quotes)`
   opacity: 0.8;
   list-style: none;
   padding: 0;
+  margin: 0;
 
   li {
     padding: var(--size-1);

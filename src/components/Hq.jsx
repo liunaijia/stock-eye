@@ -23,18 +23,19 @@ const Hq = () => {
     setStockCodeInWatch(event.target.value);
   };
 
-  return (
-    <>
-      {store.quotes && store.quotes.map(({ groupName, groupQuotes }) => (
-        <Quotes
-          groupName={groupName}
-          quotes={groupQuotes}
-          onWatch={handleWatch}
-          stockCodeInWatch={stockCodeInWatch}
-        />
-      ))}
-    </>
-  );
+  if (!store.quotes) {
+    return null;
+  }
+
+  return store.quotes.map(({ groupName, groupQuotes }) => (
+    <Quotes
+      key={groupName}
+      groupName={groupName}
+      quotes={groupQuotes}
+      onWatch={handleWatch}
+      stockCodeInWatch={stockCodeInWatch}
+    />
+  ));
 };
 
 export default Hq;
