@@ -1,7 +1,7 @@
-import { func, arrayOf } from 'prop-types';
-import { connect } from 'react-redux';
+import { useContext } from 'react';
 import { sendNotification } from '../notification';
-import { getSuggestions } from '../models/selectors';
+import { suggestionsSelector } from '../models/selectors';
+import { StoreContext } from '../contexts';
 
 const sendTradeSignal = ({
   groupName = '', gap = 0, trade = '', stock = '', price = 0, additional = '',
@@ -11,7 +11,11 @@ const sendTradeSignal = ({
   sendNotification({ title, body });
 };
 
-const TradeSuggestion = ({ suggestions, children }) => {
+const TradeSuggestion = () => {
+  const store = useContext(StoreContext);
+  const suggestions = suggestionsSelector(store);
+  // console.log(suggestions);
+
   suggestions.forEach(({
     groupName, buyingGap, sellingGap, threshold,
   }) => {
@@ -38,21 +42,8 @@ const TradeSuggestion = ({ suggestions, children }) => {
     }
   });
 
-  return children ? children() : null;
+  return null;
 };
 
-TradeSuggestion.propTypes = {
-  suggestions: arrayOf(Object),
-  children: func,
-};
 
-TradeSuggestion.defaultProps = {
-  suggestions: [],
-  children: undefined,
-};
-
-const mapState = state => ({
-  suggestions: getSuggestions(state),
-});
-
-export default connect(mapState)(TradeSuggestion);
+export default TradeSuggestion;

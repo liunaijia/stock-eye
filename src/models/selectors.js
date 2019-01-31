@@ -1,86 +1,18 @@
 import { createSelector } from 'reselect';
-import { memoize } from 'lodash-es';
-import {
-  getBuyGap, getSellGap, calcBuyingGap, calcSellingGap,
-} from '../gapService';
-import store from '../store';
-
-function calcRatio(currentPrice, previousPrice) {
-  return Math.round(((currentPrice / previousPrice) - 1) * 10000) / 100;
-}
-
-const getQuotesInGroupSelector = createSelector(
-  store.select.currentQuotes.getBy,
-  store.select.historyQuotes.getBy,
-  (getCurrentQuote, getHistoryQuote) => memoize(
-    group => group.stocks.reduce((result, stockCode) => {
-      const stock = getCurrentQuote(stockCode);
-      // don't modify stock object as doing so changes data in store
-      if (stock) {
-        const historyQuote = getHistoryQuote(stock.stockCode, group.lookBackDays);
-        if (historyQuote) {
-          const currentRatio = calcRatio(stock.current, stock.closeAt);
-          const baseAt = historyQuote.closeAt;
-          const baseRatio = calcRatio(stock.current, baseAt);
-          // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价
-          const buyingRatio = calcRatio(stock.buyingAt, baseAt);
-          const sellingRatio = calcRatio(stock.sellingAt, baseAt);
-
-          result.push({
-            ...stock,
-            currentRatio,
-            baseAt,
-            baseRatio,
-            buyingRatio,
-            sellingRatio,
-          });
-        }
-      }
-
-      return result;
-    }, []),
-  ),
-);
-
-export const getGroupedQuotes = createSelector(
-  store.select.groups.self,
-  getQuotesInGroupSelector,
-  (groups, getQuotesInGroup) => Object.entries(groups).reduce(
-    (result, [groupName, group]) => {
-      const quotes = getQuotesInGroup(group);
-      // calculate gaps
-      const quotesWithGaps = quotes.map(quote => ({
-        ...quote,
-        buyGap: getBuyGap(quotes, quote),
-        sellGap: getSellGap(quotes, quote),
-      }));
-      return { ...result, [groupName]: quotesWithGaps };
-    },
-    {},
-  ),
-);
+import { calcBuyingGap, calcSellingGap } from '../gapService';
 
 export const allQuotesSelector = createSelector(
-  groups => groups,
-  (groups = []) => groups.reduce((result, group) => result.concat(group.groupQuotes), []),
+  store => store.quotes,
+  (quotes = []) => quotes.reduce((result, group) => result.concat(group.groupQuotes), []),
 );
 
-export const getSuggestions = createSelector(
-  store.select.groups.self,
-  getGroupedQuotes,
-  (groups, groupedQuotes) => Object.entries(groupedQuotes).reduce(
-    (result, [groupName, quotesInGroup]) => {
-      if (quotesInGroup.length) {
-        const suggestion = {
-          groupName,
-          buyingGap: calcBuyingGap(quotesInGroup),
-          sellingGap: calcSellingGap(quotesInGroup),
-          threshold: groups[groupName].threshold,
-        };
-        result.push(suggestion);
-      }
-      return result;
-    },
-    [],
-  ),
+export const suggestionsSelector = createSelector(
+  store => store.groups,
+  store => store.quotes,
+  (groups, quotes = []) => quotes.map(group => ({
+    groupName: group.groupName,
+    buyingGap: calcBuyingGap(group.groupQuotes),
+    sellingGap: calcSellingGap(group.groupQuotes),
+    threshold: groups[group.groupName].threshold,
+  })),
 );
