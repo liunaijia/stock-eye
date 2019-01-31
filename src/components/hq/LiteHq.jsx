@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import LiteQuotes from './LiteQuotes';
 import { StoreContext } from '../../contexts';
-import { allQuotesSelector } from '../../models/selectors';
+import { allQuotesSelector } from '../../selectors';
 
 const LiteHq = () => {
   const store = useContext(StoreContext);

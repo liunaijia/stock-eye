@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { calcBuyingGap, calcSellingGap } from '../gapService';
+import { calcBuyingGap, calcSellingGap } from './gapService';
 
 export const allQuotesSelector = createSelector(
   store => store.quotes,

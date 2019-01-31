@@ -1,12 +1,9 @@
 import React from 'react';
 import { string } from 'prop-types';
-import { Provider } from 'react-redux';
 import { hot } from 'react-hot-loader';
 import { Layout } from 'antd';
 import styled from 'styled-components';
-import store from './store';
 import TradeSuggestion from './components/TradeSuggestion';
-
 import ErrorBoundary from './components/ErrorBoundary';
 import { Hq, LiteHq } from './components/hq';
 import GlobalStyle from './App.css';
@@ -21,22 +18,20 @@ const App = ({ className }) => {
   const quotes = useQuotes(groups);
   // console.log('quotes', quotes);
   return (
-    <Provider store={store}>
-      <ErrorBoundary>
-        <StoreContext.Provider value={{ groups, quotes }}>
-          <GlobalStyle />
-          <Layout className={className}>
-            <Content>
-              <Hq />
-            </Content>
-            <Sider className="sider" width="auto">
-              <LiteHq />
-            </Sider>
-            <TradeSuggestion />
-          </Layout>
-        </StoreContext.Provider>
-      </ErrorBoundary>
-    </Provider>
+    <ErrorBoundary>
+      <StoreContext.Provider value={{ groups, quotes }}>
+        <GlobalStyle />
+        <Layout className={className}>
+          <Content>
+            <Hq />
+          </Content>
+          <Sider className="sider" width="auto">
+            <LiteHq />
+          </Sider>
+          <TradeSuggestion />
+        </Layout>
+      </StoreContext.Provider>
+    </ErrorBoundary>
   );
 };
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Card } from 'antd';
 import Quotes from './Quotes';
 import { StoreContext } from '../../contexts';
-import { allQuotesSelector } from '../../models/selectors';
+import { allQuotesSelector } from '../../selectors';
 
 const Hq = () => {
   const [stockCodeInWatch, setStockCodeInWatch] = useState();
