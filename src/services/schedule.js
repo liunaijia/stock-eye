@@ -1,7 +1,6 @@
-import { isTradeTime, sleep } from '../services/time';
-import { sendNotification } from '../services/notification';
+import { isTradeTime, sleep } from './time';
+import { sendNotification } from './notification';
 
-// eslint-disable-next-line import/prefer-default-export
 export const runDuringTradeTime = ({ interval = 1, runOnStartUp = true }) => {
   let hasStarted = false;
   let cancelled = false;

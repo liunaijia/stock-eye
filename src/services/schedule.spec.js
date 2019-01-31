@@ -1,3 +1,4 @@
+
 /* eslint-disable global-require */
 describe('runDuringTradeTime', () => {
   let funcToRun;
@@ -8,7 +9,7 @@ describe('runDuringTradeTime', () => {
   });
 
   function setIsTradeTime(mockValue) {
-    jest.doMock('../time', () => ({
+    jest.doMock('./time', () => ({
       isTradeTime: jest.fn().mockReturnValue(mockValue),
       sleep: jest.fn().mockReturnValue(new Promise(() => {})),
     }));
@@ -17,7 +18,7 @@ describe('runDuringTradeTime', () => {
   it('calls function to run when it is trade time', () => {
     setIsTradeTime(true);
 
-    const job = require('./job');
+    const job = require('./schedule');
     job.runDuringTradeTime({ interval: 3, runOnStartUp: false })(funcToRun);
 
     expect(funcToRun).toHaveBeenCalled();
@@ -26,7 +27,7 @@ describe('runDuringTradeTime', () => {
   it('does not call function to run when it is not trade time', () => {
     setIsTradeTime(false);
 
-    const job = require('./job');
+    const job = require('./schedule');
     job.runDuringTradeTime({ interval: 3, runOnStartUp: false })(funcToRun);
 
     expect(funcToRun).not.toHaveBeenCalled();
@@ -35,7 +36,7 @@ describe('runDuringTradeTime', () => {
   it('calls function to run when run on start up is enabled even it is not trade time', () => {
     setIsTradeTime(false);
 
-    const job = require('./job');
+    const job = require('./schedule');
     job.runDuringTradeTime({ interval: 3, runOnStartUp: true })(funcToRun);
 
     expect(funcToRun).toHaveBeenCalled();
@@ -44,10 +45,10 @@ describe('runDuringTradeTime', () => {
   it('sleeps with given intervals', () => {
     setIsTradeTime(false);
 
-    const job = require('./job');
+    const job = require('./schedule');
     job.runDuringTradeTime({ interval: 3, runOnStartUp: false })(funcToRun);
 
-    const { sleep } = require('../time');
+    const { sleep } = require('./time');
     expect(sleep).toHaveBeenCalledWith(3);
   });
 });
