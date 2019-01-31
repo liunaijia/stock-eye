@@ -42,6 +42,7 @@ App.defaultProps = {
 
 export default hot(module)(styled(App)`
   display: flex;
+  min-height: 100vh;
 
   article {
     flex: 1;
