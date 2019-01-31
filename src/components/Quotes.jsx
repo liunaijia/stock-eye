@@ -4,7 +4,7 @@ import {
 } from 'prop-types';
 import { Table, Button } from 'antd';
 import styled from 'styled-components';
-import NumberRate from '../NumberRate';
+import NumberRate from './NumberRate';
 
 const { Column } = Table;
 

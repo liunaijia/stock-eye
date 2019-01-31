@@ -4,7 +4,7 @@ import {
 } from 'prop-types';
 import { List } from 'antd';
 import styled from 'styled-components';
-import Number from '../Number';
+import Number from './Number';
 
 const propTypes = {
   className: string,

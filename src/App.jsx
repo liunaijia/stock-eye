@@ -3,9 +3,9 @@ import { string } from 'prop-types';
 import { hot } from 'react-hot-loader';
 import { Layout } from 'antd';
 import styled from 'styled-components';
-import TradeSuggestion from './components/TradeSuggestion';
-import ErrorBoundary from './components/ErrorBoundary';
-import { Hq, LiteHq } from './components/hq';
+import {
+  Hq, LiteHq, TradeSuggestion, ErrorBoundary,
+} from './components';
 import GlobalStyle from './App.css';
 import useSettings from './useSettings';
 import useQuotes from './useQuotes';
