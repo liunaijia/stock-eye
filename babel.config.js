@@ -14,14 +14,6 @@ module.exports = (api) => {
       '@babel/preset-react',
     ],
     plugins: [
-      [
-        'import',
-        {
-          libraryName: 'antd',
-          libraryDirectory: 'es',
-          style: 'css',
-        },
-      ],
       ['react-hot-loader/babel'],
       // Stage 0
       '@babel/plugin-proposal-function-bind',
