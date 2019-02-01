@@ -16,7 +16,7 @@ export default createGlobalStyle`
     --size-3: calc(var(--size-1) * 3);
   }
 
-  body {
+  * {
     font-size: 14px;
     font-family: "Helvetica Neue";
     color: rgba(0,0,0,0.65);
