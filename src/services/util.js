@@ -7,3 +7,5 @@ export const classNames = (...args) => {
 
   throw Error('Unimplemented yet');
 };
+
+export const keyBy = (array, key) => array.reduce((all, item) => Object.assign(all, { [item[key]]: item }), {});

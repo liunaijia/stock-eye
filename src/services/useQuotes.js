@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { keyBy } from 'lodash-es';
+import { keyBy } from './util';
 import { fetchCurrentQuotes, fetchHistoryQuote } from '../apis';
 import { lastTradeDay } from './time';
 import { runDuringTradeTime } from './schedule';

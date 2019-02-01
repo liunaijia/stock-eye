@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // const DashboardPlugin = require('webpack-dashboard/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -84,6 +85,8 @@ const config = {
 
     // enable hot module replacement
     new webpack.HotModuleReplacementPlugin(),
+
+    // new BundleAnalyzerPlugin(),
   ],
 };
 
