@@ -16,7 +16,7 @@
   "dependencies": {
     "iconv-lite": "^0.4.24",
     "prop-types": "^15.6.2",
-    "re-reselect": "^2.3.0",
+    "re-reselect": "^3.0.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-hot-loader": "^4.6.5",
