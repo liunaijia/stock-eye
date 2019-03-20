@@ -2,7 +2,6 @@ import {
   MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER,
 } from '../secrets';
 import { readAsDataUrl, readAsDom, readAsText } from './responseHelper';
-import { sendNotification } from '../services/notification';
 
 const ROOT_URL = '/newone';
 
@@ -79,10 +78,7 @@ const login = async () => {
   const formData = await loadLoginForm();
 
   const captchaImage = await loadCaptcha();
-  sendNotification({
-    title: '验证码',
-    icon: captchaImage,
-  });
+  new Notification('验证码', { icon: captchaImage }); // eslint-disable-line no-new
 
   let captcha = 2;
   while (captcha <= 20) {

@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { sendNotification } from '../services/notification';
 import { suggestionsSelector } from '../services/selectors';
 import { StoreContext } from '../contexts';
 
@@ -8,7 +7,7 @@ const sendTradeSignal = ({
 }) => {
   const title = `${groupName}组合价差${gap}%`;
   const body = `${trade} ${stock} ${price} ${additional}`;
-  sendNotification({ title, body });
+  new Notification(title, { body }); // eslint-disable-line no-new
 };
 
 const TradeSuggestion = () => {
