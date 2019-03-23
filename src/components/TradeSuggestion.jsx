@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { suggestionsSelector } from '../services/selectors';
 import { StoreContext } from '../contexts';
 
@@ -44,5 +44,13 @@ const TradeSuggestion = () => {
   return null;
 };
 
+const WithContext = () => {
+  const { alarm } = useContext(StoreContext);
+  if (alarm.status === 'on') {
+    return (<TradeSuggestion />);
+  }
 
-export default TradeSuggestion;
+  return null;
+};
+
+export default WithContext;

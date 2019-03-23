@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { string } from 'prop-types';
 import { hot } from 'react-hot-loader';
 import styled from 'styled-components';
@@ -8,31 +8,23 @@ import {
 import GlobalStyle from './App.css';
 import { ContextProvider } from './contexts';
 
-const App = ({ className }) => {
-  const [alarmStatus, setAlarmStatus] = useState('on');
-
-  const handleAlarmControlChange = (e) => {
-    setAlarmStatus(e.target.value);
-  };
-
-  return (
-    <ErrorBoundary>
-      <ContextProvider>
-        <GlobalStyle />
-        <main className={className}>
-          <article>
-            <AlarmControl status={alarmStatus} onChange={handleAlarmControlChange} />
-            <Hq />
-          </article>
-          <aside>
-            <LiteHq />
-          </aside>
-          {alarmStatus === 'on' && <TradeSuggestion />}
-        </main>
-      </ContextProvider>
-    </ErrorBoundary>
-  );
-};
+const App = ({ className }) => (
+  <ErrorBoundary>
+    <ContextProvider>
+      <GlobalStyle />
+      <main className={className}>
+        <article>
+          <AlarmControl />
+          <Hq />
+        </article>
+        <aside>
+          <LiteHq />
+        </aside>
+        <TradeSuggestion />
+      </main>
+    </ContextProvider>
+  </ErrorBoundary>
+);
 
 App.propTypes = {
   className: string,
