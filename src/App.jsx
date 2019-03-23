@@ -6,16 +6,9 @@ import {
   Hq, LiteHq, TradeSuggestion, ErrorBoundary, AlarmControl,
 } from './components';
 import GlobalStyle from './App.css';
-import useSettings from './services/useSettings';
-import useQuotes from './services/useQuotes';
-import { StoreContext } from './contexts';
-
+import { ContextProvider } from './contexts';
 
 const App = ({ className }) => {
-  const groups = useSettings();
-  const quotes = useQuotes(groups);
-  // console.log('quotes', quotes);
-
   const [alarmStatus, setAlarmStatus] = useState('on');
 
   const handleAlarmControlChange = (e) => {
@@ -24,7 +17,7 @@ const App = ({ className }) => {
 
   return (
     <ErrorBoundary>
-      <StoreContext.Provider value={{ groups, quotes }}>
+      <ContextProvider>
         <GlobalStyle />
         <main className={className}>
           <article>
@@ -36,7 +29,7 @@ const App = ({ className }) => {
           </aside>
           {alarmStatus === 'on' && <TradeSuggestion />}
         </main>
-      </StoreContext.Provider>
+      </ContextProvider>
     </ErrorBoundary>
   );
 };
