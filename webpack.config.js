@@ -30,6 +30,7 @@ const config = {
       },
     },
   },
+  entry: './src/website',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
@@ -71,7 +72,7 @@ const config = {
     //   gzip: false,
     // }),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './src/website/index.html',
     }),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: 'vendor',

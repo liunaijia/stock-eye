@@ -1,20 +1,7 @@
 module.exports = (api) => {
   api.cache(true);
   return {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: {
-            browsers: 'last 2 Chrome versions',
-          },
-          modules: false,
-        },
-      ],
-      '@babel/preset-react',
-    ],
     plugins: [
-      ['react-hot-loader/babel'],
       // Stage 0
       '@babel/plugin-proposal-function-bind',
 
@@ -46,5 +33,9 @@ module.exports = (api) => {
         ],
       },
     },
+    babelrcRoots: [
+      '.',
+      './src/*',
+    ],
   };
 };
