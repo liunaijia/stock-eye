@@ -1,3 +1,6 @@
 module.exports = {
-  setupFiles: ['<rootDir>/testShim.js', '<rootDir>/testSetup.js'],
+  setupFiles: [
+    '<rootDir>/src/testShim.js',
+    '<rootDir>/src/testSetup.js',
+  ],
 };
