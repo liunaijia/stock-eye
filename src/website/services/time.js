@@ -17,6 +17,7 @@ const publicHolidays = [
   '2019-2-6',
   '2019-2-7',
   '2019-2-8',
+  '2019-4-5',
 ].map(day => new Date(day));
 
 const isTradeDay = (time) => {
