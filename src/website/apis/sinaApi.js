@@ -35,7 +35,7 @@ const parse = (text = '') => text
       sellingAt: getValueFrom(rawValues, 7), // 竞卖价，即“卖一“报价
       buyingBids: collapseArray(getValuesFrom(rawValues, 10, 10)),
       sellingBids: collapseArray(getValuesFrom(rawValues, 20, 10)),
-      timestamp: new Date(`${rawValues[30]} ${rawValues[31]}`),
+      timestamp: new Date(`${rawValues[30]} ${rawValues[31]}`).toISOString(),
     };
     return stock;
   });
