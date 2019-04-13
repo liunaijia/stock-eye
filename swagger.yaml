@@ -1,0 +1,84 @@
+openapi: 3.0.2
+info:
+  title: StockEye API
+  version: 0.1.0
+
+paths:
+  /current_quotes:
+    get:
+      summary: Returns current quotes of given stock codes
+      parameters:
+        - name: stockCodes
+          description: An array of stock codes
+          in: path
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+            minItems: 1
+      responses: # https://swagger.io/docs/specification/describing-responses/
+        '200':
+          description: Current quotes
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentQuotes'
+      x-amazon-apigateway-integration:
+        # Integrate API to a function
+        type: aws
+        httpMethod: POST
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FetchCurrentQuotesFunction.Arn}/invocations
+        # Enable CORS, it also requires `Access-Control-Allow-Origin` defined in above `responses` section
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+
+components:
+  schemas:
+    CurrentQuotes:
+      type: array
+      items:
+        type: object
+        properties:
+          stockCode:
+            type: string
+            description: Stock code.
+          name:
+            type: string
+            description: Stock name.
+          openAt:
+            type: number
+          closeAt:
+            type: number
+          current:
+            type: number
+          buyingAt:
+            type: number
+          sellingAt:
+            type: number
+          buyingBids:
+            $ref: '#/components/schemas/Bids'
+          sellingBids:
+            $ref: '#/components/schemas/Bids'
+          timestamp:
+            type: string
+            format: date-time
+    Bids:
+      type: array
+      items:
+        type: object
+        minItems: 5
+        maxItems: 5
+        properties:
+          price:
+            type: number
+          amount:
+            type: integer

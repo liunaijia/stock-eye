@@ -1,0 +1,66 @@
+# The AWS::Serverless transform, which is a macro hosted by AWS CloudFormation, takes an entire template written in the AWS Serverless Application Model (AWS SAM) syntax and transforms and expands it into a compliant AWS CloudFormation template.
+# https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md
+Transform: AWS::Serverless-2016-10-31
+
+# Globals is a section in your SAM template to define properties common to all your Serverless Function and APIs. All the AWS::Serverless::Function and AWS::Serverless::Api resources will inherit the properties defined here.
+Globals:
+  Function:
+    Runtime: nodejs8.10
+    Handler: index.handler # export handler from index.js file
+    # user default here?
+
+# The required Resources section declares the AWS resources that you want to include in the stack, such as an Amazon EC2 instance or an Amazon S3 bucket.
+Resources:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+  StockEyeApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      # SAM also creates a Stage with 'Stage' automatically and it maybe a bug of SAM.
+      # https://github.com/awslabs/serverless-application-model/issues/191
+      StageName: prod
+      EndpointConfiguration: REGIONAL
+      # It would be `DefinitionUri: swagger.yaml`, and SAM will upload the file to s3 with `sam package` command. But
+      # Swagger templates don't get transformed when using DefinitionUri. Using DefinitionBody is a work around raised
+      # from https://github.com/awslabs/serverless-application-model/issues/305#issuecomment-375297669
+      DefinitionBody:
+        'Fn::Transform':
+            Name: 'AWS::Include'
+            Parameters:
+              Location: swagger.yaml
+      # Enable CORS in SAM won't work, because it requires SAM to modify Swagger definition. Hence it works only inline
+      # swagger defined with DefinitionBody. However enabling CORS could be achieved by defining `x-amazon-apigateway-integration`
+      # in Swagger templates.
+      # Cors:
+      #   AllowOrigin: '*'
+
+  FetchCurrentQuotesFunction: # Use the logical name to reference the resource in other parts of the template.
+    # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/functions/fetchCurrentQuotes
+      Events:
+        Get: # API name
+          # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
+          Properties:
+            # RestApiId is optional. If not defined, a default AWS::Serverless::Api resource is created using a
+            # generated Swagger document contains a union of all paths and methods defined by Api events defined in this
+            # template that do not specify a RestApiId. When defined, the API resource must contain an operation with
+            # the given path and method.
+            RestApiId: !Ref StockEyeApi
+            Path: /current_quotes
+            Method: get
+
+# The optional Outputs section declares output values that you can import into other stacks (to create cross-stack references), return in response (to describe stack calls), or view on the AWS CloudFormation console. For example, you can output the S3 bucket name for a stack to make the bucket easier to find.
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  FetchCurrentQuotesApi:
+    Value: !Sub "https://${StockEyeApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  FetchCurrentQuotesFunction:
+    Description: "FetchCurrentQuotes function ARN"
+    Value: !GetAtt FetchCurrentQuotesFunction.Arn
+  FetchCurrentQuotesFunctionIamRole:
+    Description: "IAM role of FetchCurrentQuotes function"
+    Value: !GetAtt FetchCurrentQuotesFunctionRole.Arn
