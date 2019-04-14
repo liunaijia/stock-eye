@@ -8,14 +8,29 @@
     "lint:js": "eslint --ext .js --ext .jsx src",
     "lint:ts": "tslint src/**/*.ts",
     "test": "jest",
-    "build": "npx webpack --mode production",
-    "start": "webpack-dev-server --mode development"
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development",
+
+    "dev:api:babel": "babel ./src/functions/ -d ./.aws-sam/build --verbose",
+    "dev:api:sam": "sam local start-api",
+    "dev:api": "run-p dev:api:*",
+
+    "deploy:api": "run-s deploy:api:clean-build deploy:api:build deploy:api:upload-package deploy:api:deploy-stack",
+    "//": "Step 1: Use ./aws-sam as output folder",
+    "deploy:api:clean-build": "rm -rf ./.aws-sam",
+    "//": "Step 2: Transpile source code to .aws-sam/build folder",
+    "deploy:api:build": "babel ./src/functions/ -d ./.aws-sam/build",
+    "//": "Step 3: Build SAM template file .aws-sam/template.yaml and upload package to s3://stockeye/packages",
+    "deploy:api:upload-package": "sam package --output-template-file ./.aws-sam/template.yaml --s3-bucket stockeye --s3-prefix packages",
+    "//": "Step 4: Deploy stack",
+    "deploy:api:deploy-stack": "sam deploy --template-file ./.aws-sam/template.yaml --stack-name stockeye --capabilities CAPABILITY_IAM"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "iconv-lite": "^0.4.24",
+    "npm-run-all": "^4.1.5",
     "prop-types": "^15.7.2",
     "re-reselect": "^3.0.0",
     "react": "^16.8.6",

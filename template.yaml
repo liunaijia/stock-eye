@@ -38,7 +38,7 @@ Resources:
     # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: dist/functions/fetchCurrentQuotes
+      CodeUri: .aws-sam/build/fetchCurrentQuotes
       Events:
         Get: # API name
           # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api

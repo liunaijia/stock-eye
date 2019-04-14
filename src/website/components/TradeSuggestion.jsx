@@ -15,7 +15,7 @@ const TradeSuggestion = () => {
   const suggestions = suggestionsSelector(store);
   // console.log(suggestions);
 
-  suggestions.forEach(({
+  suggestions.filter(({ groupName }) => groupName === '深银').forEach(({
     groupName, buyingGap, sellingGap, threshold,
   }) => {
     if (buyingGap && buyingGap.value >= threshold) {
