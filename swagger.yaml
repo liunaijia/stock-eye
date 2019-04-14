@@ -4,13 +4,13 @@ info:
   version: 0.1.0
 
 paths:
-  /current_quotes/{stockCodes}:
+  /current_quotes:
     get:
       summary: Returns current quotes of given stock codes
       parameters:
         - name: stockCodes
-          description: An array of stock codes
-          in: path
+          description: An array of stock codes. Amazon API Gateway does not support nested query parameters, its value must be a string of comma-separated items.
+          in: query
           required: true
           schema:
             type: array

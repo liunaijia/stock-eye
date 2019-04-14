@@ -7,6 +7,7 @@ Globals:
   Function:
     Runtime: nodejs8.10
     Handler: index.handler # export handler from index.js file
+    # Timeout: 5
     # user default here?
 
 # The required Resources section declares the AWS resources that you want to include in the stack, such as an Amazon EC2 instance or an Amazon S3 bucket.
@@ -23,8 +24,8 @@ Resources:
       # Swagger templates don't get transformed when using DefinitionUri. Using DefinitionBody is a work around raised
       # from https://github.com/awslabs/serverless-application-model/issues/305#issuecomment-375297669
       DefinitionBody:
-        'Fn::Transform':
-            Name: 'AWS::Include'
+        Fn::Transform:
+            Name: AWS::Include
             Parameters:
               Location: swagger.yaml
       # Enable CORS in SAM won't work, because it requires SAM to modify Swagger definition. Hence it works only inline
