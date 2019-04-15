@@ -11,7 +11,7 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development",
 
-    "dev:api:babel": "babel ./src/functions/ -d ./.aws-sam/build --verbose",
+    "dev:api:babel": "babel ./src/functions/ -d ./.aws-sam/build -w --verbose",
     "dev:api:sam": "sam local start-api",
     "dev:api": "run-p dev:api:*",
 
