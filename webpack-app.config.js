@@ -1,6 +1,7 @@
 const path = require('path');
 
 const config = {
+  target: 'node',
   devtool: 'none',
   entry: {
     fetchCurrentQuotes: './src/functions/fetchCurrentQuotes',
@@ -13,10 +14,6 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.ts'],
-  },
-  externals: {
-    http: 'http',
-    https: 'https',
   },
   module: {
     rules: [
