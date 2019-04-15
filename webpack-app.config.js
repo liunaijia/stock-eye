@@ -1,4 +1,7 @@
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const ENABLE_BUNDLE_ANALYZER = process.env.ANALYZE;
 
 const config = {
   target: 'node',
@@ -34,6 +37,12 @@ const config = {
       },
     ],
   },
+  plugins: [
+    // Webpack bundle analyzer represents webpack bundle content that helps optimization
+    new BundleAnalyzerPlugin({
+      analyzerMode: ENABLE_BUNDLE_ANALYZER ? 'server' : 'disabled',
+    }),
+  ],
 };
 
 module.exports = config;
