@@ -20,26 +20,16 @@ paths:
       responses: # https://swagger.io/docs/specification/describing-responses/
         '200':
           description: Current quotes
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CurrentQuotes'
       x-amazon-apigateway-integration:
         # Integrate API to a function
-        type: aws_proxy
+        type: aws_proxy # aws_proxy will make API Gateway pass raw request to the integrated Lambda function
         httpMethod: POST
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FetchCurrentQuotesFunction.Arn}/invocations
-        # Enable CORS, it also requires `Access-Control-Allow-Origin` defined in above `responses` section
-        responses:
-          default:
-            statusCode: 200
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
 
 components:
   schemas:

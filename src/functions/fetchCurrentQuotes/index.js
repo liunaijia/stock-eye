@@ -60,6 +60,9 @@ export const handler = async (event, context, callback) => {
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(result),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
   } catch (error) {
     console.error(error);
@@ -69,6 +72,9 @@ export const handler = async (event, context, callback) => {
         Error: error.message || error,
         Reference: context.awsRequestId,
       }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
   }
 };
