@@ -1,13 +1,4 @@
-import https from 'https';
-import { readAsText } from './responseHelper';
-
-const get = (...args) => new Promise((resolve, reject) => {
-  https.get(...args, (response) => {
-    const chunks = [];
-    response.on('data', chunk => chunks.push(chunk));
-    response.on('end', () => resolve({ ...response, data: chunks.join('') }));
-  }).on('error', reject);
-});
+import { get } from './httpHelper';
 
 const getValueFrom = (array = [], index = 0) => parseFloat(array[index]);
 
@@ -54,8 +45,7 @@ export const handler = async (event, context, callback) => {
   try {
     const { stockCodes } = event.queryStringParameters;
     const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
-    const content = readAsText(response);
-    const result = parse(content);
+    const result = parse(response.body);
 
     callback(null, {
       statusCode: 200,
