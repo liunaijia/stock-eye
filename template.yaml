@@ -28,11 +28,6 @@ Resources:
             Name: AWS::Include
             Parameters:
               Location: swagger.yaml
-      # Enable CORS in SAM won't work, because it requires SAM to modify Swagger definition. Hence it works only inline
-      # swagger defined with DefinitionBody. However enabling CORS could be achieved by defining `x-amazon-apigateway-integration`
-      # in Swagger templates.
-      # Cors:
-      #   AllowOrigin: '*'
 
   FetchCurrentQuotesFunction: # Use the logical name to reference the resource in other parts of the template.
     # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -52,17 +47,3 @@ Resources:
             RestApiId: !Ref StockEyeApi
             Path: /current_quotes
             Method: get
-
-# The optional Outputs section declares output values that you can import into other stacks (to create cross-stack references), return in response (to describe stack calls), or view on the AWS CloudFormation console. For example, you can output the S3 bucket name for a stack to make the bucket easier to find.
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  FetchCurrentQuotesApi:
-    Value: !Sub "https://${StockEyeApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  FetchCurrentQuotesFunction:
-    Description: "FetchCurrentQuotes function ARN"
-    Value: !GetAtt FetchCurrentQuotesFunction.Arn
-  FetchCurrentQuotesFunctionIamRole:
-    Description: "IAM role of FetchCurrentQuotes function"
-    Value: !GetAtt FetchCurrentQuotesFunctionRole.Arn
