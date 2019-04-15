@@ -41,7 +41,7 @@ const parse = (text = '') => text
   });
 
 
-export const handler = async (event, context, callback) => {
+export default async (event, context, callback) => {
   try {
     const { stockCodes } = event.queryStringParameters;
     const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);

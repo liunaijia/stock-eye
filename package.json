@@ -10,19 +10,17 @@
     "test": "jest",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development",
-
     "dev:api:watch": "webpack --config webpack-app.config.js --mode development --watch",
     "dev:api:sam": "sam local start-api",
     "dev:api": "run-p dev:api:*",
-
     "deploy:api": "run-s deploy:api:clean-build deploy:api:build deploy:api:upload-package deploy:api:deploy-stack",
-    "//": "Step 1: Use ./aws-sam as output folder",
+    "//s1": "Step 1: Use ./aws-sam as output folder",
     "deploy:api:clean-build": "rm -rf ./.aws-sam",
-    "//": "Step 2: Bundle source code to .aws-sam/build folder",
+    "//s2": "Step 2: Bundle source code to .aws-sam/build folder",
     "deploy:api:build": "webpack --config webpack-app.config.js --mode production",
-    "//": "Step 3: Build SAM template file .aws-sam/template.yaml and upload package to s3://stockeye/packages",
+    "//s3": "Step 3: Build SAM template file .aws-sam/template.yaml and upload package to s3://stockeye/packages",
     "deploy:api:upload-package": "sam package --output-template-file ./.aws-sam/template.yaml --s3-bucket stockeye --s3-prefix packages",
-    "//": "Step 4: Deploy stack",
+    "//s4": "Step 4: Deploy stack",
     "deploy:api:deploy-stack": "sam deploy --template-file ./.aws-sam/template.yaml --stack-name stockeye --capabilities CAPABILITY_IAM"
   },
   "keywords": [],

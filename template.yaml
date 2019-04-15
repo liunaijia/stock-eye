@@ -6,7 +6,7 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     Runtime: nodejs8.10
-    Handler: index.handler # export handler from index.js file
+    Handler: index.default # export handler function as default from index.js file
     # Timeout: 5
     # user default here?
 
@@ -38,6 +38,7 @@ Resources:
     # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Type: AWS::Serverless::Function
     Properties:
+      # CodeUri only supports either a zip/jar file or a folder, and the compressed file needs to contain a folder in it
       CodeUri: .aws-sam/build/fetchCurrentQuotes
       Events:
         Get: # API name
