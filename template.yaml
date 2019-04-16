@@ -35,6 +35,8 @@ Resources:
     Properties:
       # CodeUri only supports either a zip/jar file or a folder, and the compressed file needs to contain a folder in it
       CodeUri: .aws-sam/build/fetchCurrentQuotes
+      # Layers:
+      #   - !Ref ApiDependencies
       Events:
         Get: # API name
           # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -47,3 +49,10 @@ Resources:
             RestApiId: !Ref StockEyeApi
             Path: /current_quotes
             Method: get
+
+  # ApiDependencies:
+  #   Type: AWS::Serverless::LayerVersion
+  #   Properties:
+  #     Description: Dependencies for API
+  #     ContentUri: .aws-sam/build/vendors
+  #     RetentionPolicy: Delete
