@@ -8,6 +8,7 @@ const config = {
   devtool: 'none',
   entry: {
     fetchCurrentQuotes: './src/functions/fetchCurrentQuotes',
+    fetchHistoryQuotes: './src/functions/fetchHistoryQuotes',
   },
   output: {
     path: path.resolve(__dirname, '.aws-sam/build'),

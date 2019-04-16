@@ -31,6 +31,34 @@ paths:
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FetchCurrentQuotesFunction.Arn}/invocations
 
+  /history_quotes:
+    get:
+      summary: Returns history quotes of given stock code
+      parameters:
+        - name: stockCode
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: History quote
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryQuote'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FetchHistoryQuotesFunction.Arn}/invocations
+
 components:
   schemas:
     CurrentQuotes:
@@ -72,3 +100,17 @@ components:
             type: number
           amount:
             type: integer
+    HistoryQuote:
+      type: object
+      properties:
+        stockCode:
+          type: string
+          description: Stock code.
+        openAt:
+          type: number
+        closeAt:
+          type: number
+        lowestAt:
+          type: number
+        highestAt:
+          type: number

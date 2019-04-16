@@ -7,7 +7,7 @@ Globals:
   Function:
     Runtime: nodejs8.10
     Handler: index.default # export handler function as default from index.js file
-    # Timeout: 5
+    Timeout: 10
     # user default here?
 
 # The required Resources section declares the AWS resources that you want to include in the stack, such as an Amazon EC2 instance or an Amazon S3 bucket.
@@ -48,6 +48,18 @@ Resources:
             # the given path and method.
             RestApiId: !Ref StockEyeApi
             Path: /current_quotes
+            Method: get
+
+  FetchHistoryQuotesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .aws-sam/build/fetchHistoryQuotes
+      Events:
+        Get:
+          Type: Api
+          Properties:
+            RestApiId: !Ref StockEyeApi
+            Path: /history_quotes
             Method: get
 
   # ApiDependencies:
