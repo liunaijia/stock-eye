@@ -1,4 +1,4 @@
-import { get } from './httpHelper';
+import { get, readyAsText } from '../httpHelper';
 
 const getValueFrom = (array = [], index = 0) => parseFloat(array[index]);
 
@@ -45,7 +45,8 @@ export default async (event, context, callback) => {
   try {
     const { stockCodes } = event.queryStringParameters;
     const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
-    const result = parse(response.body);
+    const body = await readyAsText(response);
+    const result = parse(body);
 
     callback(null, {
       statusCode: 200,
