@@ -20,7 +20,7 @@ const config = {
     libraryTarget: 'commonjs2',
   },
   resolve: {
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
