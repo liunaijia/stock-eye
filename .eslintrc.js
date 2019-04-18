@@ -30,4 +30,12 @@ module.exports = {
     'max-len': ['error', {code: 200}],
     'react-hooks/rules-of-hooks': 'error',
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        // allow to find TypeScript files when there is no extension for an import statement
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      }
+    }
+  },
 };

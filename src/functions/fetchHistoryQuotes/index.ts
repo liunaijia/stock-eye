@@ -1,6 +1,6 @@
 import { get, readAsDom } from '../httpHelper';
 
-export default async (event, context, callback) => {
+export default async function (event, context, callback): Promise<void> {
   try {
     const { stockCode, date } = event.queryStringParameters;
     // http://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradehistory.php?symbol=sz000001&date=2019-1-8
@@ -17,7 +17,7 @@ export default async (event, context, callback) => {
     // 最低价:9.62
     // 成交量(手):402388.11
     // 成交额(千元):389247.80
-    const quoteData = quoteString.split('\n').reduce((result, line) => {
+    const quoteData = quoteString.split('\n').reduce((result, line): object => {
       if (line.includes(':')) {
         const [name, value] = line.split(':');
         return Object.assign(result, { [name.trim()]: value.trim() });
@@ -53,4 +53,4 @@ export default async (event, context, callback) => {
       },
     });
   }
-};
+}

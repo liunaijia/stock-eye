@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "outDir": "./dist/",
     "module": "ESNext",
     "target": "ESNext",
-    "jsx": "react"
+    "jsx": "react",
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   }
 }
