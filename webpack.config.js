@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = {
   devtool: 'source-map',
   devServer: {
-    contentBase: './dist',
+    contentBase: './docs',
     hot: true,
     // use proxy to avoid cros request
     // https://github.com/chimurai/http-proxy-middleware
@@ -32,7 +32,7 @@ const config = {
   },
   entry: './src/website',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'docs'),
     filename: '[name].js',
   },
   resolve: {
