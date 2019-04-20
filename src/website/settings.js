@@ -5,6 +5,15 @@ export const ZOOM = {
 };
 
 export const STOCK_GROUPS = {
+  深银: {
+    threshold: 2.0,
+    lookBackDays: 1,
+    stocks: [
+      'sz000001', // 平安
+      'sz002142', // 宁波
+      'sh600036', // 招商
+    ],
+  },
   沪银: {
     threshold: 2.0,
     lookBackDays: 2,
@@ -14,15 +23,6 @@ export const STOCK_GROUPS = {
       'sh601288', // 农行
       'sh601939', // 建行
       'sh601328', // 交行
-    ],
-  },
-  深银: {
-    threshold: 2.0,
-    lookBackDays: 1,
-    stocks: [
-      'sz000001', // 平安
-      'sz002142', // 宁波
-      'sh600036', // 招商
     ],
   },
 };
