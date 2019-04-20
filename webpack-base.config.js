@@ -1,5 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/no-var-requires */
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { RESOLVE_EXTENSIONS } = require('./const');
 
