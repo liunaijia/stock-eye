@@ -1,4 +1,4 @@
-export async function sendNotification(options: NotificationOptions & {title: string}): void {
+export async function sendNotification(options: NotificationOptions & {title: string}): Promise<void> {
   if (!('Notification' in window)) {
     return;
   }

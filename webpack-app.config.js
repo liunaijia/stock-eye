@@ -1,12 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { RESOLVE_EXTENSIONS } = require('./const');
+const createConfig = require('./webpack-base.config');
 
-const ENABLE_BUNDLE_ANALYZER = process.env.ANALYZE;
-
-const config = {
+module.exports = createConfig({
   target: 'node',
-  devtool: 'none',
   entry: {
     fetchCurrentQuotes: './src/functions/fetchCurrentQuotes',
     fetchHistoryQuotes: './src/functions/fetchHistoryQuotes',
@@ -20,31 +17,4 @@ const config = {
     // only commonjs2 works with SAM
     libraryTarget: 'commonjs2',
   },
-  resolve: {
-    extensions: RESOLVE_EXTENSIONS,
-  },
-  module: {
-    rules: [
-      {
-        test: /^(?!.*\.spec\.jsx?$).*\.jsx?$/,
-        exclude: /node_modules/,
-        use: [
-          { loader: 'babel-loader' },
-        ],
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  plugins: [
-    // Webpack bundle analyzer represents webpack bundle content that helps optimization
-    new BundleAnalyzerPlugin({
-      analyzerMode: ENABLE_BUNDLE_ANALYZER ? 'server' : 'disabled',
-    }),
-  ],
-};
-
-module.exports = config;
+});

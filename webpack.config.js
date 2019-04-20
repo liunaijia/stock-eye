@@ -1,12 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const webpack = require('webpack');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// const DashboardPlugin = require('webpack-dashboard/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { RESOLVE_EXTENSIONS } = require('./const');
+const createConfig = require('./webpack-base.config');
 
-const config = {
-  devtool: 'source-map',
+module.exports = createConfig({
   devServer: {
     contentBase: './docs',
     hot: true,
@@ -36,31 +34,7 @@ const config = {
     path: path.resolve(__dirname, 'docs'),
     filename: '[name].js',
   },
-  resolve: {
-    extensions: RESOLVE_EXTENSIONS,
-  },
-  module: {
-    rules: [
-      {
-        test: /^(?!.*\.spec\.jsx?$).*\.jsx?$/,
-        exclude: /node_modules/,
-        use: [
-          { loader: 'babel-loader' },
-        ],
-      },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader',
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
   optimization: {
-    // CommonsChunkPlugin is removed, see https://gist.github.com/sokra/1522d586b8e5c0f5072d7565c2bee693
     splitChunks: {
       chunks: 'all',
     },
@@ -68,33 +42,10 @@ const config = {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    // new DashboardPlugin({
-    //   minified: false,
-    //   gzip: false,
-    // }),
     new HtmlWebpackPlugin({
       template: './src/website/index.html',
     }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'vendor',
-    //   minChunks: m => m.context && m.context.includes('node_modules'),
-    // }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'runtime',
-    // }),
-    // new webpack.optimize.ModuleConcatenationPlugin(),
-    // new WebpackMonitor({
-    //   capture: true, // -> default 'true'
-    //   target: '../monitor/stats.json', // default -> '../monitor/stats.json'
-    //   launch: true, // -> default 'false'
-    //   port: 8082, // default -> 8081
-    // }),
-
     // enable hot module replacement
     new webpack.HotModuleReplacementPlugin(),
-
-    // new BundleAnalyzerPlugin(),
   ],
-};
-
-module.exports = config;
+});
