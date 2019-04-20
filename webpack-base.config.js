@@ -24,40 +24,43 @@ const merge = (...args) => args.reduce(
   {},
 );
 
-module.exports = function createConfig(additionalConfig) {
-  return (env, argv) => {
-    const additionalConfigObj = typeof additionalConfig === 'function' ? additionalConfig(env, argv) : additionalConfig;
-    return merge({
-      devtool: argv.mode === 'production' ? 'none' : 'source-map',
-      resolve: {
-        extensions: RESOLVE_EXTENSIONS,
-      },
-      module: {
-        rules: [
-          {
-            test: /^(?!.*\.spec\.jsx?$).*\.jsx?$/,
-            exclude: /node_modules/,
-            use: [
-              { loader: 'babel-loader' },
-            ],
-          },
-          {
-            test: /\.css$/,
-            loader: 'style-loader!css-loader',
-          },
-          {
-            test: /\.tsx?$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
-          },
+const baseConfig = (env, argv) => ({
+  devtool: argv.mode === 'production' ? 'none' : 'source-map',
+  resolve: {
+    extensions: RESOLVE_EXTENSIONS,
+  },
+  module: {
+    rules: [
+      {
+        test: /^(?!.*\.spec\.jsx?$).*\.jsx?$/,
+        exclude: /node_modules/,
+        use: [
+          { loader: 'babel-loader' },
         ],
       },
-      plugins: [
-        // Webpack bundle analyzer represents webpack bundle content that helps optimization
-        new BundleAnalyzerPlugin({
-          analyzerMode: ENABLE_BUNDLE_ANALYZER ? 'server' : 'disabled',
-        }),
-      ],
-    }, additionalConfigObj);
-  };
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  plugins: [
+    // Webpack bundle analyzer represents webpack bundle content that helps optimization
+    new BundleAnalyzerPlugin({
+      analyzerMode: ENABLE_BUNDLE_ANALYZER ? 'server' : 'disabled',
+    }),
+  ],
+});
+
+const createConfig = additionalConfig => (env, argv) => {
+  const baseConfigObj = baseConfig(env, argv);
+  const additionalConfigObj = typeof additionalConfig === 'function' ? additionalConfig(env, argv) : additionalConfig;
+  return merge(baseConfigObj, additionalConfigObj);
 };
+
+module.exports = createConfig;
