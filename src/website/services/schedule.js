@@ -1,4 +1,5 @@
 import { isTradeTime, sleep } from './time';
+import { sendNotification } from '../notification';
 
 export const runDuringTradeTime = ({ interval = 1, runOnStartUp = true }) => {
   let hasStarted = false;
@@ -23,7 +24,7 @@ export const runDuringTradeTime = ({ interval = 1, runOnStartUp = true }) => {
       // }
       } catch (e) {
         console.error(e);
-        new Notification(e.message); // eslint-disable-line no-new
+        sendNotification({ title: e.message });
       } finally {
         await sleep(interval);
         schedule(block);
