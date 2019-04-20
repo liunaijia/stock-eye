@@ -1,5 +1,6 @@
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { RESOLVE_EXTENSIONS } = require('./const');
 
 const ENABLE_BUNDLE_ANALYZER = process.env.ANALYZE;
 
@@ -20,7 +21,7 @@ const config = {
     libraryTarget: 'commonjs2',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: RESOLVE_EXTENSIONS,
   },
   module: {
     rules: [

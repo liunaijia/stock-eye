@@ -3,6 +3,7 @@ const webpack = require('webpack');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // const DashboardPlugin = require('webpack-dashboard/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { RESOLVE_EXTENSIONS } = require('./const');
 
 const config = {
   devtool: 'source-map',
@@ -36,7 +37,7 @@ const config = {
     filename: '[name].js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: RESOLVE_EXTENSIONS,
   },
   module: {
     rules: [

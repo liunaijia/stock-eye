@@ -1,3 +1,5 @@
+const { RESOLVE_EXTENSIONS } = require('./const');
+
 module.exports = {
   // Parse typescript files with tsconfig
   parser: '@typescript-eslint/parser',
@@ -34,7 +36,7 @@ module.exports = {
     'import/resolver': {
       node: {
         // allow to find TypeScript files when there is no extension for an import statement
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+        extensions: RESOLVE_EXTENSIONS
       }
     }
   },
