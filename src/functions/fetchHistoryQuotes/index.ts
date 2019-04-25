@@ -40,11 +40,11 @@ async function getQuote(stockCode: string, day: string): Promise<object> {
   };
 }
 
-async function handler(event): Promise<object> {
+export default respond(async (event): Promise<object> => {
   const { stockCode, date } = event.queryStringParameters;
   const day = toISODateString(date);
 
-  const tableName = process.env.TableDailyQuotes;
+  const tableName = process.env.DailyQuotesTable;
   const client = new DynamoDB.DocumentClient();
 
   const output = await client.get({
@@ -64,6 +64,4 @@ async function handler(event): Promise<object> {
   }).promise();
 
   return item;
-}
-
-export default respond(handler);
+});

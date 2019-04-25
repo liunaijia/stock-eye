@@ -10,7 +10,7 @@ Globals:
     Timeout: 10
     Environment:
       Variables:
-        TableDailyQuotes: !Ref DailyQuotes
+        DailyQuotesTable: !Ref DailyQuotesTable
     # user default here?
 
 # The required Resources section declares the AWS resources that you want to include in the stack, such as an Amazon EC2 instance or an Amazon S3 bucket.
@@ -64,9 +64,11 @@ Resources:
             RestApiId: !Ref StockEyeApi
             Path: /history_quotes
             Method: get
-      Policies: AmazonDynamoDBFullAccess
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DailyQuotesTable
 
-  DailyQuotes:
+  DailyQuotesTable:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
