@@ -15,12 +15,13 @@ module.exports = {
     'eslint-plugin-jest',
     'eslint-plugin-react-hooks',
     // allows for TypeScript-specific linting rules to run
-    '@typescript-eslint'
+    '@typescript-eslint',
   ],
   globals: {
     chrome: true,
   },
   env: {
+    node: true,
     browser: true,
     'jest/globals': true,
   },
