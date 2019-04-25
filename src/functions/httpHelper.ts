@@ -62,4 +62,29 @@ export async function get(...args: any[]): Promise<IncomingMessage> {
     rawGet(...args, resolve).on('error', reject);
   });
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export function respond(fn: Function): Function {
+  const crosHeaders = {
+    'Access-Control-Allow-Origin': '*',
+  };
+  return async function decorator(event, context, callback): Promise<void> {
+    try {
+      const result = await fn.apply(this, [event, context, callback]);
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers: crosHeaders,
+      });
+    } catch (error) {
+      console.error(error);
+      callback(null, {
+        statusCode: 500,
+        body: JSON.stringify({
+          Error: error.message || error,
+          Reference: context.awsRequestId,
+        }),
+        headers: crosHeaders,
+      });
+    }
+  };
+}

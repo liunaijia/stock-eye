@@ -17,4 +17,7 @@ module.exports = createConfig({
     // only commonjs2 works with SAM
     libraryTarget: 'commonjs2',
   },
+  externals: {
+    'aws-sdk': 'aws-sdk',
+  },
 });

@@ -8,6 +8,9 @@ Globals:
     Runtime: nodejs8.10
     Handler: index.default # export handler function as default from index.js file
     Timeout: 10
+    Environment:
+      Variables:
+        TableDailyQuotes: !Ref DailyQuotes
     # user default here?
 
 # The required Resources section declares the AWS resources that you want to include in the stack, such as an Amazon EC2 instance or an Amazon S3 bucket.
@@ -61,6 +64,30 @@ Resources:
             RestApiId: !Ref StockEyeApi
             Path: /history_quotes
             Method: get
+      Policies: AmazonDynamoDBFullAccess
+
+  DailyQuotes:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: day
+          AttributeType: S
+        -
+          AttributeName: stockCode
+          AttributeType: S
+      KeySchema:
+        # All items with the same day are stored together, in sorted order by stock code.
+        -
+          AttributeName: day
+          KeyType: HASH
+        -
+          AttributeName: stockCode
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      
 
   # ApiDependencies:
   #   Type: AWS::Serverless::LayerVersion
