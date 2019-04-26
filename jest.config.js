@@ -7,4 +7,5 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.tsx?$': 'ts-jest',
   },
+  coverageReporters: ['lcov'],
 };
