@@ -1,2 +1,2 @@
-export * from './awsApi.ts';
+export * from './awsApi';
 // export * from './sinaApi';

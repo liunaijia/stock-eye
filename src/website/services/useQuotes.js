@@ -32,7 +32,7 @@ async function getQuotesInGroup(group = {
       const historyQuote = await fetchHistoryQuote(stockCode, day);
       const currentQuote = currentQuotes[stockCode];
       const currentRatio = calcRatio(currentQuote.current, currentQuote.closeAt);
-      const baseAt = historyQuote.closeAt;
+      const baseAt = historyQuote.close;
       const baseRatio = calcRatio(currentQuote.current, baseAt);
       // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价
       const buyingRatio = calcRatio(currentQuote.buyingAt, baseAt);

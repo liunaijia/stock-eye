@@ -9,9 +9,9 @@ export const STOCK_GROUPS = {
     threshold: 2.0,
     lookBackDays: 1,
     stocks: [
+      'sh600036', // 招商
       'sz000001', // 平安
       'sz002142', // 宁波
-      'sh600036', // 招商
     ],
   },
   沪银: {
