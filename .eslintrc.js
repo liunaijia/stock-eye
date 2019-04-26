@@ -1,11 +1,16 @@
 const { RESOLVE_EXTENSIONS } = require('./const');
 
 module.exports = {
-  // Parse typescript files with tsconfig
+  // the parser uses TypeScript Compiler to generate AST that ESLint can handle.
+  // it deals with all the ESLint specific configuration, and then calls @typescript-eslint/typescript-estree which
+  // invokes TypeScript Compiler on the given source code in order to produce a TypeScript AST, and then converting that
+  // AST into a format that ESLint expects.
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    // all available options: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser#configuration
     project: './tsconfig.json',
   },
+
   extends: [
     'airbnb',
     // Use the recommended rules from the @typescript-eslint/eslint-plugin
@@ -23,7 +28,7 @@ module.exports = {
   env: {
     node: true,
     browser: true,
-    'jest/globals': true,
+    jest: true,
   },
   rules: {
     '@typescript-eslint/indent': ['error', 2],

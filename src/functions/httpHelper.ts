@@ -9,6 +9,7 @@ interface ContentType {
 }
 
 function log(url: string, response: IncomingMessage, method: string = 'GET'): void {
+  // eslint-disable-next-line no-console
   console.log(`${response.statusCode} - ${method} ${url}`);
 }
 
@@ -76,6 +77,7 @@ export function respond(fn: Function): Function {
         headers: crosHeaders,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       callback(null, {
         statusCode: 500,

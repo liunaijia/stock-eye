@@ -34,6 +34,7 @@ jest.mock('https', () => ({
 
 describe('get', () => {
   beforeAll(() => {
+    // eslint-disable-next-line no-console
     console.log = jest.fn();
   });
 
@@ -48,6 +49,7 @@ describe('get', () => {
     const response = { statusCode: 200 };
     http.request.resolve(response);
     expect(await getPromise).toBe(response);
+    // eslint-disable-next-line no-console
     expect(console.log).toBeCalledWith('200 - GET http://my.com');
   });
 
