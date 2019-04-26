@@ -1,1 +1,1 @@
-export * from './awsApi';
+export { fetchCurrentQuotes, fetchHistoryQuote } from './awsApi';

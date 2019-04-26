@@ -38,7 +38,7 @@ const Bid = ({
 
   return (
     <li className={className} data-vs-current-price={vsCurrentPrice}>
-      <BidType>{type === 'buy' ? '买' : '卖'}{index + 1}</BidType>
+      <BidType>{`${type === 'buy' ? '买' : '卖'}${index + 1}`}</BidType>
       <Price>{price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</Price>
       <Lot>{Math.round(amount / 100)}</Lot>
     </li>

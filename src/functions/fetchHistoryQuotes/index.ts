@@ -1,4 +1,4 @@
-import { config, DynamoDB } from 'aws-sdk';
+import { DynamoDB } from 'aws-sdk';
 import {
   get, respond, readAsJson,
 } from '../httpHelper';
@@ -6,7 +6,7 @@ import {
   toTimezone, fromTimezone, formatDateTime, formatDate,
 } from '../timeHelper';
 
-// config.update({
+// AWS.config.update({
 // endpoint: 'http://host.docker.internal:8000',
 // });
 
@@ -16,9 +16,9 @@ function createRequestCookies(responseCookies: string[]): string {
     .join('; ');
 }
 
-function parse(responseData: any): object {
-  const { column, item } = responseData.data as {symbol: string; column: string[]; item: string[]};
-  const result: any = column.reduce((memo, col, index): object => Object.assign(memo, { [col]: item[0][index] }), { });
+function parse(responseData: { data?: object }): object {
+  const { column, item } = responseData.data as {column: string[]; item: string[]};
+  const result: {timestamp?: number} = column.reduce((memo, col, index): object => Object.assign(memo, { [col]: item[0][index] }), { });
   return Object.assign(result, { timestamp: formatDateTime(fromTimezone(result.timestamp)) });
 }
 

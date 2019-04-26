@@ -11,7 +11,7 @@ const NumberRate = ({ className, value, rate }) => {
   const rateString = typeof (rate) === 'string' ? rate : `${rate.toFixed(2)}%`;
   return (
     <span className={className}>
-      {value.toFixed(2)} ({signChar}{rateString})
+      {`${value.toFixed(2)} (${signChar}${rateString})`}
     </span>
   );
 };

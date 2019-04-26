@@ -23,6 +23,7 @@ export const runDuringTradeTime = ({ interval = 1, runOnStartUp = true }) => {
       // setBadge('');
       // }
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e);
         sendNotification({ title: e.message });
       } finally {

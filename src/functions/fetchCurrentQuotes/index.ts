@@ -1,4 +1,4 @@
-import { get, readyAsText } from '../httpHelper';
+import { get, readyAsText, respond } from '../httpHelper';
 
 interface Bid {
   price: number;
@@ -63,31 +63,11 @@ function parse(text = ''): ParsedResult[] {
     });
 }
 
-export default async function (event, context, callback): Promise<void> {
-  try {
-    const { stockCodes } = event.queryStringParameters;
-    const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
-    const body = await readyAsText(response);
-    const result = parse(body);
+export default respond(async (event): Promise<object> => {
+  const { stockCodes } = event.queryStringParameters;
+  const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
+  const body = await readyAsText(response);
+  const result = parse(body);
 
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(result),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    callback(null, {
-      statusCode: 500,
-      body: JSON.stringify({
-        Error: error.message || error,
-        Reference: context.awsRequestId,
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
-  }
-}
+  return result;
+});

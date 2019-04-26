@@ -31,6 +31,12 @@ const StockChange = ({ current, previous, ratio }) => {
   return <NumberRate value={change} rate={ratio} />;
 };
 
+StockChange.propTypes = {
+  current: number.isRequired,
+  previous: number.isRequired,
+  ratio: number.isRequired,
+};
+
 
 const Quotes = ({
   className, groupName, quotes, onWatch, stockCodeInWatch,

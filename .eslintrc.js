@@ -8,7 +8,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     // all available options: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser#configuration
-    project: './tsconfig.json',
+    // it's very slow when project is defined
+    // project: './tsconfig.json',
   },
 
   extends: [

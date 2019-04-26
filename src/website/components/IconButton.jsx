@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { classNames } from '../services/util';
 
 const IconButton = ({
-  className, children, type, ...props
+  className, children,
+  type, // eslint-disable-line @typescript-eslint/no-unused-vars
+  ...props
 }) => (
   <button
     type="button" // default to button and can be overwritten by props

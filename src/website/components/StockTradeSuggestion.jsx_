@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { string, number, func, oneOf } from 'prop-types';
+import {
+ string, number, func, oneOf 
+} from 'prop-types';
 import styled from 'styled-components';
 
 import Pankou from './Pankou';

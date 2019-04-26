@@ -1,3 +1,3 @@
-import { mockPromise } from '../../testUtil';
+import { mockPromise } from '../../../testUtil';
 
 export const fetchCurrentQuotes = mockPromise();

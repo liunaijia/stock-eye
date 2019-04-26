@@ -1,6 +1,6 @@
 import {
   MOBILE_TOKEN, ACCOUNT_NUMBER, PASSWORD, MOBILE_NUMBER,
-} from '../secrets';
+} from '../../secrets';
 import { readAsDataUrl, readAsDom, readAsText } from './responseHelper';
 import { sendNotification } from '../notification';
 
@@ -58,8 +58,8 @@ export const readAlertMessage = (text = '') => {
 const doLogin = async (payload, captcha) => {
   const response = await sendRequest('/xtrade', {
     ...payload,
-    f_khh: ACCOUNT_NUMBER,
-    f_mm: PASSWORD,
+    f_khh: ACCOUNT_NUMBER, // eslint-disable-line @typescript-eslint/camelcase
+    f_mm: PASSWORD, // eslint-disable-line @typescript-eslint/camelcase
     validatecode: captcha,
     macip: MOBILE_NUMBER,
   });
