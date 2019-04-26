@@ -31,6 +31,9 @@ jobs:
           paths:
             - ./node_modules
       - run:
+          name: lint
+          command: npm run lint:eslint
+      - run:
           name: Setup Code Climate test-reporter
           command: |
             # download test reporter as a static binary
