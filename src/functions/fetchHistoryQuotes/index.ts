@@ -1,48 +1,46 @@
 import { config, DynamoDB } from 'aws-sdk';
-import { get, readAsDom, respond } from '../httpHelper';
+import {
+  get, respond, readAsJson,
+} from '../httpHelper';
+import {
+  toTimezone, fromTimezone, formatDateTime, formatDate,
+} from '../timeHelper';
 
 // config.update({
-//   endpoint: 'http://host.docker.internal:8000',
+// endpoint: 'http://host.docker.internal:8000',
 // });
 
-function toISODateString(date: string): string {
-  return new Date(Date.parse(date)).toISOString().substring(0, 10);
+function createRequestCookies(responseCookies: string[]): string {
+  return responseCookies
+    .map((cookie): string => cookie.split(';')[0])
+    .join('; ');
+}
+
+function parse(responseData: any): object {
+  const { column, item } = responseData.data as {symbol: string; column: string[]; item: string[]};
+  const result: any = column.reduce((memo, col, index): object => Object.assign(memo, { [col]: item[0][index] }), { });
+  return Object.assign(result, { timestamp: formatDateTime(fromTimezone(result.timestamp)) });
+}
+
+async function getCookies(): Promise<string[]> {
+  const response = await get('https://xueqiu.com/');
+  return response.headers['set-cookie'];
 }
 
 async function getQuote(stockCode: string, day: string): Promise<object> {
-  // http://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradehistory.php?symbol=sz000001&date=2019-1-8
-  const response = await get(`http://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradehistory.php?symbol=${stockCode}&date=${day}`);
+  const cookies = await getCookies();
 
-  const $ = await readAsDom(response);
-  const quoteString = $('#quote_area').text();
-  // quoteString is a string containing
-  // 收盘价:9.66
-  // 涨跌幅:-0.82%
-  // 前收价:9.74
-  // 开盘价:9.73
-  // 最高价:9.74
-  // 最低价:9.62
-  // 成交量(手):402388.11
-  // 成交额(千元):389247.80
-  const quoteData = quoteString.split('\n').reduce((result, line): object => {
-    if (line.includes(':')) {
-      const [name, value] = line.split(':');
-      return Object.assign(result, { [name.trim()]: value.trim() });
-    }
-    return result;
-  }, {});
-
-  return {
-    openAt: parseFloat(quoteData['开盘价']),
-    closeAt: parseFloat(quoteData['收盘价']),
-    lowestAt: parseFloat(quoteData['最低价']),
-    highestAt: parseFloat(quoteData['最高价']),
-  };
+  const date = toTimezone(day).getTime();
+  // https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=SZ002142&begin=1556121600000&period=day&count=-1&indicator=kline
+  const url = `https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${stockCode.toUpperCase()}&begin=${date}&period=day&count=-1&indicator=kline`;
+  const response = await get(url, { cookie: createRequestCookies(cookies) });
+  const data = await readAsJson(response);
+  return parse(data);
 }
 
 export default respond(async (event): Promise<object> => {
   const { stockCode, date } = event.queryStringParameters;
-  const day = toISODateString(date);
+  const day = formatDate(date);
 
   const tableName = process.env.DailyQuotesTable;
   const client = new DynamoDB.DocumentClient();
