@@ -32,7 +32,7 @@ const baseConfig = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /^(?!.*\.spec\.jsx?$).*\.jsx?$/,
+        test: /^(?!.*\.spec\..*?$).*\.(js|ts)x?$/,
         exclude: /node_modules/,
         use: [
           { loader: 'babel-loader' },
@@ -41,11 +41,6 @@ const baseConfig = (env, argv) => ({
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
       },
     ],
   },

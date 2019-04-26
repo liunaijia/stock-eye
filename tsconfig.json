@@ -1,10 +1,30 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "module": "ESNext",
+    // target latest version of ECMAScript.
     "target": "ESNext",
-    "jsx": "react",
-    "esModuleInterop": true,
-    "moduleResolution": "node"
-  }
+    
+    // node: only search node_modules folders for non-relative imports.
+    // classic: walk up the directory tree including current folder to search for non-relative module.
+    // https://www.typescriptlang.org/docs/handbook/module-resolution.html#node
+    "moduleResolution": "node",
+
+    // allow compiler to read js and jsx files
+    // "allowJs": true,
+
+    // Enable strictest settings like strictNullChecks & noImplicitAny.
+    // "strict": true,
+    
+    // Disallow features that require cross-file information for emit.
+		// "isolatedModules": true,
+		// Import non-ES modules as default imports.
+		// "esModuleInterop": true
+
+    // don't output file
+    // "noEmit": true,
+    
+    // "jsx": "react",
+  },
+  // "include": [
+	// 	"src"
+	// ]
 }

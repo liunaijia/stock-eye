@@ -1,6 +1,10 @@
 module.exports = (api) => {
   api.cache(true);
   return {
+    presets: [
+      // it removes type annotations from source files
+      '@babel/typescript',
+    ],
     plugins: [
       // Stage 0
       '@babel/plugin-proposal-function-bind',
