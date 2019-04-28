@@ -4,3 +4,4 @@ secrets.js
 monitor
 .aws-sam
 .vscode
+.docker

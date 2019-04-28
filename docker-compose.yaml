@@ -1,0 +1,10 @@
+# https://docs.docker.com/compose/compose-file/#reference-and-guidelines
+version: '3'
+services:
+  dynamodb:
+    image: amazon/dynamodb-local
+    command: -jar DynamoDBLocal.jar -dbPath /var/lib/dynamodb/data
+    ports:
+      - 8000:8000
+    volumes:
+      - './.docker/dynamodb:/var/lib/dynamodb/data'
