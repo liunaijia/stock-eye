@@ -79,17 +79,15 @@ Resources:
           AttributeName: stockCode
           AttributeType: S
       KeySchema:
-        # All items with the same day are stored together, in sorted order by stock code.
-        -
-          AttributeName: day
-          KeyType: HASH
         -
           AttributeName: stockCode
+          KeyType: HASH
+        -
+          AttributeName: day
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      
 
   # ApiDependencies:
   #   Type: AWS::Serverless::LayerVersion
