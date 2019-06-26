@@ -27,7 +27,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.480.0",
-    "iconv-lite": "^0.4.24",
+    "iconv-lite": "^0.5.0",
     "lodash-es": "^4.17.11",
     "prop-types": "^15.7.2",
     "re-reselect": "^3.3.0",
