@@ -6,7 +6,7 @@
     // node: only search node_modules folders for non-relative imports.
     // classic: walk up the directory tree including current folder to search for non-relative module.
     // https://www.typescriptlang.org/docs/handbook/module-resolution.html#node
-    "moduleResolution": "node",
+    "moduleResolution": "node"
 
     // allow compiler to read js and jsx files
     // "allowJs": true,
@@ -23,7 +23,7 @@
     // "noEmit": true,
     
     // "jsx": "react",
-  },
+  }
   // "include": [
 	// 	"src"
 	// ]
