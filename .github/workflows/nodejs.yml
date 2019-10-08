@@ -22,4 +22,4 @@ jobs:
         npm install
         npm test
       env:
-        TZ: Brisbane
+        TZ: Australia/Brisbane
