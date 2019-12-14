@@ -2,8 +2,7 @@ module.exports = (api) => {
   api.cache(true);
   return {
     presets: [
-      // it removes type annotations from source files
-      '@babel/typescript',
+      '@babel/preset-flow',
     ],
     plugins: [
       // Stage 0
