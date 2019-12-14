@@ -2,5 +2,6 @@
   "eslint.autoFixOnSave": true,
   "editor.tabSize": 2,
   "stylelint.additionalDocumentSelectors": ["javascriptreact"],
-  "editor.formatOnSave": false
+  "editor.formatOnSave": false,
+  "javascript.validate.enable": false
 }
