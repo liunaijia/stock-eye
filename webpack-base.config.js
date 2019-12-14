@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/no-var-requires */
+/* eslint-disable import/no-extraneous-dependencies */
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { RESOLVE_EXTENSIONS } = require('./const');
 
@@ -52,7 +52,7 @@ const baseConfig = (env, argv) => ({
   ],
 });
 
-const createConfig = additionalConfig => (env, argv) => {
+const createConfig = (additionalConfig) => (env, argv) => {
   const baseConfigObj = baseConfig(env, argv);
   const additionalConfigObj = typeof additionalConfig === 'function' ? additionalConfig(env, argv) : additionalConfig;
   return merge(baseConfigObj, additionalConfigObj);

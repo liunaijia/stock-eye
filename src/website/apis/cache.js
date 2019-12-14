@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash-es';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function withCache<T extends Function>(fn: T): T {
   const cache: [any[], any][] = [];
 

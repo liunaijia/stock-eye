@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 /* eslint-disable global-require */
 describe('runDuringTradeTime', () => {
   let funcToRun;

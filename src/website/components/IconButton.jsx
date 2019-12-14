@@ -5,7 +5,7 @@ import { classNames } from '../services/util';
 
 const IconButton = ({
   className, children,
-  type, // eslint-disable-line @typescript-eslint/no-unused-vars
+  type,
   ...props
 }) => (
   <button

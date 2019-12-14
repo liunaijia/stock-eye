@@ -1,3 +1,5 @@
+// @flow
+
 import { get, readyAsText, respond } from '../httpHelper';
 
 interface Bid {

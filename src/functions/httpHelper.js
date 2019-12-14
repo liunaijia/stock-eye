@@ -1,3 +1,4 @@
+// @flow
 import { IncomingMessage, request as httpRequest } from 'http';
 import { request as httpsRequest } from 'https';
 import { decode } from 'iconv-lite';

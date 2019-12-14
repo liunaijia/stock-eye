@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const yaml = require('js-yaml'); // eslint-disable-line import/no-extraneous-dependencies
 const fs = require('fs');
 const path = require('path');
@@ -11,15 +10,15 @@ const readTemplate = async (filePath) => {
   const schema = yaml.Schema.create([
     '!And', '!If', '!Not', '!Equals', '!Or', '!FindInMap', '!Base64', '!Cidr', '!Ref', '!Sub', '!GetAtt', '!GetAZs',
     '!ImportValue', '!Select', '!Split', '!Join']
-    .map(tag => new yaml.Type(tag, {
+    .map((tag) => new yaml.Type(tag, {
       kind: 'scalar',
       resolve: () => true,
-      construct: data => data,
+      construct: (data) => data,
     })));
   return yaml.load(content, { schema });
 };
 
-const getTableDefinitions = template => Object.entries(template.Resources)
+const getTableDefinitions = (template) => Object.entries(template.Resources)
   .reduce((memo, [resourceName, { Type, Properties }]) => {
     if (Type !== 'AWS::DynamoDB::Table') {
       return memo;
@@ -39,7 +38,7 @@ const createTables = async (tableDefinitions) => {
   const ddb = new DynamoDB();
   Promise.all(
     tableDefinitions.map(
-      tableDefinition => ddb.createTable(tableDefinition).promise(),
+      (tableDefinition) => ddb.createTable(tableDefinition).promise(),
     ),
   );
 };
