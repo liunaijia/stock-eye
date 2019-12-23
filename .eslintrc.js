@@ -1,10 +1,19 @@
 const { RESOLVE_EXTENSIONS } = require('./const');
 
 module.exports = {
-  extends: ['airbnb', 'airbnb/hooks'],
+  extends: [
+    'airbnb',
+    'airbnb/hooks',
+
+    // This plugin exports a recommended configuration that enforces Flow type good practices.
+    'plugin:flowtype/recommended'
+  ],
   // babel-eslint makes eslint to support flow and typescript
   parser: 'babel-eslint',
-  plugins: ['eslint-plugin-jest'],
+  plugins: [
+    'eslint-plugin-jest',
+    'eslint-plugin-flowtype'
+  ],
   globals: {
     chrome: true,
   },
