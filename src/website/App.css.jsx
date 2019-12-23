@@ -9,7 +9,6 @@ export default createGlobalStyle`
     --primary-bg-color: #1890ff;
     --border-color: #d9d9d9;
     --hover-color: #40a9ff;
-
     --size-1: 8px;
     --size-half: calc(var(--size-1) * 0.5);
     --size-2: calc(var(--size-1) * 2);
@@ -18,13 +17,8 @@ export default createGlobalStyle`
 
   * {
     font-size: 14px;
-    font-family: "Helvetica Neue";
-    color: rgba(0,0,0,0.65);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: rgba(0, 0, 0, 0.65);
     margin: 0;
   }
-
-  // * {
-  //   color: #fff !important;
-  //   background: #fff !important;
-  // }
 `;
