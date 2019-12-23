@@ -41,7 +41,7 @@ StockChange.propTypes = {
 const Quotes = ({
   className, groupName, quotes, onWatch, stockCodeInWatch,
 }) => {
-  const renderWatchSwitch = record => (
+  const renderWatchSwitch = (record) => (
     <IconButton
       type={record.stockCode === stockCodeInWatch ? 'primary' : 'default'}
       onClick={() => onWatch && onWatch({ target: { value: record.stockCode } })}
@@ -61,11 +61,11 @@ const Quotes = ({
           <th>参考涨跌</th>
           <th>买进GAP</th>
           <th>卖出GAP</th>
-          <th />
+          <th aria-label="commands" />
         </tr>
       </thead>
       <tbody>
-        {quotes.map(record => (
+        {quotes.map((record) => (
           <tr key={record.name}>
             <td>{record.name}</td>
             <td>{record.current.toFixed(2)}</td>

@@ -45,7 +45,7 @@ function parse(text = ''): ParsedResult[] {
     .split(';')
     .slice(0, -1)
     .map((line): [string, string[]] => {
-      const [, variable = '', valueExp = ''] = /(.*?)="(.*?)"/.exec(line);
+      const [, variable = '', valueExp = ''] = /(.*?)="(.*?)"/.exec(line) || [];
       return [variable.substr(variable.lastIndexOf('_') + 1), valueExp.split(',')];
     })
     .map(([stockCode, rawValues]): ParsedResult => {
@@ -65,7 +65,7 @@ function parse(text = ''): ParsedResult[] {
     });
 }
 
-export default respond(async (event): Promise<object> => {
+export default respond(async (event): Promise<Object> => {
   const { stockCodes } = event.queryStringParameters;
   const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
   const body = await readyAsText(response);

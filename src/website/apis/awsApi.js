@@ -1,3 +1,4 @@
+// @flow
 export async function fetchCurrentQuotes(stockCodes: string[]): Promise<JSON> {
   const apiEndpoint = 'https://w68lqh1j90.execute-api.ap-southeast-2.amazonaws.com/prod/current_quotes';
   const response = await fetch(`${apiEndpoint}?stockCodes=${stockCodes.join(',')}`);

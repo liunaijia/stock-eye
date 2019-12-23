@@ -7,7 +7,7 @@ import Number from './Number';
 
 const Quotes = ({ className, quotes }) => (
   <ul className={className}>
-    {quotes.map(item => (
+    {quotes.map((item) => (
       <li key={item.name}>
         <span className="title">{item.name.match(/[^A-Z]/)[0]}</span>
         <Number>

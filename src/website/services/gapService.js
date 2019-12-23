@@ -7,9 +7,9 @@ const getFixedRatio = (stock, ratio) => {
   return ratio * zoomFactor;
 };
 
-const getStockWithMinSellingRatio = stocks => [...stocks].sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
+const getStockWithMinSellingRatio = (stocks) => [...stocks].sort((a, b) => getFixedRatio(a, a.sellingRatio) - getFixedRatio(b, b.sellingRatio))[0];
 
-const getStockWithMaxBuyingRatio = stocks => [...stocks].sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
+const getStockWithMaxBuyingRatio = (stocks) => [...stocks].sort((a, b) => getFixedRatio(b, b.buyingRatio) - getFixedRatio(a, a.buyingRatio))[0];
 
 const getGapBetween = (ratio1, ratio2) => Math.round((ratio1 - ratio2) * 100) / 100;
 
@@ -90,9 +90,9 @@ export const calcSellingGap = (
   // const stockWithMinSellingRatio = getStockWithMinSellingRatio(stocks);
 
   const holdingStocks = holdings
-    .filter(holding => holding.sellableAmount > 0)
+    .filter((holding) => holding.sellableAmount > 0)
     .reduce((acc, holding) => { acc[holding.stockCode] = holding.sellableAmount; return acc; }, {});
-  const sellableStocks = stocks.filter(stock => Object.keys(holdingStocks).includes(stock.stockCode));
+  const sellableStocks = stocks.filter((stock) => Object.keys(holdingStocks).includes(stock.stockCode));
   const stockMaySell = getStockWithMaxBuyingRatio(sellableStocks);
 
   // No sellable holdings

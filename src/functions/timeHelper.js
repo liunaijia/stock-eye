@@ -1,4 +1,5 @@
-type Datelike = string | number | Date;
+// @flow
+opaque type Datelike = string | number | Date;
 
 function toDate(date: Datelike): Date {
   if (typeof date === 'string') {

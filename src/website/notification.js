@@ -1,4 +1,5 @@
-export async function sendNotification(options: NotificationOptions & {title: string}): Promise<void> {
+// @flow
+export async function sendNotification(options: interface { title: string } & NotificationOptions): Promise<void> {
   if (!('Notification' in window)) {
     return;
   }

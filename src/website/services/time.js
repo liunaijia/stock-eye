@@ -21,7 +21,7 @@ const publicHolidays = [
   '2019-5-1',
   '2019-5-2',
   '2019-5-3',
-].map(day => new Date(day));
+].map((day) => new Date(day));
 
 const isTradeDay = (time) => {
   const day = time.getDay();
@@ -32,7 +32,7 @@ const isTradeDay = (time) => {
     && date1.getMonth() === date2.getMonth()
     && date1.getDate() === date2.getDate();
 
-  const isPublicHoliday = publicHolidays.some(publicHoliday => onTheSameDay(publicHoliday, time));
+  const isPublicHoliday = publicHolidays.some((publicHoliday) => onTheSameDay(publicHoliday, time));
   return !isPublicHoliday;
 };
 
@@ -43,7 +43,7 @@ export const isTradeTime = (time = new Date()) => {
   return isTimeInAnyTimeSlots(timeInMinutes, '11:15-13:30', '15:00-17:00');
 };
 
-export const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+export const sleep = async (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
 export const lastTradeDay = (untilDay = new Date()) => {
   const time = untilDay;

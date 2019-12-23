@@ -2,7 +2,7 @@ import React from 'react';
 import { string, number, oneOfType } from 'prop-types';
 import styled from 'styled-components';
 
-const sign = value => Math.sign(value);
+const sign = (value) => Math.sign(value);
 
 const NumberRate = ({ className, value, rate }) => {
   if (value === null) return null;
@@ -29,5 +29,5 @@ NumberRate.defaultProps = {
 };
 
 export default styled(NumberRate)`
-  color: var(${props => (sign(props.value) >= 0 ? '--red' : '--green')});
+  color: var(${(props) => (sign(props.value) >= 0 ? '--red' : '--green')});
 `;

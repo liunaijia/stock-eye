@@ -7,7 +7,7 @@ export const mockPromise = jest.fn(() => {
     rejectFn = reject;
   }));
 
-  mock.resolve = value => resolveFn(value);
-  mock.reject = reason => rejectFn(reason);
+  mock.resolve = (value) => resolveFn(value);
+  mock.reject = (reason) => rejectFn(reason);
   return mock;
 });
