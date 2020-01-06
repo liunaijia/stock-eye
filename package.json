@@ -60,7 +60,6 @@
     "@babel/preset-flow": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
     "@hot-loader/react-dom": "^16.11.0",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.4.1",
