@@ -3,23 +3,18 @@ import { IncomingMessage, request as httpRequest } from 'http';
 import { request as httpsRequest } from 'https';
 import { decode } from 'iconv-lite';
 
-interface ContentType {
-  mimeType: string;
-  charset: string;
-  boundary: string;
-}
 
 function log(url: string, response: IncomingMessage, method: string = 'GET'): void {
   // eslint-disable-next-line no-console
   console.log(`${response.statusCode} - ${method} ${url}`);
 }
 
-function parseContentType(contentType: string): ContentType {
+function parseContentType(contentType: string) {
   const groups = contentType.match(/([^;]+)(;\s*charset=([^;]+))?(;\s*boundary=([^;]+))?/);
-  return { mimeType: groups[1], charset: groups[3], boundary: groups[5] };
+  return { mimeType: groups?.[1], charset: groups?.[3], boundary: groups?.[5] };
 }
 
-function readContentType(response: IncomingMessage): ContentType {
+function readContentType(response: IncomingMessage) {
   return parseContentType(response.headers['content-type']);
 }
 
@@ -41,23 +36,24 @@ export async function readyAsText(response: IncomingMessage): Promise<string> {
   return decode(buffer, charset);
 }
 
-export async function readAsJson(response: IncomingMessage): Promise<object> {
+export async function readAsJson(response: IncomingMessage): Promise<Object> {
   const text = await readyAsText(response);
   return JSON.parse(text);
 }
 
-export async function get(url: string, headers?: object): Promise<IncomingMessage> {
+export async function get(url: string, headers?: { [key: string]: string }): Promise<IncomingMessage> {
   return new Promise((resolve, reject): void => {
     const requestFn = url.startsWith('https://') ? httpsRequest : httpRequest;
-    const request = requestFn(url, (response): void => {
+    const request = requestFn(url, (response: IncomingMessage): void => {
       log(url, response);
       resolve(response);
     })
       .on('error', reject);
     if (headers) {
-      Object.entries(headers).forEach(([k, v]): void => {
-        if (v) {
-          request.setHeader(k, v);
+      Object.keys(headers).forEach((key) => {
+        const value = headers[key];
+        if (value) {
+          request.setHeader(key, value);
         }
       });
     }

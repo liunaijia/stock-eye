@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { keyBy } from './util';
 import { fetchCurrentQuotes, fetchHistoryQuote } from '../apis';
 import { lastTradeDay } from './time';
@@ -63,7 +63,7 @@ async function getQuotesInGroup(group = {
 export default (stockGroups = {}) => {
   const [quotes, setQuotes] = useState();
 
-  async function fetch() {
+  const fetch = useCallback(async () => {
     const allData = await Promise.all(
       Object.entries(stockGroups)
         .map(async ([groupName, group]) => {
@@ -73,9 +73,9 @@ export default (stockGroups = {}) => {
     );
 
     setQuotes(allData);
-  }
+  }, [stockGroups]);
 
-  useEffect(() => runDuringTradeTime({ interval: 3, runOnStartUp: true })(fetch), [stockGroups]);
+  useEffect(() => runDuringTradeTime({ interval: 3, runOnStartUp: true })(fetch), [fetch, stockGroups]);
 
   return quotes;
 };

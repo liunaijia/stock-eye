@@ -11,6 +11,7 @@ const IconButton = ({
   <button
     type="button" // default to button and can be overwritten by props
     className={classNames('material-icons', className)}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
   >
     {children}

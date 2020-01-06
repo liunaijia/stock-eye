@@ -33,7 +33,7 @@ const WithContext = () => {
   return (
     <AlarmControl
       status={alarm.status}
-      onChange={e => alarm.setStatus(e.target.value)}
+      onChange={(e) => alarm.setStatus(e.target.value)}
     />
   );
 };

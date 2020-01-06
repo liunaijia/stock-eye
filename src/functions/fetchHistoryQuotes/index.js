@@ -1,3 +1,4 @@
+// @flow
 import { DynamoDB } from 'aws-sdk';
 import {
   get, respond, readAsJson,
@@ -16,9 +17,9 @@ function createRequestCookies(responseCookies: string[]): string {
     .join('; ');
 }
 
-function parse(responseData: { data?: object }): object {
-  const { column, item } = responseData.data as {column: string[]; item: string[]};
-  const result: {timestamp?: number} = column.reduce((memo, col, index): object => Object.assign(memo, { [col]: item[0][index] }), { });
+function parse(responseData) {
+  const { column, item } = responseData.data;
+  const result = column.reduce((memo, col, index) => Object.assign(memo, { [col]: item[0][index] }), { });
   return Object.assign(result, { timestamp: formatDateTime(fromTimezone(result.timestamp)) });
 }
 
@@ -27,7 +28,7 @@ async function getCookies(): Promise<string[]> {
   return response.headers['set-cookie'];
 }
 
-async function getQuote(stockCode: string, day: string): Promise<object> {
+async function getQuote(stockCode: string, day: string): Promise<any> {
   const cookies = await getCookies();
 
   const date = toTimezone(day).getTime();
@@ -38,7 +39,7 @@ async function getQuote(stockCode: string, day: string): Promise<object> {
   return parse(data);
 }
 
-export default respond(async (event): Promise<object> => {
+export default respond(async (event): Promise<{}> => {
   const { stockCode, date } = event.queryStringParameters;
   const day = formatDate(date);
 

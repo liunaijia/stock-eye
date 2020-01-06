@@ -1,6 +1,7 @@
+// @flow
 import { isEqual } from 'lodash-es';
 
-export function withCache<T extends Function>(fn: T): T {
+export function withCache(fn: Function): Function {
   const cache: [any[], any][] = [];
 
   function get(key: any[]): any {
@@ -15,7 +16,7 @@ export function withCache<T extends Function>(fn: T): T {
   }
 
   // eslint-disable-next-line func-names
-  return function (...args: any[]): T {
+  return function (...args) {
     const valueInCache = get(args);
     if (valueInCache) {
       return valueInCache;
@@ -24,6 +25,6 @@ export function withCache<T extends Function>(fn: T): T {
     const value = fn.apply(this, args);
     set(args, value);
     return value;
-  } as any;
+  };
 }
 /* eslint-enable */
