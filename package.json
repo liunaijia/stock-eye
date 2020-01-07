@@ -6,6 +6,7 @@
   "scripts": {
     "lint:css": "stylelint ./src/**/*.jsx",
     "lint:eslint": "eslint --ext .js --ext .jsx src",
+    "lint": "run-p lint:*",
     "test": "jest",
     "build": "webpack --config webpack-web.config.js --mode production",
     "start": "webpack-dev-server --config webpack-web.config.js --mode development",
