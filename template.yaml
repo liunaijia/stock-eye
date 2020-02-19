@@ -5,7 +5,7 @@ Transform: AWS::Serverless-2016-10-31
 # Globals is a section in your SAM template to define properties common to all your Serverless Function and APIs. All the AWS::Serverless::Function and AWS::Serverless::Api resources will inherit the properties defined here.
 Globals:
   Function:
-    Runtime: nodejs10.x
+    Runtime: nodejs12.x
     Handler: index.default # export handler function as default from index.js file
     Timeout: 10
     Environment:
