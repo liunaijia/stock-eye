@@ -31,7 +31,7 @@
     "iconv-lite": "^0.5.1",
     "lodash-es": "^4.17.15",
     "prop-types": "^15.7.2",
-    "re-reselect": "^3.4.0",
+    "re-reselect": "^4.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-hot-loader": "^4.12.19",
