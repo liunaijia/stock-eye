@@ -33,7 +33,7 @@ async function getQuote(stockCode: string, day: string): Promise<any> {
 
   const date = toTimezone(day).getTime();
   // https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=SZ002142&begin=1556121600000&period=day&count=-1&indicator=kline
-  const url = `https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${stockCode.toUpperCase()}&begin=${date}&period=day&count=-1&indicator=kline`;
+  const url = `https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${stockCode.toUpperCase()}&begin=${date}&period=day&count=-1&indicator=kline&type=before`;
   const response = await get(url, { cookie: createRequestCookies(cookies) });
   const data = await readAsJson(response);
   return parse(data);
