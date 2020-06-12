@@ -4,15 +4,11 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
-
-    // This plugin exports a recommended configuration that enforces Flow type good practices.
-    'plugin:flowtype/recommended'
   ],
-  // babel-eslint makes eslint to support flow and typescript
+  // babel-eslint makes eslint to support typescript
   parser: 'babel-eslint',
   plugins: [
     'eslint-plugin-jest',
-    'eslint-plugin-flowtype'
   ],
   globals: {
     chrome: true,

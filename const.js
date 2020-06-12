@@ -1,1 +1,1 @@
-module.exports.RESOLVE_EXTENSIONS = ['.js', '.jsx'];
+module.exports.RESOLVE_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx'];
