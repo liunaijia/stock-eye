@@ -4,11 +4,18 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
+
+    // Enable all the recommended rules for the plugin
+    'plugin:@typescript-eslint/recommended',
+    // Require type-checking
+    // 'plugin:@typescript-eslint/recommended-requiring-type-checking'
   ],
-  // babel-eslint makes eslint to support typescript
-  parser: 'babel-eslint',
+  // allow ESLint to understand TypeScript syntax.
+  parser: '@typescript-eslint/parser',
   plugins: [
     'eslint-plugin-jest',
+    // allow to use rules of TypeScript
+    '@typescript-eslint'
   ],
   globals: {
     chrome: true,

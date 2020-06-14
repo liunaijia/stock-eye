@@ -1,4 +1,3 @@
-// @flow
 type Datelike = string | number | Date;
 
 function toDate(date: Datelike): Date {
