@@ -2,16 +2,19 @@ const { RESOLVE_EXTENSIONS } = require('./const');
 
 module.exports = {
   extends: [
-    'airbnb',
+    'airbnb-typescript',
     'airbnb/hooks',
 
     // Enable all the recommended rules for the plugin
     'plugin:@typescript-eslint/recommended',
     // Require type-checking
-    // 'plugin:@typescript-eslint/recommended-requiring-type-checking'
+    'plugin:@typescript-eslint/recommended-requiring-type-checking'
   ],
   // allow ESLint to understand TypeScript syntax.
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+  },
   plugins: [
     'eslint-plugin-jest',
     // allow to use rules of TypeScript
