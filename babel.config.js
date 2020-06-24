@@ -2,7 +2,7 @@ module.exports = (api) => {
   api.cache(true);
   return {
     presets: [
-      '@babel/typescript',
+      '@babel/preset-typescript',
     ],
     plugins: [
       // Stage 0
