@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "lint:css": "stylelint ./src/**/*.jsx",
-    "lint:eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "//lint:eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint:eslint": "eslint --ext .ts,.tsx src",
     "lint": "run-p lint:*",
     "test": "jest",
     "build": "webpack --config webpack-web.config.js --mode production",

@@ -29,7 +29,7 @@ module.exports = {
     jest: true,
   },
   rules: {
-    'react/no-did-mount-set-state': 'off',
+    // 'react/no-did-mount-set-state': 'off',
     'import/prefer-default-export': 'off',
     'no-debugger': 'warn',
     'max-len': ['error', {code: 200}],
