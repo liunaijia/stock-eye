@@ -1,26 +1,25 @@
-// @flow
+import { Handler } from 'aws-lambda';
 import { IncomingMessage, request as httpRequest } from 'http';
 import { request as httpsRequest } from 'https';
 import { decode } from 'iconv-lite';
 
-
-function log(url: string, response: IncomingMessage, method: string = 'GET'): void {
+function log(url: string, response: IncomingMessage, method = 'GET'): void {
   // eslint-disable-next-line no-console
-  console.log(`${response.statusCode} - ${method} ${url}`);
+  console.log(`${response.statusCode || 'unknown'} - ${method} ${url}`);
 }
 
 function parseContentType(contentType: string) {
-  const groups = contentType.match(/([^;]+)(;\s*charset=([^;]+))?(;\s*boundary=([^;]+))?/);
+  const groups = /([^;]+)(;\s*charset=([^;]+))?(;\s*boundary=([^;]+))?/.exec(contentType);
   return { mimeType: groups?.[1], charset: groups?.[3], boundary: groups?.[5] };
 }
 
 function readContentType(response: IncomingMessage) {
-  return parseContentType(response.headers['content-type']);
+  return parseContentType(response.headers['content-type'] || '');
 }
 
 function readAsBuffer(response: IncomingMessage): Promise<Buffer> {
   return new Promise((resolve, reject): void => {
-    const chunks = [];
+    const chunks: Uint8Array[] = [];
     response
       .on('data', (chunk): void => { chunks.push(Buffer.from(chunk)); })
       .on('end', (): void => {
@@ -33,12 +32,12 @@ function readAsBuffer(response: IncomingMessage): Promise<Buffer> {
 export async function readyAsText(response: IncomingMessage): Promise<string> {
   const { charset } = readContentType(response);
   const buffer = await readAsBuffer(response);
-  return decode(buffer, charset);
+  return decode(buffer, charset || 'utf8');
 }
 
-export async function readAsJson(response: IncomingMessage): Promise<Object> {
+export async function readAsJson(response: IncomingMessage): Promise<unknown> {
   const text = await readyAsText(response);
-  return JSON.parse(text);
+  return JSON.parse(text) as unknown;
 }
 
 export async function get(url: string, headers?: { [key: string]: string }): Promise<IncomingMessage> {
@@ -61,29 +60,36 @@ export async function get(url: string, headers?: { [key: string]: string }): Pro
   });
 }
 
-export function respond(fn: Function): Function {
+// With the Lambda proxy integration, Lambda is required to return an output of the following format:
+// {
+//   "isBase64Encoded" : "boolean",
+//   "statusCode": "number",
+//   "headers": { ... },
+//   "body": "JSON string"
+// }
+export function respond(fn: Handler<unknown, unknown>): Handler {
   const crosHeaders = {
     'Access-Control-Allow-Origin': '*',
   };
-  return async function decorator(event, context, callback): Promise<void> {
+  return async function decorator(...args) {
     try {
-      const result = await fn.apply(this, [event, context, callback]);
-      callback(null, {
+      const result = await fn(...args);
+      return {
         statusCode: 200,
         body: JSON.stringify(result),
         headers: crosHeaders,
-      });
+      };
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      callback(null, {
+      const e = error as Error;
+      return {
         statusCode: 500,
         body: JSON.stringify({
-          Error: error.message || error,
-          Reference: context.awsRequestId,
+          errorMessage: e.message,
+          errorType: e.name,
+          stackTrace: e.stack,
         }),
         headers: crosHeaders,
-      });
+      };
     }
   };
 }
