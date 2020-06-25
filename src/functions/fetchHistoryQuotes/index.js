@@ -1,4 +1,3 @@
-// @flow
 import { DynamoDB } from 'aws-sdk';
 import {
   get, respond, readAsJson,
@@ -11,9 +10,9 @@ import {
 // endpoint: 'http://host.docker.internal:8000',
 // });
 
-function createRequestCookies(responseCookies: string[]): string {
+function createRequestCookies(responseCookies) {
   return responseCookies
-    .map((cookie): string => cookie.split(';')[0])
+    .map((cookie) => cookie.split(';')[0])
     .join('; ');
 }
 
@@ -23,12 +22,12 @@ function parse(responseData) {
   return Object.assign(result, { timestamp: formatDateTime(fromTimezone(result.timestamp)) });
 }
 
-async function getCookies(): Promise<string[]> {
+async function getCookies() {
   const response = await get('https://xueqiu.com/');
   return response.headers['set-cookie'];
 }
 
-async function getQuote(stockCode: string, day: string): Promise<any> {
+async function getQuote(stockCode, day) {
   const cookies = await getCookies();
 
   const date = toTimezone(day).getTime();
@@ -39,7 +38,7 @@ async function getQuote(stockCode: string, day: string): Promise<any> {
   return parse(data);
 }
 
-export default respond(async (event): Promise<{}> => {
+export default respond(async (event) => {
   const { stockCode, date } = event.queryStringParameters;
   const day = formatDate(date);
 

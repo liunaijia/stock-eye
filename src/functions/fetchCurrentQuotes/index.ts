@@ -1,5 +1,3 @@
-// @flow
-
 import { get, readyAsText, respond } from '../httpHelper';
 
 interface Bid {
@@ -16,7 +14,7 @@ function getValuesFrom(array: string[], index: number, length: number): number[]
 }
 
 function collapseArray(array: number[]): Bid[] {
-  return array.reduce((acc, _, idx): Bid[] => {
+  return array.reduce((acc, _, idx) => {
     if (idx % 2 === 0) {
       acc.push({
         price: array[idx + 1],
@@ -24,7 +22,7 @@ function collapseArray(array: number[]): Bid[] {
       });
     }
     return acc;
-  }, []);
+  }, [] as Bid[]);
 }
 
 interface ParsedResult {
@@ -65,7 +63,7 @@ function parse(text = ''): ParsedResult[] {
     });
 }
 
-export default respond(async (event): Promise<Object> => {
+export default respond(async (event) => {
   const { stockCodes } = event.queryStringParameters;
   const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
   const body = await readyAsText(response);

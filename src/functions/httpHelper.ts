@@ -1,4 +1,4 @@
-import { Handler } from 'aws-lambda';
+import { Handler, APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { IncomingMessage, request as httpRequest } from 'http';
 import { request as httpsRequest } from 'https';
 import { decode } from 'iconv-lite';
@@ -67,7 +67,7 @@ export async function get(url: string, headers?: { [key: string]: string }): Pro
 //   "headers": { ... },
 //   "body": "JSON string"
 // }
-export function respond(fn: Handler<unknown, unknown>): Handler {
+export function respond(fn: APIGatewayProxyHandlerV2): APIGatewayProxyHandlerV2 {
   const crosHeaders = {
     'Access-Control-Allow-Origin': '*',
   };

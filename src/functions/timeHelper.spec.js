@@ -2,7 +2,6 @@ import {
   fromTimezone, toTimezone, formatDate, formatDateTime,
 } from './timeHelper';
 
-
 describe('fromTimezone', () => {
   it('changes timezone', () => {
     const result = fromTimezone('2019-4-26 9:30');
