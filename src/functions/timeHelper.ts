@@ -8,12 +8,20 @@ function isNumber(date: Datelike): date is number {
   return typeof date === 'number';
 }
 
+function parseDateString(date: string) : Date {
+  return new Date(Date.parse(date));
+}
+
+function parseDateNumber(date: number): Date {
+  return new Date(date);
+}
+
 function toDate(date: Datelike): Date {
   if (isString(date)) {
-    return new Date(Date.parse(date));
+    return parseDateString(date);
   }
   if (isNumber(date)) {
-    return new Date(date);
+    return parseDateNumber(date);
   }
   return date;
 }
