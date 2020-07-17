@@ -1,10 +1,18 @@
 type Datelike = string | number | Date;
 
+function isString(date: Datelike): date is string {
+  return typeof date === 'string';
+}
+
+function isNumber(date: Datelike): date is number {
+  return typeof date === 'number';
+}
+
 function toDate(date: Datelike): Date {
-  if (typeof date === 'string') {
+  if (isString(date)) {
     return new Date(Date.parse(date));
   }
-  if (typeof date === 'number') {
+  if (isNumber(date)) {
     return new Date(date);
   }
   return date;
