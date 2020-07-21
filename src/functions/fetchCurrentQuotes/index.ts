@@ -64,7 +64,11 @@ function parse(text = ''): ParsedResult[] {
 }
 
 export default respond(async (event) => {
-  const { stockCodes } = event.queryStringParameters;
+  const stockCodes = event.queryStringParameters?.stockCodes;
+  if (!stockCodes) {
+    return [];
+  }
+
   const response = await get(`https://hq.sinajs.cn/rn=${new Date().getTime()}&list=${stockCodes}`);
   const body = await readyAsText(response);
   const result = parse(body);
