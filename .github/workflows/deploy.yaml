@@ -1,0 +1,50 @@
+name: Deploy
+on:
+  workflow_dispatch
+jobs:
+  deploy_website:
+    name: Deploy website
+    runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: 12.x
+      SOURCE_REPO: ${{ github.repository }}
+      PAGE_REPO: liunaijia/app-stock-eye
+      SOURCE_FOLDER: source
+      PAGE_FOLDER: page
+      TMP_FOLDER: tmp
+    steps:
+    - name: Install node
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Checkout ${{ env.SOURCE_REPO }}
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ env.SOURCE_REPO }}
+        path: ${{ env.SOURCE_FOLDER }}
+    
+    - name: Checkout ${{ env.PAGE_REPO }}
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ env.PAGE_REPO }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        path: ${{ env.PAGE_FOLDER }}
+
+    - name: Build
+      run: |
+        cd ${{ env.SOURCE_FOLDER }}
+        npm install
+        npm run build -- --env.output=../${{ env.TMP_FOLDER }}
+        cd ..
+
+    - name: Deploy
+      run: |
+        cd ${{ env.PAGE_FOLDER }}
+        git config user.email "${{ secrets.DEPLOY_USER_EMAIL }}"
+        git config user.name "${{ secrets.DEPLOY_USER_NAME }}"
+        git rm -rf *
+        cp -r ../${{ env.TMP_FOLDER }}/* .
+        git add --all
+        git commit -m "deploy"
+        git push

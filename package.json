@@ -19,8 +19,8 @@
     "deploy:api:clean-build": "rm -rf ./.aws-sam",
     "//s2": "Step 2: Bundle source code to .aws-sam/build folder",
     "deploy:api:build": "webpack --config webpack-app.config.js --mode production",
-    "//s3": "Step 3: Build SAM template file .aws-sam/template.yaml and upload package to s3://stockeye/packages",
-    "deploy:api:upload-package": "sam package --output-template-file ./.aws-sam/template.yaml --s3-bucket stockeye --s3-prefix packages",
+    "//s3": "Step 3: Build SAM template file .aws-sam/template.yaml and upload package to s3://my-aws-packages/stockeye",
+    "deploy:api:upload-package": "sam package --output-template-file ./.aws-sam/template.yaml --s3-bucket my-aws-packages --s3-prefix stockeye",
     "//s4": "Step 4: Deploy stack",
     "deploy:api:deploy-stack": "sam deploy --template-file ./.aws-sam/template.yaml --stack-name stockeye --capabilities CAPABILITY_IAM"
   },

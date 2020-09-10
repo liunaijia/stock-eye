@@ -5,10 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createConfig = require('./webpack-base.config');
 
 module.exports = createConfig((env, argv) => {
+  const outputRelativePath = env.output || 'dist';
+
   const config = {
     entry: './src/website',
     output: {
-      path: path.resolve(__dirname, 'docs'),
+      path: path.resolve(__dirname, outputRelativePath),
       filename: '[name].js',
     },
     optimization: {
