@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useContext } from 'react';
 import Quotes from './Quotes';
 import { StoreContext } from '../contexts';
@@ -14,7 +13,8 @@ const Hq = () => {
       const allQuotes = allQuotesSelector(store);
       const stockInWatch = allQuotes.find(({ stockCode }) => stockCode === stockCodeInWatch);
       if (stockInWatch) {
-        document.title = `${stockInWatch.name.substr(0, 1)} ${stockInWatch.current} (${stockInWatch.currentRatio.toFixed(2)}%)`;
+        const gap = Math.max(stockInWatch.buyGap.value, stockInWatch.sellGap.value);
+        document.title = `${stockInWatch.name.substr(0, 1)} ${stockInWatch.current.toFixed(2)} (${stockInWatch.currentRatio.toFixed(2)}%) ${gap}`;
       }
     }
   });
