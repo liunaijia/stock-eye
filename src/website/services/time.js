@@ -50,11 +50,3 @@ export const isTradeTime = (time = new Date()) => {
 };
 
 export const sleep = async (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-
-export const lastTradeDay = (untilDay = new Date()) => {
-  const time = untilDay;
-  do {
-    time.setDate(time.getDate() - 1);
-  } while (!isTradeDay(time));
-  return time;
-};

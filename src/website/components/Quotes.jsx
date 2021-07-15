@@ -37,7 +37,6 @@ StockChange.propTypes = {
   ratio: number.isRequired,
 };
 
-
 const Quotes = ({
   className, groupName, quotes, onWatch, stockCodeInWatch,
 }) => {
@@ -57,8 +56,6 @@ const Quotes = ({
           <th>{groupName}</th>
           <th>现价</th>
           <th>今日涨跌</th>
-          <th>参考价</th>
-          <th>参考涨跌</th>
           <th>买进GAP</th>
           <th>卖出GAP</th>
           <th aria-label="commands" />
@@ -71,10 +68,6 @@ const Quotes = ({
             <td>{record.current.toFixed(2)}</td>
             <td>
               <StockChange current={record.current} previous={record.closeAt} ratio={record.currentRatio} />
-            </td>
-            <td>{record.baseAt.toFixed(2)}</td>
-            <td>
-              <StockChange current={record.current} previous={record.baseAt} ratio={record.baseRatio} />
             </td>
             <td>{record.buyGap.value}</td>
             <td>{record.sellGap.value}</td>
@@ -109,9 +102,7 @@ export default styled(Quotes)`
     &:nth-child(3),
     &:nth-child(4),
     &:nth-child(5),
-    &:nth-child(6),
-    &:nth-child(7),
-    &:nth-child(8) {
+    &:nth-child(6) {
       text-align: right;
     }
   }

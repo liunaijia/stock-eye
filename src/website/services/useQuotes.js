@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { keyBy } from './util';
-import { fetchCurrentQuotes, fetchHistoryQuote } from '../apis';
-import { lastTradeDay } from './time';
+import { fetchCurrentQuotes } from '../apis';
 import { runDuringTradeTime } from './schedule';
 import { getBuyGap, getSellGap } from './gapService';
 
@@ -9,30 +8,20 @@ function calcRatio(currentPrice, previousPrice) {
   return Math.round(((currentPrice / previousPrice) - 1) * 10000) / 100;
 }
 
-function getLastTradeDay(daysBefore) {
-  let tradeDay = new Date();
-  Array.from({ length: daysBefore }).forEach(() => {
-    tradeDay = lastTradeDay(tradeDay);
-  });
-  return tradeDay;
-}
-
 async function getQuotesInGroup(group = {
   stocks: ['sz000001'],
-  lookBackDays: 1,
   DEFAULT: true,
 }) {
   if (group.DEFAULT) {
     return undefined;
   }
   const currentQuotes = keyBy(await fetchCurrentQuotes(group.stocks), 'stockCode');
-  const day = getLastTradeDay(group.lookBackDays);
   const groupQuotes = await Promise.all(
     group.stocks.map(async (stockCode) => {
-      const historyQuote = await fetchHistoryQuote(stockCode, day);
+      // const historyQuote = await fetchHistoryQuote(stockCode, day);
       const currentQuote = currentQuotes[stockCode];
       const currentRatio = calcRatio(currentQuote.current, currentQuote.closeAt);
-      const baseAt = historyQuote.close;
+      const baseAt = currentQuote.closeAt;
       const baseRatio = calcRatio(currentQuote.current, baseAt);
       // 用基价计算买一价和卖一价的涨跌幅，默认基价为昨收价
       const buyingRatio = calcRatio(currentQuote.buyingAt, baseAt);
