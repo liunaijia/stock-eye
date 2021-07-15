@@ -20,7 +20,6 @@ module.exports = createConfig((env, argv) => {
       runtimeChunk: true,
     },
     plugins: [
-      new webpack.HashedModuleIdsPlugin(),
       new HtmlWebpackPlugin({
         template: './src/website/index.html',
       }),
