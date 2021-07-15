@@ -12,7 +12,7 @@
     "build": "webpack --config webpack-web.config.js --mode production",
     "start": "webpack serve --config webpack-web.config.js --mode development",
     "dev:api:webpack": "webpack --config webpack-app.config.js --mode development --watch",
-    "dev:api:sam": "sam local start-api --debug",
+    "dev:api:sam": "sam-beta-cdk local start-api --debug",
     "dev:api": "run-p dev:api:*",
     "deploy:api": "run-s deploy:api:clean-build deploy:api:build deploy:api:upload-package deploy:api:deploy-stack",
     "//s1": "Step 1: Use ./aws-sam as output folder",

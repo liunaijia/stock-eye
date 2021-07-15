@@ -25,7 +25,7 @@ const merge = (...args) => args.reduce(
 );
 
 const baseConfig = (env, argv) => ({
-  devtool: argv.mode === 'production' ? 'none' : 'source-map',
+  devtool: argv.mode === 'production' ? false : 'source-map',
   resolve: {
     extensions: RESOLVE_EXTENSIONS,
   },
